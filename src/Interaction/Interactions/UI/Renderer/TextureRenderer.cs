@@ -13,7 +13,6 @@ namespace Pandora.Interactions.UI.Renderer
     public class TextureRenderer : RenderTargetBase
     {
         private View _defaultview;
-        private Texture _texture;
 
         public TextureRenderer(uint width, uint height) : this(width, height, false)
         { }
@@ -21,9 +20,9 @@ namespace Pandora.Interactions.UI.Renderer
         public TextureRenderer(uint width, uint height, bool depthbuffer) : base(NativeSFML.sfRenderTexture_create(width, height, depthbuffer))
         {
             _defaultview = new View(NativeSFML.sfRenderTexture_getDefaultView(Pointer));
-            _texture = new Texture(NativeSFML.sfRenderTexture_getTexture(Pointer));
+            Texture = new Texture(NativeSFML.sfRenderTexture_getTexture(Pointer));
             GC.SuppressFinalize(_defaultview);
-            GC.SuppressFinalize(_texture);
+            GC.SuppressFinalize(Texture);
         }
 
         public bool SetActive(bool active)
@@ -104,7 +103,8 @@ namespace Pandora.Interactions.UI.Renderer
 
         public Texture Texture
         {
-            get { return _texture; }
+            get;
+            private set;
         }
 
         public bool Smooth
@@ -148,7 +148,7 @@ namespace Pandora.Interactions.UI.Renderer
             if (disposing)
             {
                 _defaultview.Dispose();
-                _texture.Dispose();
+                Texture.Dispose();
             }
 
             if (!disposing)

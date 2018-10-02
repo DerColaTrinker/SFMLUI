@@ -102,7 +102,7 @@ namespace Pandora.Interactions.UI
 
         internal virtual void InternalSetParent(Visual parent)
         {
-            // Nicht anwenden, wenn der eigene Type eine Scene ist, dann gibt es keinen Parent.
+            // Scene has no parent
             if (this is Scene) return;
             Parent = parent;
         }
@@ -180,7 +180,7 @@ namespace Pandora.Interactions.UI
 
         protected internal virtual void UpdatePosition()
         {
-            // Position anpassen
+            // Update internal screen position
             switch (Visibility)
             {
                 case Visibilities.Display:

@@ -10,10 +10,13 @@ namespace Pandora.Interactions.UI.Animations
 {
     public class ColorAnimation : PropertyAnimation<Color>
     {
+        // Currentcolor
         private float _cR;
         private float _cG;
         private float _cB;
         private float _cA;
+
+        // Factor
         private float _fR;
         private float _fG;
         private float _fB;

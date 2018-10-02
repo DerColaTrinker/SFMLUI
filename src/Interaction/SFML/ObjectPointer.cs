@@ -8,8 +8,6 @@ namespace Pandora.SFML
 {
     public abstract class ObjectPointer : IDisposable
     {
-        //private IntPtr _pointer = IntPtr.Zero;
-
         public ObjectPointer(IntPtr pointer)
         {
             Pointer = pointer;

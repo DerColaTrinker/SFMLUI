@@ -14,16 +14,16 @@ namespace Pandora.Interactions.UI.Animations
         {
             if (_animations.Count == 0) return;
 
-            // Damit wir die Animationen direkt aus der Liste löschen können, müssen wir auf ForEach verzichten. Dazu nutzen wir RemoveWhere und ein Predikat.
+            // Use RemoveWhere for direct remove the animation
             _animations.RemoveWhere(animation =>
             {
                 if (animation.Status == AnimationStatus.Running)
                 {
-                    // Zuerst das Update innerhalb des Effekts aufrufen
+                    // Call update
                     animation.InternalUpdate(ms, s);
                 }
 
-                // Jetzt entscheiden ob es entfernt werden kann
+                // Remove animation if complet
                 if (animation.IsComplet)
                 {
                     return true;

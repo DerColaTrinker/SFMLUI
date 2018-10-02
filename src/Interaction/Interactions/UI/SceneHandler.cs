@@ -28,7 +28,7 @@ namespace Pandora.Interactions.UI
             Service = service;
             Cache = new CacheHandler();
 
-            // Rahmenkonfiguration festlegen
+            // Default Configuration
             _contextsettings.DepthBits = 0;
             _contextsettings.StencilBits = 0;
             _contextsettings.AntialiasingLevel = 1;
@@ -40,7 +40,7 @@ namespace Pandora.Interactions.UI
             _videomode.Height = 786;
             _videomode.BitsPerPixel = 32;
 
-            // Fenster und Videomodus
+            // Windowstyle
             _windowstyle = WindowStyle.Close | WindowStyle.Titlebar;
         }
 
@@ -50,16 +50,16 @@ namespace Pandora.Interactions.UI
         {
             try
             {
-                // Versuchen das Renderfenster zu erstellen, da der ScenenManager nur ein Fenster handeln kann.
+                // Try to create the RenderWindow. The SceneManager managed the Window
                 Pointer = NativeSFML.sfRenderWindow_create(_videomode, _windowtitle, _windowstyle, ref _contextsettings);
             }
             catch (Exception)
             {
-                //TODO: Fehler in der init
+                //TODO: Throw exception
                 return false;
             }
 
-            // Event Dispatcher für dieses Fenster erstellen
+            // Event Dispatcher
             Dispatcher = new EventDispatcher(this);
             RegisterEvents();
 
@@ -74,20 +74,29 @@ namespace Pandora.Interactions.UI
 
         private void RegisterEvents()
         {
-            // Events aus dem Fenstersystem abfangen und an die Runtime weiterleiten.
-            //TODO: Steuerung der Runtime wo her?  //Dispatcher.Closed += delegate () { Service.Runtime.ExitApplication(); };
+            // Window-Events handling
+            //TODO: Where to handle this event  //Dispatcher.Closed += delegate () { Service.Runtime.ExitApplication(); };
+
+            //TODO: Lostfocus = No Rendering
             //Dispatcher.LostFocus += delegate () { Service.Paused = true; };
             //Dispatcher.GetFocus += delegate () { Service.Paused = false; };
         }
 
         internal void SystemUpdate(float ms, float s)
         {
+            // Dispatch the next event
             Dispatcher.DispatchEvents();
 
+            // Update all Anmations
             AnimationHandler.SystemUpdate(ms, s);
 
+            // Clear the Display
             Renderer.Clear(Color.Black);
+
+            // Render the First Scene in Pipe.
             if (_scenes.Count > 0) _scenes[0].InternalRenderUpdate(Renderer);
+
+            // Display
             Renderer.Display();
         }
 
@@ -98,6 +107,9 @@ namespace Pandora.Interactions.UI
 
         #endregion
 
+        /// <summary>
+        /// The Event Dispatcher for this Window
+        /// </summary>
         internal EventDispatcher Dispatcher { get; private set; }
 
         public WindowRenderer Renderer { get; private set; }
@@ -173,24 +185,39 @@ namespace Pandora.Interactions.UI
 
         public CacheHandler Cache { get; }
 
+        public bool HasFocus
+        {
+            get { return NativeSFML.sfRenderWindow_hasFocus(Pointer); }
+        }
+
+        public bool IsOpen
+        {
+            get { return NativeSFML.sfRenderWindow_isOpen(Pointer); }
+        }
+
+        public void RequestFocus()
+        {
+            NativeSFML.sfRenderWindow_requestFocus(Pointer);
+        }
+
         #region Scene Control
 
         public void Show(Scene scene)
         {
-            // Alle anderen Scenen ausblenden
+            // Change visibility to hidden
             foreach (var item in _scenes) item.Visibility = Visibilities.Hidden;
 
-            // Scene ist sichtbar
+            // new scene ist visible
             scene.Visibility = Visibilities.Display;
 
-            // Die Größe der Scene richtig sich nach der Auflösund
+            // Reset size
             scene.Size = Renderer.Size;
 
-            // Das initialisieren der Steuerelemente auslösen
+            // Initilize controls
             scene.InternalOnLoad(this);
             scene.InternalOnShow();
 
-            // Scene einfügen
+            // Insert scene on top
             _scenes.Insert(0, scene);
         }
 
