@@ -8,12 +8,12 @@ namespace Pandora.Engine
 {
     public abstract class PandoraRuntimeHost
     {
-                private int _framelimit;
+        private int _framelimit;
         private float _maxframetime;
 
         public PandoraRuntimeHost()
         {
-            Services =  new ServiceCollection(); 
+            Services = new ServiceCollection();
         }
 
         public bool IsRunning { get; private set; }
@@ -72,8 +72,7 @@ namespace Pandora.Engine
                 args.Milliseconds = ms;
                 args.Secounds = ms / 1000F;
 
-                // Das Systemupdate an alle Dienste weiterleiten
-                ForEachServices(m => m.SystemUpdate(this, args));
+                InternalSystemUpdate(args);
 
                 // Lastenausgleich durchführen, in dem Systemzeit an das Betriebssystem zurück gegeben wird
                 if (_framelimit > 0 && waittime > 0) Thread.Sleep((int)waittime);
@@ -98,6 +97,17 @@ namespace Pandora.Engine
             ForEachServices(m => m.Stop());
 
         }
+
+        private void InternalSystemUpdate(RuntimeFrameEventArgs args)
+        {
+            SystemUpdate(args);
+
+            // Das Systemupdate an alle Dienste weiterleiten
+            ForEachServices(m => m.SystemUpdate(this, args));
+        }
+
+        protected virtual void SystemUpdate(RuntimeFrameEventArgs args)
+        { }
 
         private void ForEachServices(Action<RuntimeService> action)
         {
