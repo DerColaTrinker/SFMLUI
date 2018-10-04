@@ -25,7 +25,7 @@ namespace Pandora.Interactions.UI
             var control = Controls.InternalTunnelMouseMoveEvent(x, y, ref handled);
             if (handled) return control;
 
-            return InternalTunnelMouseMoveEvent(x, y, ref handled);
+            return control ?? InternalTunnelMouseMoveEvent(x, y, ref handled);
         }
 
         internal override ControlElement InternalTunnelMouseOverEvent(int x, int y, ref bool handled)
@@ -33,7 +33,7 @@ namespace Pandora.Interactions.UI
             var control = Controls.InternalTunnelMouseOverEvent(x, y, ref handled);
             if (handled) return control;
 
-            return InternalTunnelMouseOverEvent(x, y, ref handled);
+            return control ?? InternalTunnelMouseOverEvent(x, y, ref handled);
         }
 
         internal override ControlElement InternalTunnelMouseButtonUpEvent(int x, int y, MouseButton button, ref bool handled)
@@ -41,7 +41,7 @@ namespace Pandora.Interactions.UI
             var control = Controls.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
             if (handled) return control;
 
-            return InternalTunnelMouseMoveEvent(x, y, ref handled);
+            return control ?? InternalTunnelMouseMoveEvent(x, y, ref handled);
         }
 
         internal override ControlElement InternalTunnelMouseButtonDownEvent(int x, int y, MouseButton button, ref bool handled)
@@ -49,9 +49,9 @@ namespace Pandora.Interactions.UI
             var control = Controls.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
             if (handled) return control;
 
-            return InternalTunnelMouseMoveEvent(x, y, ref handled);
+            return control ?? InternalTunnelMouseMoveEvent(x, y, ref handled);
         }
-
+             
         #endregion
     }
 }

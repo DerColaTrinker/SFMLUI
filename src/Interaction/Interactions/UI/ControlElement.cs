@@ -173,7 +173,9 @@ namespace Pandora.Interactions.UI
 
         #region MouseButton
 
-        public event EventDelegate MouseButtonDoubleClick;
+        public event PreMouseMoveDelegate PreMouseClick;
+        public event EventDelegate MouseClick;
+        public event EventDelegate MouseDoubleClick;
 
         public event PreMouseButtonUpDelegate PreMouseButtonUp;
         public event PreMouseButtonDownDelegate PreMouseButtonDown;
@@ -227,6 +229,26 @@ namespace Pandora.Interactions.UI
         protected virtual void OnPreMouseButtonDown(int x, int y, MouseButton button, ref bool handled)
         {
             PreMouseButtonDown?.Invoke(this, button, x, y, ref handled);
+        }
+
+        internal virtual void InternalMouseClickEvent()
+        {
+            OnMouseClick();
+        }
+
+        protected virtual void OnMouseClick()
+        {
+            MouseClick?.Invoke(this);
+        }
+
+        internal virtual void InternalMouseDoubleClickEvent()
+        {
+            OnMouseDoubleClick();
+        }
+
+        protected virtual void OnMouseDoubleClick()
+        {
+            MouseDoubleClick?.Invoke(this);
         }
 
         internal virtual void InternalMouseButtonDownEvent(MouseButton button, int x, int y)
@@ -285,7 +307,7 @@ namespace Pandora.Interactions.UI
         private void RegisterKeyShortCutEvent(bool control, bool alt, bool shift, bool system, KeyboardKey key, ref bool handled)
         {
             OnShortCutKeyPress(control, alt, shift, system, key, ref handled);
-        }   
+        }
 
         protected virtual void OnShortCutKeyPress(bool control, bool alt, bool shift, bool system, KeyboardKey key, ref bool handled)
         {

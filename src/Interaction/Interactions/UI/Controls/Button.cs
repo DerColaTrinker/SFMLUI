@@ -77,6 +77,11 @@ namespace Pandora.Interactions.UI.Controls
             FillColor = new Color(60, 0, 0);
         }
 
+        protected override void OnMouseClick()
+        {
+            TextColor = Color.Green;
+        }
+
         public BindingProperty<Color> TextColorBinding { get; private set; }
 
         public BindingProperty<Color> TextOutlineColorBinding { get; private set; }

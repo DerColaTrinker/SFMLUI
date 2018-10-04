@@ -31,6 +31,7 @@ namespace Pandora.Interactions.Dispatcher
         public ControlElement FocusControl { get; private set; }
 
         public ControlElement HooverControl { get; private set; }
+        public ControlElement MouseDownControl { get; private set; }
 
         internal EventDispatcher(SceneHandler handler)
         {
@@ -64,32 +65,6 @@ namespace Pandora.Interactions.Dispatcher
         internal bool WaitEvent(out Event eventToFill)
         {
             return NativeSFML.sfWindow_waitEvent(_scenehandler.Pointer, out eventToFill);
-        }
-
-        public bool CheckDoubleClick(ControlElement control)
-        {
-            if (_dbclickcontrol == control)
-            {
-                // Wenn das Steuerelement vorher schonmal geklickt wurde, prüfen ob es innerhalb des Zeitraumes wiederholt geklickt wurde.
-                if (control.Enabled && (DateTime.Now - _dbclicktimestamp).TotalMilliseconds <= DoubleClickTime)
-                {
-                    _dbclicktimestamp = DateTime.Now;
-                    return true;
-                }
-                else
-                {
-                    // Zeitpunkt nicht getroffen, also neu setzten
-                    _dbclicktimestamp = DateTime.Now;
-                }
-            }
-            else
-            {
-                // Control hat gewechselt, also Control und Zeitpunkt festlegen
-                _dbclicktimestamp = DateTime.Now;
-                _dbclickcontrol = control;
-            }
-
-            return false;
         }
 
         public void SetFocusControl(ControlElement control)
@@ -239,6 +214,22 @@ namespace Pandora.Interactions.Dispatcher
             var handled = false;
             var control = _scenehandler.Scenes.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
 
+            // Trigger the MouseClick event only when the button is also released above the control where it was pressed.
+            if (button == MouseButton.Left && control == MouseDownControl)
+                HandleMouseClick(control);
+
+            // Trigger a MouseUp at the control where the MouseDown event was triggered.
+            if (control != MouseDownControl)
+            {
+                while (MouseDownControl != null)
+                {
+                    MouseDownControl.InternalMouseButtonUpEvent(button, x, y);
+                    MouseDownControl = MouseDownControl.Parent;
+                }
+
+                MouseDownControl = null;
+            }
+
             // Let the event come up again from the found control.
             while (control != null)
             {
@@ -253,12 +244,49 @@ namespace Pandora.Interactions.Dispatcher
             var handled = false;
             var control = _scenehandler.Scenes.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
 
+            MouseDownControl = control;
+
             // Let the event come up again from the found control.
             while (control != null)
             {
                 control.InternalMouseButtonDownEvent(button, x, y);
                 control = control.Parent;
             }
+        }
+
+        private void HandleMouseClick(ControlElement control)
+        {
+            control.InternalMouseClickEvent();
+
+            // Doublecklick check
+            if (CheckDoubleClick(control))
+                control.InternalMouseDoubleClickEvent();
+        }
+
+        private bool CheckDoubleClick(ControlElement control)
+        {
+            if (_dbclickcontrol == control)
+            {
+                // Wenn das Steuerelement vorher schonmal geklickt wurde, prüfen ob es innerhalb des Zeitraumes wiederholt geklickt wurde.
+                if (control.Enabled && (DateTime.Now - _dbclicktimestamp).TotalMilliseconds <= DoubleClickTime)
+                {
+                    _dbclicktimestamp = DateTime.Now;
+                    return true;
+                }
+                else
+                {
+                    // Zeitpunkt nicht getroffen, also neu setzten
+                    _dbclicktimestamp = DateTime.Now;
+                }
+            }
+            else
+            {
+                // Control hat gewechselt, also Control und Zeitpunkt festlegen
+                _dbclicktimestamp = DateTime.Now;
+                _dbclickcontrol = control;
+            }
+
+            return false;
         }
 
         #endregion
