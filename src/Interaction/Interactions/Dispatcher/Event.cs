@@ -14,6 +14,9 @@ namespace Pandora.Interactions.Dispatcher
         public EventType Type;
 
         [FieldOffset(4)]
+        public uint Unicode;
+
+        [FieldOffset(4)]
         public SizeEvent Size;
 
         [FieldOffset(4)]

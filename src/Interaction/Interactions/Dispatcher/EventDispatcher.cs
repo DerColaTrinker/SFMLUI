@@ -18,6 +18,7 @@ namespace Pandora.Interactions.Dispatcher
     internal delegate void DispatcherMouseWheelMoveDelegate(MouseWheel wheel, float delta, float x, float y);
     internal delegate void DispatcherShortcutKeyDelegate(bool control, bool alt, bool shift, bool system, KeyboardKey key, ref bool handled);
     internal delegate void DispatcherKeyDelegate(bool control, bool alt, bool shift, bool system, KeyboardKey key);
+    internal delegate void DispatcherTextDelegate(char unicode);
 
     internal sealed class EventDispatcher
     {
@@ -137,6 +138,10 @@ namespace Pandora.Interactions.Dispatcher
                     }
                     break;
 
+                case EventType.TextEntered:
+                    KeyPress?.Invoke((char)(int)e.Unicode);
+                    break;
+
                 case EventType.LostFocus:
                     LostFocus?.Invoke();
                     break;
@@ -189,6 +194,8 @@ namespace Pandora.Interactions.Dispatcher
         public event DispatcherShortcutKeyDelegate ShortCutKeyUp;
 
         public event DispatcherKeyDelegate KeyDown;
+
+        public event DispatcherTextDelegate KeyPress;
 
         public event DispatcherMouseWheelMoveDelegate MouseWheelMove;
 
