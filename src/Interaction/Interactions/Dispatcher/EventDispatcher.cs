@@ -150,11 +150,11 @@ namespace Pandora.Interactions.Dispatcher
                     break;
 
                 case EventType.MouseButtonPressed:
-                    MouseButtonDown?.Invoke(e.MouseButton.Button, e.MouseButton.X, e.MouseButton.Y);
+                    HandleMouseButtonDownEvent(e.MouseButton.Button, e.MouseButton.X, e.MouseButton.Y);
                     break;
 
                 case EventType.MouseButtonReleased:
-                    MouseButtonUp?.Invoke(e.MouseButton.Button, e.MouseButton.X, e.MouseButton.Y);
+                    HandleMouseButtonUpEvent(e.MouseButton.Button, e.MouseButton.X, e.MouseButton.Y);
                     break;
 
                 case EventType.MouseEntered:
@@ -181,6 +181,8 @@ namespace Pandora.Interactions.Dispatcher
                     break;
             }
         }
+
+        #region MouseMove and MouseOver
 
         private void HandleMouseMoveEvent(int x, int y)
         {
@@ -227,6 +229,40 @@ namespace Pandora.Interactions.Dispatcher
             }
         }
 
+        #endregion
+
+        #region MouseButtonUp and MouseButtonDown
+
+        private void HandleMouseButtonUpEvent(MouseButton button, int x, int y)
+        {
+            // Search for the deepest control element that has received this event.
+            var handled = false;
+            var control = _scenehandler.Scenes.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+
+            // Let the event come up again from the found control.
+            while (control != null)
+            {
+                control.InternalMouseButtonUpEvent(button, x, y);
+                control = control.Parent;
+            }
+        }
+
+        private void HandleMouseButtonDownEvent(MouseButton button, int x, int y)
+        {
+            // Search for the deepest control element that has received this event.
+            var handled = false;
+            var control = _scenehandler.Scenes.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
+
+            // Let the event come up again from the found control.
+            while (control != null)
+            {
+                control.InternalMouseButtonDownEvent(button, x, y);
+                control = control.Parent;
+            }
+        }
+
+        #endregion
+
         public event DispatcherRenderUpdateDelegate Render;
 
         public event DispatcherWindowDelegate Closed;
@@ -247,9 +283,9 @@ namespace Pandora.Interactions.Dispatcher
 
         public event DispatcherMouseWheelMoveDelegate MouseWheelMove;
 
-        public event DispatcherMouseButtonDelegate MouseButtonUp;
+        // public event DispatcherMouseButtonDelegate MouseButtonUp;
 
-        public event DispatcherMouseButtonDelegate MouseButtonDown;
+        //public event DispatcherMouseButtonDelegate MouseButtonDown;
 
         //internal event DispatcherMouseMoveDelegate MouseMove;
 

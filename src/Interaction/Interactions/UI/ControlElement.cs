@@ -18,9 +18,8 @@ namespace Pandora.Interactions.UI
 
     public delegate void PreMouseWheelMoveDelegate(ControlElement element, ref bool cancel, MouseWheel wheel, float delta, float x, float y);
     public delegate void MouseWheelMoveDelegate(ControlElement element, MouseWheel wheel, float delta, float x, float y);
-
-    public delegate void PreMouseButtonUpDelegate(ControlElement element, ref bool cancel, MouseButton button, float x, float y);
-    public delegate void PreMouseButtonDownDelegate(ControlElement element, ref bool cancel, MouseButton button, float x, float y);
+    public delegate void PreMouseButtonUpDelegate(ControlElement element, MouseButton button, float x, float y, ref bool handled);
+    public delegate void PreMouseButtonDownDelegate(ControlElement element, MouseButton button, float x, float y, ref bool handled);
     public delegate void MouseButtonUpDelegate(ControlElement element, MouseButton button, float x, float y);
     public delegate void MouseButtonDownDelegate(ControlElement element, MouseButton button, float x, float y);
 
@@ -73,8 +72,6 @@ namespace Pandora.Interactions.UI
             //Dispatcher.MouseMove += RegisterMouseMovedEvent;
 
             Dispatcher.MouseWheelMove += RegisterMouseWheelMoveEvent;
-            Dispatcher.MouseButtonUp += RegisterMouseButtonUpEvent;
-            Dispatcher.MouseButtonDown += RegisterMouseButtonDownEvent;
 
             Dispatcher.ShortCutKeyUp += RegisterKeyShortCutEvent;
             Dispatcher.KeyUp += RegisterKeyUp;
@@ -177,62 +174,80 @@ namespace Pandora.Interactions.UI
         #region MouseButton
 
         public event EventDelegate MouseButtonDoubleClick;
+
         public event PreMouseButtonUpDelegate PreMouseButtonUp;
         public event PreMouseButtonDownDelegate PreMouseButtonDown;
+
         public event MouseButtonUpDelegate MouseButtonUp;
         public event MouseButtonDownDelegate MouseButtonDown;
 
-        private void RegisterMouseButtonUpEvent(MouseButton button, float x, float y)
+        internal virtual ControlElement InternalTunnelMouseButtonUpEvent(int x, int y, MouseButton button, ref bool handled)
         {
-            if (Enabled && MouseButtonUp != null)
+            if (Enabled && HitTest(x, y))
             {
-                if (HitTest(x, y))
+                var control = default(ControlElement);
+
+                if (this is IContainer container)
                 {
-                    // Das Event wird im Dispatcher verwaltet.
-                    if (Dispatcher.CheckDoubleClick(this))
-                    {
-                        MouseButtonDoubleClick?.Invoke(this);
-                    }
-
-                    Dispatcher.SetFocusControl(this);
-
-                    var cancel = false;
-                    OnPreMouseButtonUp(ref cancel, button, x, y);
-                    if (cancel) return;
-                    MouseButtonUp?.Invoke(this, button, x, y);
+                    control = container.Controls.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+                    if (control != null) return control;
                 }
+
+                OnPreMouseButtonUp(x, y, button, ref handled);
+                return this;
             }
+
+            return null;
         }
 
-
-
-        private void RegisterMouseButtonDownEvent(MouseButton button, float x, float y)
+        protected virtual void OnPreMouseButtonUp(int x, int y, MouseButton button, ref bool handled)
         {
-            if (MouseButtonDown != null)
+            PreMouseButtonUp?.Invoke(this, button, x, y, ref handled);
+        }
+
+        internal virtual ControlElement InternalTunnelMouseButtonDownEvent(int x, int y, MouseButton button, ref bool handled)
+        {
+            if (Enabled && HitTest(x, y))
             {
-                if (HitTest(x, y))
+                var control = default(ControlElement);
+
+                if (this is IContainer container)
                 {
-                    var cancel = false;
-                    OnPreMouseButtonDown(ref cancel, button, x, y);
-                    if (cancel) return;
-                    MouseButtonDown?.Invoke(this, button, x, y);
+                    control = container.Controls.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
+                    if (control != null) return control;
                 }
+
+                OnPreMouseButtonDown(x, y, button, ref handled);
+                return this;
             }
+
+            return null;
         }
 
-
-
-        private void OnPreMouseButtonUp(ref bool cancel, MouseButton button, float x, float y)
+        protected virtual void OnPreMouseButtonDown(int x, int y, MouseButton button, ref bool handled)
         {
-            PreMouseButtonUp?.Invoke(this, ref cancel, button, x, y);
+            PreMouseButtonDown?.Invoke(this, button, x, y, ref handled);
         }
 
-        private void OnPreMouseButtonDown(ref bool cancel, MouseButton button, float x, float y)
+        internal virtual void InternalMouseButtonDownEvent(MouseButton button, int x, int y)
         {
-            PreMouseButtonDown?.Invoke(this, ref cancel, button, x, y);
+            OnMouseButtonDown(x, y, button);
         }
 
+        protected virtual void OnMouseButtonDown(int x, int y, MouseButton button)
+        {
+            MouseButtonDown?.Invoke(this, button, x, y);
+        }
 
+        internal virtual void InternalMouseButtonUpEvent(MouseButton button, int x, int y)
+        {
+            OnMouseButtonUp(x, y, button);
+        }
+
+        protected virtual void OnMouseButtonUp(int x, int y, MouseButton button)
+        {
+            MouseButtonUp?.Invoke(this, button, x, y);
+        }
 
         #endregion
 
@@ -270,7 +285,7 @@ namespace Pandora.Interactions.UI
         private void RegisterKeyShortCutEvent(bool control, bool alt, bool shift, bool system, KeyboardKey key, ref bool handled)
         {
             OnShortCutKeyPress(control, alt, shift, system, key, ref handled);
-        }
+        }   
 
         protected virtual void OnShortCutKeyPress(bool control, bool alt, bool shift, bool system, KeyboardKey key, ref bool handled)
         {

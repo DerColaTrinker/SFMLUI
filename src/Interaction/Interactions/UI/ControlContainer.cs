@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
 
@@ -33,6 +34,22 @@ namespace Pandora.Interactions.UI
             if (handled) return control;
 
             return InternalTunnelMouseOverEvent(x, y, ref handled);
+        }
+
+        internal override ControlElement InternalTunnelMouseButtonUpEvent(int x, int y, MouseButton button, ref bool handled)
+        {
+            var control = Controls.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+            if (handled) return control;
+
+            return InternalTunnelMouseMoveEvent(x, y, ref handled);
+        }
+
+        internal override ControlElement InternalTunnelMouseButtonDownEvent(int x, int y, MouseButton button, ref bool handled)
+        {
+            var control = Controls.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
+            if (handled) return control;
+
+            return InternalTunnelMouseMoveEvent(x, y, ref handled);
         }
 
         #endregion

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Renderer;
 
 namespace Pandora.Interactions.UI
@@ -60,6 +61,7 @@ namespace Pandora.Interactions.UI
             return _elements.Contains(item);
         }
 
+
         public IEnumerator<ControlElement> GetEnumerator()
         {
             return _elements.GetEnumerator();
@@ -98,6 +100,32 @@ namespace Pandora.Interactions.UI
             foreach (var m in _elements)
             {
                 control = m.InternalTunnelMouseOverEvent(x, y, ref handled);
+                if (handled) break;
+            }
+
+            return control;
+        }
+
+        internal ControlElement InternalTunnelMouseButtonUpEvent(int x, int y, MouseButton button, ref bool handled)
+        {
+            var control = default(ControlElement);
+
+            foreach (var m in _elements)
+            {
+                control = m.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+                if (handled) break;
+            }
+
+            return control;
+        }
+
+        internal ControlElement InternalTunnelMouseButtonDownEvent(int x, int y, MouseButton button, ref bool handled)
+        {
+            var control = default(ControlElement);
+
+            foreach (var m in _elements)
+            {
+                control = m.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
                 if (handled) break;
             }
 

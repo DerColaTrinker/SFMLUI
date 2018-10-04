@@ -1,4 +1,5 @@
 ﻿using Pandora.Interactions.Bindings;
+using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Controls.Primitives;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing2D;
@@ -34,7 +35,7 @@ namespace Pandora.Interactions.UI.Controls
 
             Text = "Button";
             TextAlignment = TextAlignment.MiddleCenter;
-            FillColor = Color.Transparent;
+            FillColor = new Color(60, 0, 0);
             BorderOutlineThickness = 2;
             BorderOutlineColor = Color.Green;
         }
@@ -64,6 +65,16 @@ namespace Pandora.Interactions.UI.Controls
         protected override void OnMouseLeave()
         {
             BorderOutlineColor = Color.Green;
+        }
+
+        protected override void OnMouseButtonDown(int x, int y, MouseButton button)
+        {
+            FillColor = new Color(128,0,0);
+        }
+
+        protected override void OnMouseButtonUp(int x, int y, MouseButton button)
+        {
+            FillColor = new Color(60, 0, 0);
         }
 
         public BindingProperty<Color> TextColorBinding { get; private set; }
