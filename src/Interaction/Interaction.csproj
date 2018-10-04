@@ -84,6 +84,7 @@
     <Compile Include="Interactions\UI\ControlCollection.cs" />
     <Compile Include="Interactions\UI\ControlContainer.cs" />
     <Compile Include="Interactions\UI\ControlElement.cs" />
+    <Compile Include="Interactions\UI\Controls\TextBox.cs" />
     <Compile Include="Interactions\UI\Controls\Button.cs" />
     <Compile Include="Interactions\UI\Controls\Label.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\CircleElement.cs" />

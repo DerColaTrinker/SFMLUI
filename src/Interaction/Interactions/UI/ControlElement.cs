@@ -24,6 +24,7 @@ namespace Pandora.Interactions.UI
     public delegate void MouseButtonDownDelegate(ControlElement element, MouseButton button, float x, float y);
 
     public delegate void ControlKeyDelegate(ControlElement element, bool control, bool alt, bool shift, bool system, KeyboardKey key);
+    public delegate void ControlKeyPressDelegate(ControlElement element, char unicode);
 
     public abstract class ControlElement : UIElement, ITemplate
     {
@@ -61,7 +62,9 @@ namespace Pandora.Interactions.UI
 
         public bool AllowFocus { get; protected set; }
 
-        public bool HasFocus { get { return Dispatcher.FocusControl == this; } }
+        public bool IsFocus { get { return Dispatcher.FocusControl == this; } }
+
+        public bool IsMouseOver { get { return Dispatcher.HooverControl == this; } }
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }
 
@@ -328,27 +331,60 @@ namespace Pandora.Interactions.UI
 
         #region Focus
 
-        public event EventDelegate ControlGetFocus;
-        public event EventDelegate ControlLostFocus;
+        public event EventDelegate GetFocus;
+        public event EventDelegate LostFocus;
+        public event ControlKeyDelegate KeyUpFocus;
+        public event ControlKeyDelegate KeyDownFocus;
+        public event ControlKeyPressDelegate KeyPressFocus;
 
-        internal void InternalLostFocus()
+        internal virtual void InternalLostFocusEvent()
         {
-            ControlLostFocus?.Invoke(this);
+            OnLostFocus();
         }
 
-        internal void InternalGetFocus()
+        protected virtual void OnLostFocus()
         {
-            ControlGetFocus?.Invoke(this);
+            LostFocus?.Invoke(this);
         }
 
-        internal void InternalFocusKeyUp(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        internal virtual void InternalGetFocusEvent()
         {
-
+            OnGetFocus();
         }
 
-        internal void InternalFocusKeyDown(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        protected virtual void OnGetFocus()
         {
-            throw new NotImplementedException();
+            GetFocus?.Invoke(this);
+        }
+
+        internal virtual void InternalFocusKeyUp(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        {
+            OnFocusKeyUp(control, alt, shift, system, key);
+        }
+
+        protected virtual void OnFocusKeyUp(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        {
+            KeyUpFocus?.Invoke(this, control, alt, shift, system, key);
+        }
+
+        internal virtual void InternalFocusKeyDown(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        {
+            OnFocusKeyDown(control, alt, shift, system, key);
+        }
+
+        protected virtual void OnFocusKeyDown(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        {
+            KeyDownFocus?.Invoke(this, control, alt, shift, system, key);
+        }
+
+        internal virtual void InternalFocusKeyPress(char unicode)
+        {
+            OnFocusKeyPress(unicode);
+        }
+
+        protected virtual void OnFocusKeyPress(char unicode)
+        {
+            KeyPressFocus?.Invoke(this, unicode);
         }
 
         #endregion

@@ -67,19 +67,6 @@ namespace Pandora.Interactions.Dispatcher
             return NativeSFML.sfWindow_waitEvent(_scenehandler.Pointer, out eventToFill);
         }
 
-        public void SetFocusControl(ControlElement control)
-        {
-            if (control != FocusControl)
-            {
-                // Ein anderes Steuerelement erzwingt den Fokus
-                FocusControl?.InternalLostFocus();
-                FocusControl = control;    // Auch wenn control null ist...
-
-                // Fokus nur setzen wenn es auch erlaubt ist.
-                if (control != null && control.AllowFocus) control.InternalGetFocus();
-            }
-        }
-
         private void CallEventHandler(Event e)
         {
             switch (e.Type)
@@ -117,7 +104,15 @@ namespace Pandora.Interactions.Dispatcher
                     break;
 
                 case EventType.TextEntered:
-                    KeyPress?.Invoke((char)(int)e.Unicode);
+                    if (FocusControl == null)
+                    {
+                        KeyPress?.Invoke((char)(int)e.Unicode);
+                    }
+                    else
+                    {
+                        FocusControl.InternalFocusKeyPress((char)(int)e.Unicode);
+                    }
+
                     break;
 
                 case EventType.LostFocus:
@@ -258,6 +253,8 @@ namespace Pandora.Interactions.Dispatcher
         {
             control.InternalMouseClickEvent();
 
+            HandleFocusEvent(control);
+
             // Doublecklick check
             if (CheckDoubleClick(control))
                 control.InternalMouseDoubleClickEvent();
@@ -287,6 +284,26 @@ namespace Pandora.Interactions.Dispatcher
             }
 
             return false;
+        }
+
+        private void HandleFocusEvent(ControlElement control)
+        {
+            if (control != FocusControl)
+            {
+                FocusControl?.InternalLostFocusEvent();
+                
+                if (control.AllowFocus)
+                {
+
+                    FocusControl = control;
+                    FocusControl?.InternalGetFocusEvent();
+                }
+                else
+                {
+
+                    FocusControl = null;
+                }
+            }
         }
 
         #endregion

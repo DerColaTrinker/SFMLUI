@@ -13,6 +13,7 @@ namespace Pandora
     {
         private Label _label1;
         private Button _button;
+        private TextBox _textbox;
 
         public DemoScene()
         { }
@@ -36,8 +37,17 @@ namespace Pandora
                 FillColor = new Color(20, 20, 20)
             };
 
+            _textbox = new TextBox
+            {
+                Position = new Vector2F(0, 60),
+                Size = new Vector2F(150, 40),
+                Text = "",
+                FillColor = new Color(20, 20, 20)
+            };
+
             Controls.Add(_label1);
             Controls.Add(_button);
+            Controls.Add(_textbox);
 
             _button.MouseButtonUp += _button_MouseButtonUp;
         }
