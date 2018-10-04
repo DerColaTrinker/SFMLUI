@@ -18,8 +18,8 @@ namespace Pandora.Interactions.UI
     {
         private RectElement _background;
 
-        public event SceneDelegate MouseEnter;
-        public event SceneDelegate MouseLeft;
+        public event SceneDelegate WindowMouseEnter;
+        public event SceneDelegate WindowMouseLeft;
         public event SceneResizeDelegate Resize;
 
         protected Scene()
@@ -49,8 +49,10 @@ namespace Pandora.Interactions.UI
             // Nicht aufrufen, da das aus dem UIElement kommt
             //Controls.InternalOnLoad(handler);
 
-            _background = new RectElement();
-            _background.AutoScaleOnParent = true;
+            _background = new RectElement
+            {
+                AutoScaleOnParent = true
+            };
 
             RegisterBindings();
                  
@@ -95,12 +97,12 @@ namespace Pandora.Interactions.UI
 
         private void RegisterWindowLeftEvent()
         {
-            MouseLeft?.Invoke(this);
+            WindowMouseLeft?.Invoke(this);
         }
 
         private void RegisterWindowMouseEnterEvent()
         {
-            MouseEnter?.Invoke(this);
+            WindowMouseEnter?.Invoke(this);
         }
 
         #endregion

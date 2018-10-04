@@ -30,7 +30,7 @@ namespace Pandora
 
             _button = new Button
             {
-                Position = new Vector2F(20, 20),
+                Position = new Vector2F(0, 20),
                 Size = new Vector2F(150, 40),
                 Text = "Demo Button",
                 FillColor = new Color(20, 20, 20)

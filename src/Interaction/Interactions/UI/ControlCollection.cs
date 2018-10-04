@@ -11,7 +11,7 @@ namespace Pandora.Interactions.UI
     public sealed class ControlCollection : IEnumerable<ControlElement>
     {
         private List<ControlElement> _elements = new List<ControlElement>();
-        private ControlElement _parent;
+        private readonly ControlElement _parent;
 
         internal ControlCollection(ControlElement parent)
         {
@@ -75,5 +75,35 @@ namespace Pandora.Interactions.UI
         {
             throw new NotImplementedException();
         }
+
+        #region Events
+
+        internal ControlElement InternalTunnelMouseMoveEvent(int x, int y, ref bool handled)
+        {
+            var control = default(ControlElement);
+
+            foreach (var m in _elements)
+            {
+                control = m.InternalTunnelMouseMoveEvent(x, y, ref handled);
+                if (handled) break;
+            }
+
+            return control;
+        }
+
+        internal ControlElement InternalTunnelMouseOverEvent(int x, int y, ref bool handled)
+        {
+            var control = default(ControlElement);
+
+            foreach (var m in _elements)
+            {
+                control = m.InternalTunnelMouseOverEvent(x, y, ref handled);
+                if (handled) break;
+            }
+
+            return control;
+        }
+
+        #endregion
     }
 }

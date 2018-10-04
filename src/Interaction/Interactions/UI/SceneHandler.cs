@@ -66,7 +66,7 @@ namespace Pandora.Interactions.UI
             // Render-Target erstellen für das Zeichnen
             Renderer = new WindowRenderer(this);
 
-            // Alle Scenen sind vom Type 'Control' können also in einer ControlCollection gehalten werden
+            // Scenes are also Controls.
             _scenes = new ControlCollection(null);
 
             return true;
@@ -201,6 +201,12 @@ namespace Pandora.Interactions.UI
         }
 
         #region Scene Control
+
+        public bool HasScene { get => _scenes.Count > 0; }
+
+        public Scene CurrentScene { get { return _scenes.Cast<Scene>().FirstOrDefault(); } }
+
+        public ControlCollection Scenes { get { return _scenes; } }
 
         public void Show(Scene scene)
         {

@@ -13,7 +13,7 @@ namespace Pandora.Interactions.UI
 {
     public delegate void EventDelegate(ControlElement element);
 
-    public delegate void PreMouseMoveDelegate(ControlElement element, ref bool cancel, float x, float y);
+    public delegate void PreMouseMoveDelegate(ControlElement element, float x, float y, ref bool handled);
     public delegate void MouseMoveDelegate(ControlElement element, float x, float y);
 
     public delegate void PreMouseWheelMoveDelegate(ControlElement element, ref bool cancel, MouseWheel wheel, float delta, float x, float y);
@@ -58,6 +58,8 @@ namespace Pandora.Interactions.UI
 
         public UITemplateCollection Templates { get; private set; }
 
+        public new ControlElement Parent { get { return (ControlElement)base.Parent; } }
+
         public bool AllowFocus { get; protected set; }
 
         public bool HasFocus { get { return Dispatcher.FocusControl == this; } }
@@ -68,7 +70,8 @@ namespace Pandora.Interactions.UI
 
         private void RegisterDispatcherEvents()
         {
-            Dispatcher.MouseMove += RegisterMouseMovedEvent;
+            //Dispatcher.MouseMove += RegisterMouseMovedEvent;
+
             Dispatcher.MouseWheelMove += RegisterMouseWheelMoveEvent;
             Dispatcher.MouseButtonUp += RegisterMouseButtonUpEvent;
             Dispatcher.MouseButtonDown += RegisterMouseButtonDownEvent;
@@ -83,23 +86,90 @@ namespace Pandora.Interactions.UI
         public event PreMouseMoveDelegate PreMouseMove;
         public event MouseMoveDelegate MouseMove;
 
-        private void RegisterMouseMovedEvent(float x, float y)
+        internal virtual ControlElement InternalTunnelMouseMoveEvent(int x, int y, ref bool handled)
         {
-            if (Enabled && MouseMove != null)
+            if (Enabled && HitTest(x, y))
             {
-                if (HitTest(x, y))
+                var control = default(ControlElement);
+
+                if (this is IContainer container)
                 {
-                    var cancel = false;
-                    OnPreMouseMove(ref cancel, x, y);
-                    if (cancel) return;
-                    MouseMove?.Invoke(this, x, y);
+                    control = container.Controls.InternalTunnelMouseMoveEvent(x, y, ref handled);
+                    if (control != null) return control;
                 }
+
+                OnPreMouseMove(x, y, ref handled);
+                return this;
             }
+
+            return null;
         }
 
-        private void OnPreMouseMove(ref bool cancel, float x, float y)
+        internal virtual void InternalMouseMoveEvent(int x, int y)
         {
-            PreMouseMove?.Invoke(this, ref cancel, x, y);
+            OnMouseMove(x, y);
+        }
+
+        protected virtual void OnPreMouseMove(float x, float y, ref bool handled)
+        {
+            PreMouseMove?.Invoke(this, x, y, ref handled);
+        }
+
+        protected virtual void OnMouseMove(float x, float y)
+        {
+            MouseMove?.Invoke(this, x, y);
+        }
+
+        #endregion
+
+        #region MouseOver
+
+        public event PreMouseMoveDelegate PreMouseOver;
+        public event EventDelegate MouseEnter;
+        public event EventDelegate MouseLeave;
+
+        internal virtual ControlElement InternalTunnelMouseOverEvent(int x, int y, ref bool handled)
+        {
+            if (Enabled && HitTest(x, y))
+            {
+                var control = default(ControlElement);
+
+                if (this is IContainer container)
+                {
+                    control = container.Controls.InternalTunnelMouseOverEvent(x, y, ref handled);
+                    if (control != null) return control;
+                }
+
+                OnPreMouseOver(x, y, ref handled);
+                return this;
+            }
+
+            return null;
+        }
+
+        protected virtual void OnPreMouseOver(float x, float y, ref bool handled)
+        {
+            PreMouseOver?.Invoke(this, x, y, ref handled);
+        }
+
+        internal virtual void InternalMouseEnterEvent()
+        {
+            OnMouseEnter();
+        }
+
+        protected virtual void OnMouseEnter()
+        {
+            MouseEnter?.Invoke(this);
+        }
+
+        internal virtual void InternalMouseLeaveEvent()
+        {
+            OnMouseLeave();
+        }
+
+        protected virtual void OnMouseLeave()
+        {
+            MouseLeave?.Invoke(this);
         }
 
         #endregion

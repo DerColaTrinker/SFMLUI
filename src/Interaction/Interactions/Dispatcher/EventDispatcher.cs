@@ -22,7 +22,7 @@ namespace Pandora.Interactions.Dispatcher
 
     internal sealed class EventDispatcher
     {
-        private IntPtr _pointer;
+        private SceneHandler _scenehandler;
         private ControlElement _dbclickcontrol;
         private DateTime _dbclicktimestamp;
 
@@ -30,9 +30,12 @@ namespace Pandora.Interactions.Dispatcher
 
         public ControlElement FocusControl { get; private set; }
 
+        public ControlElement HooverControl { get; private set; }
+
         internal EventDispatcher(SceneHandler handler)
         {
-            _pointer = handler.Pointer;
+            _scenehandler = handler;
+
             DoubleClickTime = 1000;
         }
 
@@ -50,7 +53,7 @@ namespace Pandora.Interactions.Dispatcher
 
         internal bool PollEvent(out Event eventToFill)
         {
-            return NativeSFML.sfWindow_pollEvent(_pointer, out eventToFill);
+            return NativeSFML.sfWindow_pollEvent(_scenehandler.Pointer, out eventToFill);
         }
 
         internal void RenderUpdate(RenderTargetBase target)
@@ -60,7 +63,7 @@ namespace Pandora.Interactions.Dispatcher
 
         internal bool WaitEvent(out Event eventToFill)
         {
-            return NativeSFML.sfWindow_waitEvent(_pointer, out eventToFill);
+            return NativeSFML.sfWindow_waitEvent(_scenehandler.Pointer, out eventToFill);
         }
 
         public bool CheckDoubleClick(ControlElement control)
@@ -163,7 +166,7 @@ namespace Pandora.Interactions.Dispatcher
                     break;
 
                 case EventType.MouseMoved:
-                    MouseMove?.Invoke(e.MouseMove.X, e.MouseMove.Y);
+                    HandleMouseMoveEvent(e.MouseMove.X, e.MouseMove.Y);
                     break;
 
                 case EventType.MouseWheelScrolled:
@@ -176,6 +179,51 @@ namespace Pandora.Interactions.Dispatcher
 
                 default:
                     break;
+            }
+        }
+
+        private void HandleMouseMoveEvent(int x, int y)
+        {
+            // Search for the deepest control element that has received this event.
+            var handled = false;
+            var control = _scenehandler.Scenes.InternalTunnelMouseMoveEvent(x, y, ref handled);
+
+            HandleMouseOverEvent(x, y);
+
+            // Let the event come up again from the found control.
+            while (control != null)
+            {
+                control.InternalMouseMoveEvent(x, y);
+                control = control.Parent;
+            }
+        }
+
+        private void HandleMouseOverEvent(int x, int y)
+        {
+            var handled = false;
+            var control = _scenehandler.Scenes.InternalTunnelMouseOverEvent(x, y, ref handled);
+
+            if (HooverControl == control) return;
+            HandleMouseLeaveEvent(HooverControl);
+            HooverControl = control;
+            HandleMouseEnterEvent(HooverControl);
+        }
+
+        private void HandleMouseEnterEvent(ControlElement control)
+        {
+            while (control != null)
+            {
+                control.InternalMouseEnterEvent();
+                control = control.Parent;
+            }
+        }
+
+        private void HandleMouseLeaveEvent(ControlElement control)
+        {
+            while (control != null)
+            {
+                control.InternalMouseLeaveEvent();
+                control = control.Parent;
             }
         }
 
@@ -203,7 +251,7 @@ namespace Pandora.Interactions.Dispatcher
 
         public event DispatcherMouseButtonDelegate MouseButtonDown;
 
-        public event DispatcherMouseMoveDelegate MouseMove;
+        //internal event DispatcherMouseMoveDelegate MouseMove;
 
         public event DispatcherWindowDelegate WindowMouseEnter;
 

@@ -15,7 +15,27 @@ namespace Pandora.Interactions.UI
             Controls = new ControlCollection(this);
         }
 
-        public ControlCollection Controls { get; }    
+        public ControlCollection Controls { get; }
+
+        #region Events
+
+        internal override ControlElement InternalTunnelMouseMoveEvent(int x, int y, ref bool handled)
+        {
+            var control = Controls.InternalTunnelMouseMoveEvent(x, y, ref handled);
+            if (handled) return control;
+
+            return InternalTunnelMouseMoveEvent(x, y, ref handled);
+        }
+
+        internal override ControlElement InternalTunnelMouseOverEvent(int x, int y, ref bool handled)
+        {
+            var control = Controls.InternalTunnelMouseOverEvent(x, y, ref handled);
+            if (handled) return control;
+
+            return InternalTunnelMouseOverEvent(x, y, ref handled);
+        }
+
+        #endregion
     }
 }
 
