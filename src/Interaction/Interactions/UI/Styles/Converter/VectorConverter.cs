@@ -9,7 +9,7 @@ namespace Pandora.Interactions.UI.Styles.Converter
 {
     public sealed class VectorConverter : ConverterBase
     {
-        public override StyleResourceType ConverterType => StyleResourceType.Color;
+        public static VectorConverter Converter = new VectorConverter();
 
         public override object ConvertFromString(string value)
         {

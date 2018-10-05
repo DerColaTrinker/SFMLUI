@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Pandora.Interactions.UI.Styles;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -13,6 +14,8 @@ namespace Pandora
             var runtime = new DemoRuntime();
 
             runtime.Initialize();
+
+            StyleHandler.LoadStyle("styletest.xml");
 
             runtime.Start();
         }

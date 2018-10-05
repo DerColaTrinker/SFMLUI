@@ -8,8 +8,6 @@ namespace Pandora.Interactions.UI.Styles.Converter
 {
     public abstract class ConverterBase
     {
-        public abstract StyleResourceType ConverterType { get; }
-
         public virtual object ConvertFromString(string value)
         {
             return value;
@@ -19,7 +17,5 @@ namespace Pandora.Interactions.UI.Styles.Converter
         {
             return value.ToString();
         }
-
-        public virtual Type Type { get { return typeof(object); } }
     }
 }

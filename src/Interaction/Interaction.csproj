@@ -143,15 +143,10 @@
     <Compile Include="Interactions\UI\ShortCut.cs" />
     <Compile Include="Interactions\UI\Styles\Converter\ColorConverter.cs" />
     <Compile Include="Interactions\UI\Styles\Converter\ConverterBase.cs" />
+    <Compile Include="Interactions\UI\Styles\Converter\DefaultConverter.cs" />
     <Compile Include="Interactions\UI\Styles\Converter\VectorConverter.cs" />
-    <Compile Include="Interactions\UI\Styles\Resource.cs" />
-    <Compile Include="Interactions\UI\Styles\ResourceHandler.cs" />
     <Compile Include="Interactions\UI\Styles\Style.cs" />
-    <Compile Include="Interactions\UI\Styles\StyleControlDescription.cs" />
     <Compile Include="Interactions\UI\Styles\StyleHandler.cs" />
-    <Compile Include="Interactions\UI\Styles\StylePropertyDescription.cs" />
-    <Compile Include="Interactions\UI\Styles\StylePropertyValueSetter.cs" />
-    <Compile Include="Interactions\UI\Styles\StyleResourceType.cs" />
     <Compile Include="Interactions\UI\UIElement.cs" />
     <Compile Include="Interactions\UI\UITemplateCollection.cs" />
     <Compile Include="Interactions\UI\Visibilities.cs" />

@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<styleset>
+  <resource name="borderfillcolor" value="40,40,40" />
+
+  <style control="Pandora.Interactions.UI.Controls.Button">
+    <set property="FillColor">#borderfillcolor</set>
+  </style>
+
+</styleset>

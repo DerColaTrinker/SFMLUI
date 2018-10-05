@@ -13,139 +13,106 @@ namespace Pandora.Interactions.UI.Styles
 {
     public static class StyleHandler
     {
-        private static Dictionary<string, Style> _styles = new Dictionary<string, Style>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<Type, StyleControlDescription> _controls = new Dictionary<Type, StyleControlDescription>();
+        private static readonly Dictionary<string, string> _resources = new Dictionary<string, string>();
+        private static Dictionary<Type, Dictionary<string, Style>> _controls = new Dictionary<Type, Dictionary<string, Style>>();
 
         public static void LoadStyle(string filename)
         {
-            if (!File.Exists(filename))
-            {
-                return;
-            }
-
             var xd = new XmlDocument();
+            xd.Load(filename);
 
-            try
-            {
-                xd.Load(filename);
-            }
-            catch (Exception)
-            {
-                return;
-            }
-
+            ParseResources(xd);
             ParseXmlStyles(xd);
+        }
+
+        private static void ParseResources(XmlDocument xd)
+        {
+            foreach (XmlNode resnode in xd.SelectNodes("styleset/resource"))
+            {
+                var name = resnode.Attributes.GetValue("name");
+                var value = resnode.Attributes.GetValue("value");
+
+                _resources[name] = value;
+            }
         }
 
         private static void ParseXmlStyles(XmlDocument xd)
         {
-            foreach (XmlNode stylenode in xd.SelectNodes("styles/style"))
+            foreach (XmlNode stylenode in xd.SelectNodes("styleset/style"))
             {
-                var stylename = stylenode.Attributes.GetValue("name", string.Empty);
+                var controlname = stylenode.Attributes.GetValue("control");
+                var controltype = LookupControlElement(controlname);
+                if (controltype == null) throw new Exception($"Control '{controlname}' not found");
 
-                if (string.IsNullOrEmpty(stylename))
+                if (!_controls.TryGetValue(controltype, out Dictionary<string, Style> styles))
                 {
-                    continue;
+                    styles = new Dictionary<string, Style>();
+                    _controls.Add(controltype, styles);
                 }
 
-                var propertyvalues = new List<StylePropertyValueSetter>();
-                foreach (XmlNode propertynode in stylenode.SelectNodes("property"))
+                ParseXmlStyleSetter(stylenode, controltype, styles);
+            }
+        }
+
+        private static void ParseXmlStyleSetter(XmlNode stylenode, Type controltype, Dictionary<string, Style> styles)
+        {
+            foreach (XmlNode setnode in stylenode.SelectNodes("set"))
+            {
+                var name = setnode.Attributes.GetValue("property");
+                var value = setnode.InnerText;
+
+                if (value.StartsWith("#"))
                 {
-                    var name = propertynode.Attributes.GetValue("name", string.Empty);
-                    var value = propertynode.InnerText;
-
-                    if (string.IsNullOrEmpty(name))
-                    {
-                        continue;
-                    }
-
-                    propertyvalues.Add(new StylePropertyValueSetter(name, value));
+                    if (!_resources.TryGetValue(value.Substring(1), out string resvalue))
+                        throw new Exception($"´Resource '{value}' not found");
+                    else
+                        value = resvalue;
                 }
 
-                var style = new Style()
+                var property = (from p in controltype.GetProperties()
+                                where p.PropertyType.IsSubclassOf(typeof(BindingProperty))
+                                where p.Name.Contains(name)
+                                select p).FirstOrDefault();
+
+                if (property == null) throw new Exception($"Property '{name}' not found");
+
+                var style = new Style
                 {
-                    Name = stylename,
-                    Setter = propertyvalues.AsEnumerable()
+                    Property = property,
+                    Value = value
                 };
 
-                _styles[stylename] = style;
+                styles[property.Name] = style;
             }
         }
 
-        internal static Style GetStyle(string stylename)
+        private static Type LookupControlElement(string controlname)
         {
-            if (!_styles.TryGetValue(stylename, out Style result))
-            {
-                //TODO: Fehler Style nicht gefunden
-            }
-
-            return result;
+            return (from a in AppDomain.CurrentDomain.GetAssemblies()
+                    from t in a.GetTypes()
+                    where t.IsClass && t.IsSubclassOf(typeof(ControlElement))
+                    where t.FullName == controlname
+                    select t).FirstOrDefault();
         }
 
-        internal static void ApplyStyle(ControlElement instance, Style style)
+        private static ConverterBase Converter(Type type)
         {
-            var type = instance.GetType();
-
-            // Control Binding Konfiguration erstellen wenn nicht verfügbar
-            if (!_controls.TryGetValue(type, out StyleControlDescription controldescription))
-            {
-                var bindingproperties = from p in type.GetProperties()
-                                        where p.PropertyType.IsSubclassOf(typeof(BindingProperty))
-                                        let bp = (BindingProperty)p.GetValue(instance)
-                                        select new StylePropertyDescription() { Property = p, Name = bp.Name, Type = bp.PropertyType, Binding = bp };
-
-                controldescription = new StyleControlDescription()
-                {
-                    Type = type,
-                    BindingProperties = bindingproperties.AsEnumerable()
-                };
-
-                _controls[type] = controldescription;
-            }
-
-            foreach (var setter in style.Setter)
-            {
-                var binding = controldescription.BindingProperties.Where(m => m.Name == setter.Name | m.Property.Name == setter.Name).FirstOrDefault();
-
-                if (binding == null)
-                {
-                    //TODO: Fehler Binding nicht gefunden
-                }
-
-                if (Converter(binding, setter, out object value))
-                {
-                    binding.Binding.Value = value;
-                }
-            }
-        }
-
-        private static bool Converter(StylePropertyDescription binding, StylePropertyValueSetter setter, out object result)
-        {
-            result = null;
-
-            switch (Type.GetTypeCode(binding.Type))
+            switch (Type.GetTypeCode(type))
             {
                 case TypeCode.Object:
-                    var converter = default(ConverterBase);
-
-                    switch (binding.Type.Name)
+                    switch (type.Name)
                     {
                         case "Color":
-                            converter = new ColorConverter();
-                            break;
+                            return ColorConverter.Converter;
 
                         case "Vector2":
                         case "Vector2F":
                         case "Vector2U":
-                            converter = new VectorConverter();
-                            break;
+                            return VectorConverter.Converter;
 
                         default:
-                            return false;
+                            throw new Exception($"Binding type '{type.Name}' not supported");
                     }
-
-                    result = converter.ConvertFromString(setter.Value);
-                    return true;
 
                 case TypeCode.Boolean:
                 case TypeCode.Char:
@@ -162,14 +129,24 @@ namespace Pandora.Interactions.UI.Styles
                 case TypeCode.Decimal:
                 case TypeCode.DateTime:
                 case TypeCode.String:
-                    result = Convert.ChangeType(setter.Value, binding.Type);
-                    return true;
+                    return new DefaultConverter(type);
 
                 case TypeCode.Empty:
                 case TypeCode.DBNull:
                 default:
-                    //TODO: Konvertierung ungültig.
-                    return false;
+                    throw new Exception($"Binding type '{type.Name}' not supported");
+            }
+        }
+
+        public static void ApplyStyle(ControlElement element)
+        {
+            if (_controls.TryGetValue(element.GetType(), out Dictionary<string, Style> styles))
+            {
+                foreach (var style in styles.Values)
+                {
+                    var binding = (BindingProperty)style.Property.GetValue(element);
+                    binding.Value = Converter(binding.PropertyType).ConvertFromString(style.Value);
+                }
             }
         }
     }

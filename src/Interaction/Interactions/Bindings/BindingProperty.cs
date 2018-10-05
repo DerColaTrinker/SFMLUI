@@ -19,7 +19,6 @@ namespace Pandora.Interactions.Bindings
     {
         private Delegate _getter;
         private Delegate _setter;
-        private Resource _resource;
 
         public event BindingPropertyChangedDelegate BindingPropertyChanged;
 
@@ -85,8 +84,6 @@ namespace Pandora.Interactions.Bindings
                         return _externalbinding.Value;
 
                     case BindingPropertyType.Delegate:
-                        // Wert der Resource liefern
-                        if (IsResource) return _resource.Value;
 
                         return _getter.DynamicInvoke();
 
@@ -105,14 +102,10 @@ namespace Pandora.Interactions.Bindings
                         break;
 
                     case BindingPropertyType.Delegate:
-                        // Nichts machen wenn eine Resource festgelegt ist
-                        if (IsResource) return;
-
                         _setter.DynamicInvoke(new object[] { value });
                         break;
 
                     case BindingPropertyType.InternalValue:
-                        if (IsResource) return;
                         _internalvalue = value;
                         break;
                 }
@@ -120,50 +113,6 @@ namespace Pandora.Interactions.Bindings
                 OnValueChanged(value);
             }
         }
-
-        public Resource Resource
-        {
-            get
-            {
-                switch (BindingType)
-                {
-                    case BindingPropertyType.ExternalBinding:
-                        return _externalbinding.Resource;
-
-                    case BindingPropertyType.InternalValue:
-                    case BindingPropertyType.Delegate:
-                        return _resource;
-
-                }
-
-                return null;
-            }
-            set
-            {
-                switch (BindingType)
-                {
-                    case BindingPropertyType.ExternalBinding:
-                        _externalbinding.Resource = value;
-                        break;
-
-                    case BindingPropertyType.InternalValue:
-                    case BindingPropertyType.Delegate:
-                        if (value != null)
-                        {
-                            if (value.Type != PropertyType) throw new InvalidCastException("Different property and resource type");
-                            _resource = value;
-                        }
-                        else
-                        {
-                            _resource = null;
-                        }
-
-                        break;
-                }
-            }
-        }
-
-        public bool IsResource { get { return _resource != null; } }
 
         protected virtual void OnValueChanged(object value)
         {

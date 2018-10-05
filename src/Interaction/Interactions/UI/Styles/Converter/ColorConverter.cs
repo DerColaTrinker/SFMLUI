@@ -9,7 +9,7 @@ namespace Pandora.Interactions.UI.Styles.Converter
 {
     public sealed class ColorConverter : ConverterBase
     {
-        public override StyleResourceType ConverterType => StyleResourceType.Color;
+        public static ColorConverter Converter = new ColorConverter();
 
         public override object ConvertFromString(string value)
         {
@@ -55,7 +55,7 @@ namespace Pandora.Interactions.UI.Styles.Converter
 
         public override string ConvertToString(object value)
         {
-            if(value is Color color)
+            if (value is Color color)
                 return string.Format("{0},{1},{2},{3}", color.R, color.G, color.B, color.A);
 
             throw new InvalidCastException("value ist not Color");

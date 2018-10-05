@@ -1,15 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Reflection;
 
 namespace Pandora.Interactions.UI.Styles
 {
     public class Style
     {
-        public Style()
-        {
-        }
-
-        public string Name { get; set; }
-
-        public IEnumerable<StylePropertyValueSetter> Setter { get; set; }
+        public PropertyInfo Property { get; internal set; }
+        public string Value { get; internal set; }
     }
 }

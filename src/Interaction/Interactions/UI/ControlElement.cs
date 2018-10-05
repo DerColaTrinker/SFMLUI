@@ -28,8 +28,6 @@ namespace Pandora.Interactions.UI
 
     public abstract class ControlElement : UIElement, ITemplate
     {
-        private Style _style;
-
         protected ControlElement() : base(IntPtr.Zero)
         {
             InitializeUIElement();
@@ -46,6 +44,8 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
+            StyleHandler.ApplyStyle(this);
+
             base.InternalOnLoad(handler);
 
             RegisterDispatcherEvents();
@@ -393,24 +393,7 @@ namespace Pandora.Interactions.UI
 
         #region Style
 
-        public Style Style
-        {
-            get { return _style; }
-            set
-            {
-                StyleHandler.ApplyStyle(this, value);
-                _style = value;
-            }
-        }
 
-        public string Stylename
-        {
-            get { return _style == null ? string.Empty : _style.Name; }
-            set
-            {
-                Style = StyleHandler.GetStyle(value);
-            }
-        }
 
         #endregion
     }
