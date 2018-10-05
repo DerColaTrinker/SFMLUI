@@ -2,7 +2,6 @@
 using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
-using Pandora.Interactions.UI.Styles;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,7 +43,7 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            StyleHandler.ApplyStyle(this);
+            //DesignHandler.ApplyStyle(this);
 
             base.InternalOnLoad(handler);
 
@@ -387,12 +386,6 @@ namespace Pandora.Interactions.UI
         }
 
         #endregion
-
-        #endregion
-
-        #region Style
-
-
 
         #endregion
     }

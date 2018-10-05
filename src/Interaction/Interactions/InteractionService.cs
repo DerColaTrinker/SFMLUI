@@ -22,15 +22,17 @@ namespace Pandora.Interactions
         {
             _options = InteractionOptions.Create();
             options?.Invoke(_options);
-
         }
-                   
+
         public SceneHandler Scenes { get; private set; }
 
         protected internal override void Initialize(out bool success)
         {
             Scenes = new SceneHandler(this);
             success = Scenes.Initialize();
+
+            foreach (var item in _options.DesignFiles)
+                Scenes.Designs.LoadDesign(item);
 
             if (!string.IsNullOrEmpty(_options.DefaultFontfile))
                 DefaultFont = new Font(_options.DefaultFontfile);

@@ -97,6 +97,7 @@
     <Compile Include="Interactions\UI\Controls\Primitives\TextAlignment.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\TextElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexElement.cs" />
+    <Compile Include="Interactions\UI\Design\DesignContainer.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Font.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Image.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Shader.cs" />
@@ -141,12 +142,11 @@
     <Compile Include="Interactions\UI\Scene.cs" />
     <Compile Include="Interactions\UI\SceneHandler.cs" />
     <Compile Include="Interactions\UI\ShortCut.cs" />
-    <Compile Include="Interactions\UI\Styles\Converter\ColorConverter.cs" />
-    <Compile Include="Interactions\UI\Styles\Converter\ConverterBase.cs" />
-    <Compile Include="Interactions\UI\Styles\Converter\DefaultConverter.cs" />
-    <Compile Include="Interactions\UI\Styles\Converter\VectorConverter.cs" />
-    <Compile Include="Interactions\UI\Styles\Style.cs" />
-    <Compile Include="Interactions\UI\Styles\StyleHandler.cs" />
+    <Compile Include="Interactions\UI\Design\Converter\ColorConverter.cs" />
+    <Compile Include="Interactions\UI\Design\Converter\ConverterBase.cs" />
+    <Compile Include="Interactions\UI\Design\Converter\DefaultConverter.cs" />
+    <Compile Include="Interactions\UI\Design\Converter\VectorConverter.cs" />
+    <Compile Include="Interactions\UI\Design\DesignHandler.cs" />
     <Compile Include="Interactions\UI\UIElement.cs" />
     <Compile Include="Interactions\UI\UITemplateCollection.cs" />
     <Compile Include="Interactions\UI\Visibilities.cs" />

@@ -1,9 +1,9 @@
 ﻿using Pandora.Interactions.Caching;
 using Pandora.Interactions.Dispatcher;
 using Pandora.Interactions.UI.Animations;
+using Pandora.Interactions.UI.Design;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
-using Pandora.Interactions.UI.Styles;
 using Pandora.SFML;
 using Pandora.SFML.Graphics;
 using Pandora.SFML.Native;
@@ -27,8 +27,9 @@ namespace Pandora.Interactions.UI
         {
             Service = service;
             Cache = new CacheHandler();
+            Designs = new DesignHandler();
 
-            // Default Configuration
+              // Default Configuration
             _contextsettings.DepthBits = 0;
             _contextsettings.StencilBits = 0;
             _contextsettings.AntialiasingLevel = 1;
@@ -207,6 +208,8 @@ namespace Pandora.Interactions.UI
         public Scene CurrentScene { get { return _scenes.Cast<Scene>().FirstOrDefault(); } }
 
         public ControlCollection Scenes { get { return _scenes; } }
+
+        public DesignHandler Designs { get; private set; }
 
         public void Show(Scene scene)
         {

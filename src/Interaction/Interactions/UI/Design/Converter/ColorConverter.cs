@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Pandora.Interactions.UI.Styles.Converter
+namespace Pandora.Interactions.UI.Design.Converter
 {
     public sealed class ColorConverter : ConverterBase
     {

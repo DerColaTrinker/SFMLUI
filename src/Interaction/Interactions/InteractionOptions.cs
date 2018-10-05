@@ -10,16 +10,25 @@ namespace Pandora.Interactions
 {
     public class InteractionOptions : IInteractionOptions
     {
+        private List<string> _designfiles = new List<string>();
+
         private InteractionOptions()
         { }
-
-        public Scene StartScene { get; set; }
-
-        public string DefaultFontfile { get;  set; }
 
         internal static InteractionOptions Create()
         {
             return new InteractionOptions();
+        }
+
+        public Scene StartScene { get; set; }
+
+        public string DefaultFontfile { get; set; }
+
+        public IEnumerable<string> DesignFiles { get { return _designfiles; } }
+
+        public void LoadDesign(string filename)
+        {
+            _designfiles.Add(filename);
         }
     }
 }
