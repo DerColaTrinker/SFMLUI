@@ -1,5 +1,6 @@
 ﻿using Pandora.Interactions.Bindings;
 using Pandora.Interactions.Controller;
+using Pandora.Interactions.UI.Design;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
 using System;
@@ -43,7 +44,7 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            //DesignHandler.ApplyStyle(this);
+            DesignHandler.PerformDesign(this);
 
             base.InternalOnLoad(handler);
 

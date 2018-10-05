@@ -98,6 +98,7 @@
     <Compile Include="Interactions\UI\Controls\Primitives\TextElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexElement.cs" />
     <Compile Include="Interactions\UI\Design\DesignContainer.cs" />
+    <Compile Include="Interactions\UI\Design\StyleContainer.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Font.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Image.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Shader.cs" />

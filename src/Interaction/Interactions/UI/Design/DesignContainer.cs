@@ -1,58 +1,40 @@
 ﻿using Pandora.Interactions.UI.Design.Converter;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace Pandora.Interactions.UI.Design
 {
     internal class DesignContainer
     {
+        internal class StyleCollection : IEnumerable<StyleContainer>
+        {
+            private Dictionary<string, StyleContainer> _properties = new Dictionary<string, StyleContainer>();
+
+            internal void Add(StyleContainer style)
+            {
+                _properties[style.Property.Name] = style;
+            }
+
+            public IEnumerator<StyleContainer> GetEnumerator()
+            {
+                return _properties.Values.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
+        }
+
         public DesignContainer(Type control)
         {
             Control = control;
+            Styles = new StyleCollection();
         }
 
         public Type Control { get; }
 
-        private static ConverterBase Converter(Type type)
-        {
-            switch (Type.GetTypeCode(type))
-            {
-                case TypeCode.Object:
-                    switch (type.Name)
-                    {
-                        case "Color":
-                            return ColorConverter.Converter;
-
-                        case "Vector2":
-                        case "Vector2F":
-                        case "Vector2U":
-                            return VectorConverter.Converter;
-
-                        default:
-                            throw new Exception($"Binding type '{type.Name}' not supported");
-                    }
-
-                case TypeCode.Boolean:
-                case TypeCode.Char:
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                case TypeCode.DateTime:
-                case TypeCode.String:
-                    return new DefaultConverter(type);
-
-                case TypeCode.Empty:
-                case TypeCode.DBNull:
-                default:
-                    throw new Exception($"Binding type '{type.Name}' not supported");
-            }
-        }
+        public StyleCollection Styles { get; }
     }
 }

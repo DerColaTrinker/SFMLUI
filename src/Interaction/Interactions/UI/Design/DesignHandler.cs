@@ -14,7 +14,7 @@ namespace Pandora.Interactions.UI.Design
     public class DesignHandler
     {
         private readonly Dictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        private Dictionary<Type, DesignContainer> _controls = new Dictionary<Type, DesignContainer>();
+        private static Dictionary<Type, DesignContainer> _controls = new Dictionary<Type, DesignContainer>();
 
         public void LoadDesign(string filename)
         {
@@ -55,8 +55,25 @@ namespace Pandora.Interactions.UI.Design
                 }
 
                 ParseXmlTemplates(container, controlnode.SelectNodes("templates/element"));
-                ParseXmlStyles(container, controlnode.SelectNodes("style"));
+                ParseXmlStyles(container, controlnode.SelectNodes("style/set"));
                 ParseXmlAnimation(container, controlnode.SelectNodes("animation"));
+            }
+        }
+
+        internal static void PerformDesign(ControlElement control)
+        {
+            if (_controls.TryGetValue(control.GetType(), out DesignContainer container))
+            {
+                ApplyStyles(control, container);
+            }
+        }
+
+        private static void ApplyStyles(ControlElement control, DesignContainer container)
+        {
+            foreach (var item in container.Styles)
+            {
+                var binding = (BindingProperty)item.Property.GetValue(control);
+                binding.Value = Converter(binding.PropertyType).ConvertFromString(item.Value);
             }
         }
 
@@ -72,7 +89,28 @@ namespace Pandora.Interactions.UI.Design
         {
             foreach (XmlNode node in nodes)
             {
+                var name = node.Attributes.GetValue("property");
+                var value = node.InnerText;
 
+                if (value.StartsWith("#"))
+                {
+                    if (_resources.TryGetValue(value.Substring(1), out string resvalue))
+                    {
+                        value = resvalue;
+                    }
+                    else
+                    {
+                        throw new Exception($"Resource '{value}' not found");
+                    }
+                }
+
+                var style = (from p in container.Control.GetProperties()
+                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
+                             select new StyleContainer() { Property = p, Value = value }).FirstOrDefault();
+
+                if (style == null) throw new Exception($"Property '{name}' not found");
+
+                container.Styles.Add(style);
             }
         }
 
@@ -81,6 +119,49 @@ namespace Pandora.Interactions.UI.Design
             foreach (XmlNode node in nodes)
             {
 
+            }
+        }
+
+        private static ConverterBase Converter(Type type)
+        {
+            switch (Type.GetTypeCode(type))
+            {
+                case TypeCode.Object:
+                    switch (type.Name)
+                    {
+                        case "Color":
+                            return ColorConverter.Converter;
+
+                        case "Vector2":
+                        case "Vector2F":
+                        case "Vector2U":
+                            return VectorConverter.Converter;
+
+                        default:
+                            throw new Exception($"Binding type '{type.Name}' not supported");
+                    }
+
+                case TypeCode.Boolean:
+                case TypeCode.Char:
+                case TypeCode.SByte:
+                case TypeCode.Byte:
+                case TypeCode.Int16:
+                case TypeCode.UInt16:
+                case TypeCode.Int32:
+                case TypeCode.UInt32:
+                case TypeCode.Int64:
+                case TypeCode.UInt64:
+                case TypeCode.Single:
+                case TypeCode.Double:
+                case TypeCode.Decimal:
+                case TypeCode.DateTime:
+                case TypeCode.String:
+                    return new DefaultConverter(type);
+
+                case TypeCode.Empty:
+                case TypeCode.DBNull:
+                default:
+                    throw new Exception($"Binding type '{type.Name}' not supported");
             }
         }
     }
