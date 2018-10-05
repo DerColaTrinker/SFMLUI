@@ -175,8 +175,7 @@ namespace Pandora.Interactions.UI
         #endregion
 
         #region MouseButton
-
-        public event PreMouseMoveDelegate PreMouseClick;
+       
         public event EventDelegate MouseClick;
         public event EventDelegate MouseDoubleClick;
 
