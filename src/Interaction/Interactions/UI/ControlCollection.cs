@@ -114,6 +114,7 @@ namespace Pandora.Interactions.UI
             {
                 control = m.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
                 if (handled) break;
+                if (control != null) break;
             }
 
             return control;
@@ -127,6 +128,7 @@ namespace Pandora.Interactions.UI
             {
                 control = m.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
                 if (handled) break;
+                if (control != null) break;
             }
 
             return control;
