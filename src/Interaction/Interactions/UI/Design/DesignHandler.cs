@@ -7,14 +7,16 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 using Pandora.Interactions.Bindings;
+using Pandora.Interactions.UI.Animations;
 using Pandora.Interactions.UI.Design.Converter;
+using Pandora.Interactions.UI.Drawing;
 
 namespace Pandora.Interactions.UI.Design
 {
     public class DesignHandler
     {
         private readonly Dictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<Type, DesignContainer> _controls = new Dictionary<Type, DesignContainer>();
+        private static Dictionary<Type, ControlContainer> _controls = new Dictionary<Type, ControlContainer>();
 
         public void LoadDesign(string filename)
         {
@@ -48,73 +50,120 @@ namespace Pandora.Interactions.UI.Design
                                select t).FirstOrDefault();
                 if (control == null) throw new Exception($"Control '{controlname}' not found");
 
-                if (!_controls.TryGetValue(control, out DesignContainer container))
+                if (!_controls.TryGetValue(control, out ControlContainer container))
                 {
-                    container = new DesignContainer(control);
+                    container = new ControlContainer(control);
                     _controls.Add(control, container);
                 }
 
-                ParseXmlTemplates(container, controlnode.SelectNodes("templates/element"));
-                ParseXmlStyles(container, controlnode.SelectNodes("style/set"));
-                ParseXmlAnimation(container, controlnode.SelectNodes("animation"));
+                container.Styles.AddRange(ParseXmlStyles(container, controlnode));
+                container.Animations.AddRange(ParseXmlAnimation(container, controlnode));
             }
         }
 
         internal static void PerformDesign(ControlElement control)
         {
-            if (_controls.TryGetValue(control.GetType(), out DesignContainer container))
+            if (_controls.TryGetValue(control.GetType(), out ControlContainer container))
             {
-                ApplyStyles(control, container);
+                ApplyDesign(control, container);
             }
         }
 
-        private static void ApplyStyles(ControlElement control, DesignContainer container)
+        private static void ApplyDesign(ControlElement control, ControlContainer container)
+        {
+            ApplyStyles(control, container);
+            ApplyAnimation(control, container);
+        }
+
+        private static void ApplyAnimation(ControlElement control, ControlContainer container)
+        {
+            foreach (var animationcontainer in container.Animations)
+            {
+                var animation = default(Animation);
+
+                if (animationcontainer.Styles.Count() == 1)
+                {
+                    // Create Animation Effect
+                    var item = animationcontainer.Styles.First();
+                    var binding = (BindingProperty)item.Property.GetValue(control);
+                    animation = CreateAnimation(binding, item);
+
+                }
+                else if (animationcontainer.Styles.Count() > 1)
+                {
+
+                }
+                else
+                    continue;
+
+                var effect = CreateAnimationEffect(animationcontainer, animation, control);
+
+                control.Effects.Add(effect);
+            }
+        }
+
+        private static void ApplyStyles(ControlElement control, ControlContainer container)
         {
             foreach (var item in container.Styles)
             {
                 var binding = (BindingProperty)item.Property.GetValue(control);
-                binding.Value = Converter(binding.PropertyType).ConvertFromString(item.Value);
+                binding.Value = TypeConverter(binding.PropertyType).ConvertFromString(item.Value);
             }
         }
 
-        private void ParseXmlAnimation(DesignContainer container, XmlNodeList nodes)
+        private IEnumerable<AnimationContainer> ParseXmlAnimation(ControlContainer container, XmlNode controlnode)
         {
-            foreach (XmlNode node in nodes)
+            foreach (XmlNode node in controlnode.SelectNodes("animation"))
             {
+                var eventmode = node.Attributes.GetValue("event");
+                var groupname = node.Attributes.GetValue("groupname", string.Empty);
 
-            }
-        }
-
-        private void ParseXmlStyles(DesignContainer container, XmlNodeList nodes)
-        {
-            foreach (XmlNode node in nodes)
-            {
-                var name = node.Attributes.GetValue("property");
-                var value = node.InnerText;
-
-                if (value.StartsWith("#"))
+                var animation = new AnimationContainer()
                 {
-                    if (_resources.TryGetValue(value.Substring(1), out string resvalue))
-                    {
-                        value = resvalue;
-                    }
-                    else
-                    {
-                        throw new Exception($"Resource '{value}' not found");
-                    }
-                }
+                    Event = (DesignAnimationEvents)Enum.Parse(typeof(DesignAnimationEvents), eventmode, true),
+                    Groupname = groupname
+                };
 
-                var style = (from p in container.Control.GetProperties()
-                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
-                             select new StyleContainer() { Property = p, Value = value }).FirstOrDefault();
+                animation.Styles = ParseXmlStyles(container, node);
 
-                if (style == null) throw new Exception($"Property '{name}' not found");
-
-                container.Styles.Add(style);
+                yield return animation;
             }
         }
 
-        private void ParseXmlTemplates(DesignContainer container, XmlNodeList nodes)
+        private IEnumerable<StyleContainer> ParseXmlStyles(ControlContainer container, XmlNode basenode)
+        {
+            foreach (XmlNode stylenode in basenode.SelectNodes("style"))
+            {
+                foreach (XmlNode node in stylenode.SelectNodes("set"))
+                {
+                    var name = node.Attributes.GetValue("property");
+                    var duration = node.Attributes.GetValue("duration", 0);
+                    var value = node.InnerText;
+
+                    if (value.StartsWith("#"))
+                    {
+                        if (_resources.TryGetValue(value.Substring(1), out string resvalue))
+                        {
+                            value = resvalue;
+                        }
+                        else
+                        {
+                            throw new Exception($"Resource '{value}' not found");
+                        }
+                    }
+
+                    var style = (from p in container.Control.GetProperties()
+                                 where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
+                                 select new StyleContainer() { Property = p, Duration = duration, Value = value }).FirstOrDefault();
+
+                    if (style == null) throw new Exception($"Property '{name}' not found");
+
+                    yield return style;
+                }
+            }
+        }
+
+        private void ParseXmlTemplates(ControlContainer container, XmlNodeList nodes)
         {
             foreach (XmlNode node in nodes)
             {
@@ -122,7 +171,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static ConverterBase Converter(Type type)
+        private static ConverterBase TypeConverter(Type type)
         {
             switch (Type.GetTypeCode(type))
             {
@@ -163,6 +212,51 @@ namespace Pandora.Interactions.UI.Design
                 default:
                     throw new Exception($"Binding type '{type.Name}' not supported");
             }
+        }
+
+        private static Animation CreateAnimation(BindingProperty binding, StyleContainer style)
+        {
+            switch (binding.PropertyType.Name)
+            {
+                case "Color":
+                    return new ColorAnimation((BindingProperty<Color>)binding, (Color)TypeConverter(typeof(Color)).ConvertFromString(style.Value), style.Duration);
+
+                case "Vector2F":
+                    return new VectorAnimation((BindingProperty<Vector2F>)binding, (Vector2F)TypeConverter(typeof(Vector2F)).ConvertFromString(style.Value), style.Duration);
+
+                default:
+                    throw new Exception($"Animation converter not found '{binding.PropertyType.Name}'");
+            }
+        }
+
+        private static AnimationEventHook CreateAnimationEffect(AnimationContainer container, Animation animation, ControlElement control)
+        {
+            var hook = new AnimationEventHook
+            {
+                Animation = animation,
+                Control = control,
+                Groupname = container.Groupname
+            };
+
+            switch (container.Event)
+            {
+                case DesignAnimationEvents.MouseEnter:
+                    control.MouseEnter += hook.MouseEvents1;
+                    break;
+
+                case DesignAnimationEvents.MouseLeave:
+                    control.MouseLeave += hook.MouseEvents1;
+                    break;
+
+                case DesignAnimationEvents.MouseClick:
+                    control.MouseClick += hook.MouseEvents1;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"'{container.Event}' not supported.");
+            }
+
+            return hook;
         }
     }
 }

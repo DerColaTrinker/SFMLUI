@@ -88,6 +88,7 @@ namespace Pandora.Interactions.UI
             {
                 control = m.InternalTunnelMouseMoveEvent(x, y, ref handled);
                 if (handled) break;
+                if (control != null) break;
             }
 
             return control;
@@ -101,6 +102,7 @@ namespace Pandora.Interactions.UI
             {
                 control = m.InternalTunnelMouseOverEvent(x, y, ref handled);
                 if (handled) break;
+                if (control != null) break;
             }
 
             return control;

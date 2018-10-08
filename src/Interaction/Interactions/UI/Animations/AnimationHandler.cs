@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Pandora.Interactions.UI.Design;
 
 namespace Pandora.Interactions.UI.Animations
 {
@@ -33,6 +34,14 @@ namespace Pandora.Interactions.UI.Animations
                     return false;
                 }
             });
+        }
+
+        public static void StopRange(IEnumerable<AnimationEventHook> enumerable)
+        {
+            foreach (var item in enumerable)
+            {
+                Stop(item.Animation);
+            }
         }
 
         public static void Start(Animation effect)

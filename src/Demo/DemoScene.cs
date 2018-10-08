@@ -48,16 +48,6 @@ namespace Pandora
             Controls.Add(_label1);
             Controls.Add(_button);
             Controls.Add(_textbox);
-
-            _button.MouseButtonUp += _button_MouseButtonUp;
-        }
-
-        private void _button_MouseButtonUp(ControlElement element, Interactions.Controller.MouseButton button, float x, float y)
-        {
-            if (element is Button b)
-            {
-                b.TextColor = Color.Yellow;
-            }
-        }
+        }              
     }
 }

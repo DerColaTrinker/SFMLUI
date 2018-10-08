@@ -57,31 +57,6 @@ namespace Pandora.Interactions.UI.Controls
             BorderOutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", _rect.OutlineThicknessBinding);
         }
 
-        protected override void OnMouseEnter()
-        {
-            BorderOutlineColor = Color.Red;
-        }
-
-        protected override void OnMouseLeave()
-        {
-            BorderOutlineColor = Color.Green;
-        }
-
-        protected override void OnMouseButtonDown(int x, int y, MouseButton button)
-        {
-            FillColor = new Color(128,0,0);
-        }
-
-        protected override void OnMouseButtonUp(int x, int y, MouseButton button)
-        {
-            FillColor = new Color(60, 0, 0);
-        }
-
-        protected override void OnMouseClick()
-        {
-            TextColor = Color.Green;
-        }
-
         public BindingProperty<Color> TextColorBinding { get; private set; }
 
         public BindingProperty<Color> TextOutlineColorBinding { get; private set; }

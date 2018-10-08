@@ -7,6 +7,8 @@ namespace Pandora.Interactions.UI.Design
         public StyleContainer()
         { }
 
+        public int Duration { get;  set; }
+
         public PropertyInfo Property { get; set; }
 
         public string Value { get; set; }

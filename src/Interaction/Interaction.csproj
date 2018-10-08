@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DesignAnimationEvents.cs" />
     <Compile Include="Engine\Services\RuntimeService.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
     <Compile Include="Interactions\Bindings\BindingEnumerator.cs" />
@@ -97,7 +98,9 @@
     <Compile Include="Interactions\UI\Controls\Primitives\TextAlignment.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\TextElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexElement.cs" />
-    <Compile Include="Interactions\UI\Design\DesignContainer.cs" />
+    <Compile Include="Interactions\UI\Design\AnimationContainer.cs" />
+    <Compile Include="Interactions\UI\Design\AnimationEventHook.cs" />
+    <Compile Include="Interactions\UI\Design\ControlContainer.cs" />
     <Compile Include="Interactions\UI\Design\StyleContainer.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Font.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Image.cs" />
@@ -127,6 +130,7 @@
     <Compile Include="Interactions\UI\Drawing\Vector2U.cs" />
     <Compile Include="Interactions\UI\Drawing\Vector3F.cs" />
     <Compile Include="Interactions\UI\Drawing\Vertex.cs" />
+    <Compile Include="Interactions\UI\EffectCollection.cs" />
     <Compile Include="Interactions\UI\IContainer.cs" />
     <Compile Include="Interactions\UI\ITemplate.cs" />
     <Compile Include="Interactions\UI\Renderer\BlendMode.cs" />

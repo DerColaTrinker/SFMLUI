@@ -30,6 +30,8 @@ namespace Pandora.Interactions.UI
     {
         protected ControlElement() : base(IntPtr.Zero)
         {
+            Effects = new EffectCollection();
+
             InitializeUIElement();
 
             RegisterBindingProperties();
@@ -60,6 +62,19 @@ namespace Pandora.Interactions.UI
 
         public new ControlElement Parent { get { return (ControlElement)base.Parent; } }
 
+        public Scene FindScene()
+        {
+            var parent = Parent;
+
+            while (parent != null)
+            {
+                if (parent is Scene scene) return scene;
+                parent = parent.Parent;
+            }
+
+            return null;
+        }
+
         public bool AllowFocus { get; protected set; }
 
         public bool IsFocus { get { return Dispatcher.FocusControl == this; } }
@@ -67,6 +82,8 @@ namespace Pandora.Interactions.UI
         public bool IsMouseOver { get { return Dispatcher.HooverControl == this; } }
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }
+
+        public EffectCollection Effects { get; internal set; }
 
         #region Events
 
@@ -175,7 +192,7 @@ namespace Pandora.Interactions.UI
         #endregion
 
         #region MouseButton
-       
+
         public event EventDelegate MouseClick;
         public event EventDelegate MouseDoubleClick;
 

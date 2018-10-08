@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Animations
 {
-    public abstract class PropertyAnimation : Animation
+    public class PropertyAnimation : Animation
     {
-        protected PropertyAnimation(BindingProperty property, float time) : base(time)
+        public PropertyAnimation(BindingProperty property, float time) : base(time)
         {
             Property = property;
         }
@@ -17,9 +17,9 @@ namespace Pandora.Interactions.UI.Animations
         public BindingProperty Property { get; }
     }
 
-    public abstract class PropertyAnimation<T> : PropertyAnimation
+    public class PropertyAnimation<T> : PropertyAnimation
     {
-        protected PropertyAnimation(BindingProperty<T> property, T targetvalue, float time) : base(property, time)
+        public PropertyAnimation(BindingProperty<T> property, T targetvalue, float time) : base(property, time)
         {
             TargetValue = targetvalue;
         }

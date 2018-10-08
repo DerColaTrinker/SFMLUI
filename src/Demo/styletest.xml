@@ -1,12 +1,26 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 
 <controls>
-  <resource name="borderfillcolor" value="40,40,40" />
+  <resource name="borderfillcolornormal" value="40,40,40" />
+  <resource name="borderfillcolorhoover" value="80,80,80" />
 
   <control name="Pandora.Interactions.UI.Controls.Button">
     <style>
-      <set property="FillColor">#borderfillcolor</set>
+      <set property="FillColor">#borderfillcolornormal</set>
     </style>
+
+    <animation event="MouseEnter" groupname="mousemove">
+      <style>
+        <set property="FillColor" duration="100">#borderfillcolorhoover</set>
+      </style>
+    </animation>
+
+    <animation event="MouseLeave" groupname="mousemove">
+      <style>
+        <set property="FillColor" duration="100">#borderfillcolornormal</set>
+      </style>
+    </animation>
+
   </control>
 
 </controls>
