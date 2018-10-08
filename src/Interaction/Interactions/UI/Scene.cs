@@ -46,7 +46,7 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            // Nicht aufrufen, da das aus dem UIElement kommt
+            // Do not call, since this comes from the UIElement.
             //Controls.InternalOnLoad(handler);
 
             _background = new RectElement

@@ -44,7 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DesignAnimationEvents.cs" />
+    <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />
     <Compile Include="Engine\Services\RuntimeService.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
     <Compile Include="Interactions\Bindings\BindingEnumerator.cs" />

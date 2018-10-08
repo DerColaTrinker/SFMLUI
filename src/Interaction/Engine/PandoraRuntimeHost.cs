@@ -44,7 +44,7 @@ namespace Pandora.Engine
 
         public void Stop()
         {
-            // Nicht direkt anhalten, aber den Running Status auf False setzten, damit wird die Schleife direkt verlassen
+            // Do not stop directly, but set the running status to False, so that the loop is left directly.
             IsRunning = false;
         }
 
@@ -55,9 +55,9 @@ namespace Pandora.Engine
 
         private void RuntimeLoop()
         {
-            var clock = new Clock();                    // Verwendet eine Zeitmessung aus der SFML Bibliothek.
-            var ms = 1F;                                // Initial ms auf 1 setzten, da bei 0 ggf. DivisionByZero Ausnahmen auftreten.
-            var waittime = 0F;                          // Anzahl an Millisekunden die zurück an das System gegeben werden, wenn die Max. Framezeit nicht erreicht wurde.
+            var clock = new Clock();                    // Uses a time measurement from the SFML library.
+            var ms = 1F;                                // Set Initial ms to 1, since exceptions may occur with 0 DivisionByZero.
+            var waittime = 0F;                          // Number of milliseconds returned to the system if the maximum frame time was not reached.
             var args = new RuntimeFrameEventArgs();
 
             IsRunning = true;
@@ -74,20 +74,20 @@ namespace Pandora.Engine
 
                 InternalSystemUpdate(args);
 
-                // Lastenausgleich durchführen, in dem Systemzeit an das Betriebssystem zurück gegeben wird
+                // Perform load balancing by returning system time to the operating system.
                 if (_framelimit > 0 && waittime > 0) Thread.Sleep((int)waittime);
 
-                // Die Zeit schon hier messen und die Ausgleichzeit mit einbeziehen.
+                // Measure the time already here and include the compensation time.
                 ms = clock.ElapsedTime.AsMilliseconds();
 
-                // Wartezeit für den Lastenausgleich berechnen
+                // Calculate waiting time for load balancing
                 if (_framelimit > 0 && ms < _maxframetime)
                 {
                     waittime = _maxframetime - ms;
-                    ms += waittime; // Laufzeit korrektur.
+                    ms += waittime; // correction
                 }
 
-                // FPS berechnen
+                // FPS
                 FPS = 1000F / (ms);
             }
 
@@ -102,7 +102,7 @@ namespace Pandora.Engine
         {
             SystemUpdate(args);
 
-            // Das Systemupdate an alle Dienste weiterleiten
+            // Forward the system update to all services
             ForEachServices(m => m.SystemUpdate(this, args));
         }
 
