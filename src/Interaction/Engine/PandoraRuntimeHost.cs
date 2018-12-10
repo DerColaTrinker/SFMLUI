@@ -13,7 +13,8 @@ namespace Pandora.Engine
 
         public PandoraRuntimeHost()
         {
-            Services = new ServiceCollection();
+            Services = new ServiceCollection(this);
+            FrameLimit = 60;
         }
 
         public bool IsRunning { get; private set; }
@@ -42,15 +43,27 @@ namespace Pandora.Engine
             RuntimeLoop();
         }
 
+        internal void InternalStopRequest(RuntimeService service)
+        {
+            if (Services.Any(m => m.StopRequested()))
+                Stop();
+        }
+
         public void Stop()
         {
             // Do not stop directly, but set the running status to False, so that the loop is left directly.
             IsRunning = false;
         }
 
-        public bool StopRequest()
+        public void InitiateStopRequest()
         {
-            return Services.Any(m => m.StopRequest());
+            if (GetStopRequestResult())
+                Stop();
+        }
+
+        public bool GetStopRequestResult()
+        {
+            return Services.Any(m => m.StopRequested());
         }
 
         private void RuntimeLoop()

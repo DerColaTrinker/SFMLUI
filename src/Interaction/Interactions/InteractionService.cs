@@ -49,9 +49,9 @@ namespace Pandora.Interactions
             Scenes.Dispose();
         }
 
-        protected internal override bool StopRequest()
+        protected internal override bool StopRequested()
         {
-            throw new NotImplementedException();
+            return true;
         }
 
         protected internal override void SystemUpdate(PandoraRuntimeHost pandoraRuntimeHost, RuntimeFrameEventArgs args)

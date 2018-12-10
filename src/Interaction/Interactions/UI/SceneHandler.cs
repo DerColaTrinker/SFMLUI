@@ -29,7 +29,7 @@ namespace Pandora.Interactions.UI
             Cache = new CacheHandler();
             Designs = new DesignHandler();
 
-              // Default Configuration
+            // Default Configuration
             _contextsettings.DepthBits = 0;
             _contextsettings.StencilBits = 0;
             _contextsettings.AntialiasingLevel = 1;
@@ -81,6 +81,12 @@ namespace Pandora.Interactions.UI
             //TODO: Lostfocus = No Rendering
             //Dispatcher.LostFocus += delegate () { Service.Paused = true; };
             //Dispatcher.GetFocus += delegate () { Service.Paused = false; };
+            Dispatcher.Closed += Dispatcher_Closed;
+        }
+
+        private void Dispatcher_Closed()
+        {
+            Service.InitiateStopRequest();
         }
 
         internal void SystemUpdate(float ms, float s)

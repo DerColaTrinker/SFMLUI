@@ -10,6 +10,12 @@ namespace Pandora.Engine.Services
     public sealed class ServiceCollection : ICollection<RuntimeService>
     {
         private HashSet<RuntimeService> _services = new HashSet<RuntimeService>();
+        private PandoraRuntimeHost _runtime;
+
+        public ServiceCollection(PandoraRuntimeHost runtime)
+        {
+            _runtime = runtime;
+        }
 
         internal ServiceCollection()
         { }
@@ -20,11 +26,21 @@ namespace Pandora.Engine.Services
 
         public void Add(RuntimeService item)
         {
-            _services.Add(item);
-        }
+            if (_services.Add(item))
+            {
+                item.Runtime = _runtime;
+                item.StopRequest += _runtime.InternalStopRequest;
 
+            }
+        }
         public void Clear()
         {
+            foreach (var item in _services)
+            {
+                item.Runtime = null;
+                item.StopRequest -= _runtime.InternalStopRequest;
+            }
+
             _services.Clear();
         }
 
@@ -45,7 +61,14 @@ namespace Pandora.Engine.Services
 
         public bool Remove(RuntimeService item)
         {
-            return _services.Remove(item);
+            var result = _services.Remove(item);
+            if (result)
+            {
+                item.Runtime = null;
+                item.StopRequest += _runtime.InternalStopRequest;
+            }
+
+            return result;
         }
 
         IEnumerator IEnumerable.GetEnumerator()

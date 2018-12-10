@@ -13,7 +13,6 @@ namespace Pandora
             var runtime = new DemoRuntime();
 
             runtime.Initialize();
-
             runtime.Start();
         }
     }
