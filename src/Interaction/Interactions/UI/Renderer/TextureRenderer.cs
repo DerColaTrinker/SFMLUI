@@ -25,6 +25,14 @@ namespace Pandora.Interactions.UI.Renderer
             GC.SuppressFinalize(Texture);
         }
 
+        public TextureRenderer(uint width, uint height, ContextSettings contextSettings) : base(NativeSFML.sfRenderTexture_createWithSettings(width, height, contextSettings))
+        {
+            _defaultview = new View(NativeSFML.sfRenderTexture_getDefaultView(Pointer));
+            Texture = new Texture(NativeSFML.sfRenderTexture_getTexture(Pointer));
+            GC.SuppressFinalize(_defaultview);
+            GC.SuppressFinalize(Texture);
+        }
+
         public bool SetActive(bool active)
         {
             return NativeSFML.sfRenderTexture_setActive(Pointer, active);
@@ -44,6 +52,8 @@ namespace Pandora.Interactions.UI.Renderer
                 throw new NotSupportedException("Resize on texture rendering not supported by sfml");
             }
         }
+
+        public static uint MaximumAntialiasingLevel => NativeSFML.sfRenderTexture_getMaximumAntialiasingLevel();
 
         public override View DefaultView
         {
@@ -123,9 +133,14 @@ namespace Pandora.Interactions.UI.Renderer
             NativeSFML.sfRenderTexture_drawText(Pointer, pointer, ref state);
         }
 
-        public override void DrawVertex(IntPtr pointer, ref MarshalData states)
+        public override void DrawVertexArray(IntPtr pointer, ref MarshalData states)
         {
             NativeSFML.sfRenderTexture_drawVertexArray(Pointer, pointer, ref states);
+        }
+
+        public override void DrawVertexBuffer(IntPtr pointer, ref MarshalData marshaledStates)
+        {
+            NativeSFML.sfRenderTexture_drawVertexBuffer(Pointer, pointer, ref marshaledStates);
         }
 
         public override void DrawSprite(IntPtr pointer, ref MarshalData states)

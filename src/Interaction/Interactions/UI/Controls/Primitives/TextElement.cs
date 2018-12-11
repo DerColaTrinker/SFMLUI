@@ -158,6 +158,19 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         public RectangleF TextBounds { get; private set; }
 
+        public float LetterSpacing
+
+        {
+            get { return NativeSFML.sfText_getLetterSpacing(Pointer); }
+            set { NativeSFML.sfText_setLetterSpacing(Pointer, value); }
+        }
+
+        public float LineSpacing
+        {
+            get { return NativeSFML.sfText_getLineSpacing(Pointer); }
+            set { NativeSFML. sfText_setLineSpacing(Pointer, value); }
+        }
+
         public Color TextColor
         {
             get { return TextColorBinding.Value; }

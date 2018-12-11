@@ -15,6 +15,11 @@ namespace Pandora.Interactions.UI.Renderer
         internal WindowRenderer(ObjectPointer pointer) : base(pointer.Pointer)
         { }
 
+        public void SetMouseCursor(Cursor cursor)
+        {
+            NativeSFML.sfRenderWindow_setMouseCursor(Pointer, cursor.Pointer);
+        }
+
         #region Renderer Implementierung
 
         public override Vector2U Size
@@ -59,9 +64,14 @@ namespace Pandora.Interactions.UI.Renderer
             NativeSFML.sfRenderWindow_drawText(Pointer, pointer, ref state);
         }
 
-        public override void DrawVertex(IntPtr pointer, ref MarshalData states)
+        public override void DrawVertexArray(IntPtr pointer, ref MarshalData states)
         {
             NativeSFML.sfRenderWindow_drawVertexArray(Pointer, pointer, ref states);
+        }
+
+        public override void DrawVertexBuffer(IntPtr pointer, ref MarshalData marshaledStates)
+        {
+            NativeSFML.sfRenderWindow_drawVertexBuffer(Pointer, pointer, ref marshaledStates);
         }
 
         public override void DrawSprite(IntPtr pointer, ref MarshalData states)

@@ -11,6 +11,7 @@ using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
 using System.Threading.Tasks;
+using static Pandora.Interactions.UI.Drawing.Cursor;
 
 #pragma warning disable IDE1006 // Benennungsstile
 
@@ -54,6 +55,19 @@ namespace Pandora.SFML.Native
         internal static extern bool sfWindow_waitEvent(IntPtr CPointer, out Event Evt);
 
         #endregion
+
+        #endregion
+
+        #region Cursor
+
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr sfCursor_createFromSystem(CursorType type);
+
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr sfCursor_createFromPixels(IntPtr pixels, Vector2U size, Vector2U hotspot);
+
+        [DllImport("csfml-window-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfCursor_destroy(IntPtr CPointer);
 
         #endregion
     }

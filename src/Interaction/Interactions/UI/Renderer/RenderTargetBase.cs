@@ -42,9 +42,13 @@ namespace Pandora.Interactions.UI.Renderer
 
         public abstract void DrawText(IntPtr pointer, ref MarshalData states);
 
-        public abstract void DrawVertex(IntPtr pointer, ref MarshalData states);
+        public abstract void DrawVertexArray(IntPtr pointer, ref MarshalData states);
 
+        public abstract void DrawVertexBuffer(IntPtr pointer, ref MarshalData marshaledStates);
+        
         public abstract void DrawSprite(IntPtr pointer, ref MarshalData states);
+
+
 
         //public abstract void Draw(UIElement drawable);
 

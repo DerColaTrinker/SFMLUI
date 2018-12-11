@@ -1,5 +1,6 @@
 ﻿using Pandora.Interactions.Controller;
 using Pandora.Interactions.Dispatcher;
+using Pandora.Interactions.UI.Controls.Primitives;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing.Shader;
 using Pandora.Interactions.UI.Renderer;
@@ -70,6 +71,9 @@ namespace Pandora.SFML.Native
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern void sfTransform_scaleWithCenter(ref Transform transform, float scaleX, float scaleY, float centerX, float centerY);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern bool sfTransform_equal(ref Transform left, ref Transform right);
 
         #endregion
 
@@ -198,6 +202,12 @@ namespace Pandora.SFML.Native
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern bool sfTexture_isSrgb(IntPtr texture);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfTexture_updateFromTexture(IntPtr CPointer, IntPtr texture, uint x, uint y);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfTexture_swap(IntPtr CPointer, IntPtr right);
 
         #endregion
 
@@ -510,6 +520,18 @@ namespace Pandora.SFML.Native
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern RectangleF sfText_getLocalBounds(IntPtr CPointer);
 
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfText_setLineSpacing(IntPtr CPointer, float spacingFactor);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfText_setLetterSpacing(IntPtr CPointer, float spacingFactor);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern float sfText_getLetterSpacing(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern float sfText_getLineSpacing(IntPtr CPointer);
+
         #endregion
 
         #region Sprite
@@ -670,12 +692,25 @@ namespace Pandora.SFML.Native
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern uint sfRenderWindow_getFrameTime(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfRenderWindow_setMouseCursor(IntPtr window, IntPtr cursor);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfRenderWindow_drawVertexBuffer(IntPtr CPointer, IntPtr VertexArray, ref MarshalData states);
+
         #endregion
 
         #region TextureRederer
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern IntPtr sfRenderTexture_create(uint Width, uint Height, bool DepthBuffer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr sfRenderTexture_createWithSettings(uint Width, uint Height, ContextSettings Settings);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern uint sfRenderTexture_getMaximumAntialiasingLevel();
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern void sfRenderTexture_destroy(IntPtr CPointer);
@@ -749,6 +784,9 @@ namespace Pandora.SFML.Native
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern void sfRenderTexture_resetGLStates(IntPtr CPointer);
 
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfRenderTexture_drawVertexBuffer(IntPtr CPointer, IntPtr VertexBuffer, ref MarshalData states);
+
         #endregion
 
         #region VideoMode
@@ -802,6 +840,49 @@ namespace Pandora.SFML.Native
 
         [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
         internal static extern void sfRenderTexture_drawVertexArray(IntPtr CPointer, IntPtr VertexArray, ref MarshalData states);
+
+        #endregion
+
+        #region VertexBuffer
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr sfVertexBuffer_create(uint vertexCount, PrimitiveType type, UsageSpecifier usage);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern IntPtr sfVertexBuffer_copy(IntPtr copy);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfVertexBuffer_destroy(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern uint sfVertexBuffer_getVertexCount(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern unsafe bool sfVertexBuffer_update(IntPtr CPointer, Vertex* vertices, uint vertexCount, uint offset);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern bool sfVertexBuffer_updateFromVertexBuffer(IntPtr CPointer, IntPtr other);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfVertexBuffer_swap(IntPtr CPointer, IntPtr other);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern uint sfVertexBuffer_getNativeHandle(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfVertexBuffer_setPrimitiveType(IntPtr CPointer, PrimitiveType primitiveType);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern PrimitiveType sfVertexBuffer_getPrimitiveType(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern void sfVertexBuffer_setUsage(IntPtr CPointer, UsageSpecifier usageType);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern UsageSpecifier sfVertexBuffer_getUsage(IntPtr CPointer);
+
+        [DllImport("csfml-graphics-2", CallingConvention = CallingConvention.Cdecl), SuppressUnmanagedCodeSecurity]
+        internal static extern bool sfVertexBuffer_isAvailable();
 
         #endregion
 

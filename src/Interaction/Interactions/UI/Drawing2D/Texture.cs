@@ -83,6 +83,11 @@ namespace Pandora.Interactions.UI.Drawing2D
             return new Image(NativeSFML.sfTexture_copyToImage(Pointer));
         }
 
+        public void Update(Texture texture, uint x, uint y)
+        {
+            NativeSFML.sfTexture_updateFromTexture(Pointer, texture.Pointer, x, y);
+        }
+
         public void Update(byte[] pixels)
         {
             Vector2U size = Size;
@@ -108,6 +113,11 @@ namespace Pandora.Interactions.UI.Drawing2D
         public void Update(Image image, uint x, uint y)
         {
             NativeSFML.sfTexture_updateFromImage(Pointer, image.Pointer, x, y);
+        }
+
+        public void Swap(Texture right)
+        {
+            NativeSFML.sfTexture_swap(Pointer, right.Pointer);
         }
 
         //public void Update(SFML.Window.Window window)

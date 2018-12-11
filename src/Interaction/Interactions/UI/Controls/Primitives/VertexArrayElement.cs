@@ -9,24 +9,24 @@ using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Controls.Primitives
 {
-    public class VertexElement : UIElement
+    public class VertexArrayElement : UIElement
     {
 
-        public VertexElement() : base(NativeSFML.sfVertexArray_create())
+        public VertexArrayElement() : base(NativeSFML.sfVertexArray_create())
         { }
 
-        public VertexElement(PrimitiveType type) : base(NativeSFML.sfVertexArray_create())
+        public VertexArrayElement(PrimitiveType type) : base(NativeSFML.sfVertexArray_create())
         {
             PrimitiveType = type;
         }
 
-        public VertexElement(PrimitiveType type, uint vertexCount) : base(NativeSFML.sfVertexArray_create())
+        public VertexArrayElement(PrimitiveType type, uint vertexCount) : base(NativeSFML.sfVertexArray_create())
         {
             PrimitiveType = type;
             Resize(vertexCount);
         }
 
-        public VertexElement(VertexElement copy) : base(NativeSFML.sfVertexArray_copy(copy.Pointer))
+        public VertexArrayElement(VertexArrayElement copy) : base(NativeSFML.sfVertexArray_copy(copy.Pointer))
         { }
 
         public uint VertexCount
@@ -113,7 +113,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
             states.Transform *= Transform;
             var marshaledStates = states.Marshal();
 
-            target.DrawVertex(Pointer, ref marshaledStates);
+            target.DrawVertexArray(Pointer, ref marshaledStates);
         }
     }
 }

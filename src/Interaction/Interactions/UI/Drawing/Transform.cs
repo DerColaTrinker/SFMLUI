@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Pandora.Interactions.UI.Drawing
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct Transform
+    public struct Transform : IEquatable<Transform>
     {
         public Transform(float a00, float a01, float a02, float a10, float a11, float a12, float a20, float a21, float a22)
         {
@@ -111,6 +111,13 @@ namespace Pandora.Interactions.UI.Drawing
             {
                 return new Transform(1, 0, 0, 0, 1, 0, 0, 0, 1);
             }
+        }
+
+        public override bool Equals(object obj) => (obj is Transform) && Equals((Transform)obj);
+
+        public bool Equals(Transform transform)
+        {
+            return NativeSFML.sfTransform_equal(ref this, ref transform);
         }
 
         public override string ToString()
