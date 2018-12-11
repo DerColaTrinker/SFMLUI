@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,10 +9,10 @@ namespace Pandora.Interactions.UI.Animations
 {
     public sealed class StoryboardAnimation : Animation, IComparer<StoryboardStep>
     {
-        private List<StoryboardStep> _steps = new List<StoryboardStep>();
-        private int _stepindex;
+        private List<StoryboardStep> _storyboardcollection = new List<StoryboardStep>();
+        private Stack<StoryboardStep> _playstack = new Stack<StoryboardStep>();
 
-        internal StoryboardAnimation() : base(0)
+        public StoryboardAnimation() : base(0)
         { }
 
         public int Compare(StoryboardStep x, StoryboardStep y)
@@ -24,38 +25,29 @@ namespace Pandora.Interactions.UI.Animations
 
         public void Add(float startime, Animation animation)
         {
-            _steps.Add(new StoryboardStep() { StartTime = startime, Duration = animation.Duration, Animation = animation });
-            _steps.Sort(this);
+            // Add the Animation and create a step
+            _storyboardcollection.Add(new StoryboardStep() { StartTime = startime, Animation = animation });
+            _storyboardcollection.Sort(this);
 
-            Duration = _steps.Select(s => s.StartTime + s.Duration).Max();
+            // The sum of all durations is the total duration of the storyboard.
+            Duration = _storyboardcollection.Sum(m => m.Duration);
         }
+
+        /// <summary>
+        /// Returns the sum of all animation steps.
+        /// </summary>
+        public int StepCount => _storyboardcollection.Count;
 
         internal override void InternalReset()
         {
-            _steps.ForEach(m => m.Animation.InternalReset());
-            _stepindex = 0;
+            // Reorder the startparameters
+            _playstack.Clear();
+            foreach (var item in _storyboardcollection.OrderByDescending(m => m.StartTime))
+            {
+                _playstack.Push(item);
+            }
 
             base.InternalReset();
-        }
-
-        internal override void InternalPause()
-        {
-            for (int index = 0; index < _stepindex; index++)
-            {
-                if (!_steps[index].Animation.IsComplet) _steps[index].Animation.InternalPause();
-            }
-
-            base.InternalPause();
-        }
-
-        internal override void InternalStop()
-        {
-            for (int index = 0; index < _stepindex; index++)
-            {
-                if (!_steps[index].Animation.IsComplet) _steps[index].Animation.InternalStop();
-            }
-
-            base.InternalStop();
         }
 
         internal override void InternalStart()
@@ -63,24 +55,40 @@ namespace Pandora.Interactions.UI.Animations
             base.InternalStart();
         }
 
+        internal override void InternalPause()
+        {
+            base.InternalPause();
+        }
+
+        internal override void InternalStop()
+        {
+            base.InternalStop();
+        }
+
         internal override void InternalUpdate(float ms, float s)
         {
-            if (_stepindex > -1 & _stepindex <= _steps.Count)
+            if (_playstack.Count > 0)
             {
-                var step = _steps[_stepindex];
+                var peekstep = _playstack.Peek();
 
-                if (CurrentTime >= step.StartTime & step.Animation.Status != AnimationStatus.Running)
+                if (CurrentTime >= peekstep.StartTime)
                 {
-                    step.Animation.InternalStart();
-                    _stepindex++;
-                }
-
-                for (int index = 0; index < _stepindex; index++)
-                {
-                    if (!_steps[index].Animation.IsComplet)
-                        _steps[index].Animation.InternalUpdate(ms, s);
+                    peekstep.Animation.InternalStart();
+                    peekstep.Animation.InternalReset();
+                    _playstack.Pop();
                 }
             }
+
+            _storyboardcollection.ForEach(step =>
+            {
+                if (step.Animation.Status == AnimationStatus.Running)
+                {
+                    step.Animation.InternalUpdate(ms, s);
+
+                    if (step.Animation.IsComplet)
+                        step.Animation.InternalStop();
+                }
+            });
 
             base.InternalUpdate(ms, s);
         }

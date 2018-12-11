@@ -22,7 +22,7 @@ namespace Pandora.Interactions.UI.Animations
 
         protected override void OnReset()
         {
-            _factor = (Property.Value - TargetValue) / Duration;
+            _factor = (TargetValue - Property.Value) / Duration;
         }
     }
 }
