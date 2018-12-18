@@ -53,13 +53,14 @@ namespace Pandora
             _testbox = new RectElement(new Vector2F(50, 50))
             {
                 Position = new Vector2F(200, 200),
+                Origin = new Vector2F(25, 25),
                 FillColor = Color.Blue
             };
 
             _story = new StoryboardAnimation();
             _story.Add(0, new ColorAnimation(_testbox.FillColorBinding, Color.Red, 2500));
             _story.Add(2000, new FloatAnimation(_testbox.RotationBinding, 90, 1000));
-            _story.Add(2500, new ColorAnimation(_testbox.FillColorBinding,  Color.Yellow, 5000));
+            _story.Add(2500, new ColorAnimation(_testbox.FillColorBinding, Color.Yellow, 5000));
             _story.Add(4000, new FloatAnimation(_testbox.RotationBinding, 180, 1000));
             _story.Add(5000, new ColorAnimation(_testbox.FillColorBinding, Color.Green, 7500));
             _story.Add(6000, new FloatAnimation(_testbox.RotationBinding, 270, 1000));

@@ -72,8 +72,8 @@ namespace Pandora.Interactions.UI
             AutoScaleOnParentBinding = new BindingProperty<bool>("AutoScaleOnParent", () => _autoscaleonparent, (value) => _autoscaleonparent = value);
             AutoScaleOnParentBinding.BindingPropertyChanged += delegate (BindingProperty property, bool value) { InvalidTransformation(); };
 
-            RotationBinding = new BindingProperty<float>("Rotation", () => _rotation, (value) => _rotation = value);
-            RotationBinding.BindingPropertyChanged += delegate (BindingProperty property, float value) { InvalidTransformation(); };
+            RotationBinding = new BindingProperty<float>("Rotation", () => _rotation, (value) => _rotation = value % 360F);
+            RotationBinding.BindingPropertyChanged += delegate (BindingProperty property, float value) { InvalidTransformation();};
 
             ScaleBinding = new BindingProperty<Vector2F>("Scale", () => _scale, (value) => _scale = value);
             ScaleBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { InvalidTransformation(); };
