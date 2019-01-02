@@ -2,15 +2,17 @@
 
 namespace Pandora.Interactions.UI.Design
 {
-    internal class StyleContainer
+    internal class PropertySetterContainer
     {
-        public StyleContainer()
+        public PropertySetterContainer()
         { }
 
-        public int Duration { get;  set; }
+        public int Duration { get; set; }
 
         public PropertyInfo Property { get; set; }
 
         public string Value { get; set; }
+
+        public int Start { get; set; }
     }
 }

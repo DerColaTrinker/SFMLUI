@@ -15,30 +15,38 @@ namespace Pandora.Interactions.UI.Design
 {
     public class DesignHandler
     {
-        private readonly Dictionary<string, string> _resources = new Dictionary<string, string>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, Ressource> _resources = new Dictionary<string, Ressource>(StringComparer.InvariantCultureIgnoreCase);
         private static Dictionary<Type, ControlContainer> _controls = new Dictionary<Type, ControlContainer>();
 
-        public void LoadDesign(string filename)
+        public void Load(string filename)
         {
             var xd = new XmlDocument();
             xd.Load(filename);
 
-            ParseResources(xd);
-            ParseXmlControls(xd.SelectNodes("controls/control"));
+            var stylesnode = xd.SelectSingleNode("styles");
+            var templatenode = xd.SelectSingleNode("templates");
+
+            ParseResources(stylesnode);
+            ParseResources(templatenode);
+
+            ParseStylesControls(xd.SelectNodes("styles/control"));
         }
 
-        private void ParseResources(XmlDocument xd)
+        private void ParseResources(XmlNode node)
         {
-            foreach (XmlNode resnode in xd.SelectNodes("controls/resource"))
+            if (node == null) return;
+            var mode = node.Name == "styles" ? ResourceType.Style : ResourceType.Template;
+
+            foreach (XmlNode resnode in node.SelectNodes("resource"))
             {
                 var name = resnode.Attributes.GetValue("name");
                 var value = resnode.Attributes.GetValue("value");
 
-                _resources[name] = value;
+                _resources[name] = new Ressource() { Value = value, ResourceType = ResourceType.Template };
             }
         }
 
-        private void ParseXmlControls(XmlNodeList controlnodes)
+        private void ParseStylesControls(XmlNodeList controlnodes)
         {
             foreach (XmlNode controlnode in controlnodes)
             {
@@ -56,58 +64,9 @@ namespace Pandora.Interactions.UI.Design
                     _controls.Add(control, container);
                 }
 
-                container.Styles.AddRange(ParseXmlStyles(container, controlnode));
+                container.Styles.AddRange(ParseXmlPropertySetter(container, controlnode));
                 container.Animations.AddRange(ParseXmlAnimation(container, controlnode));
-            }
-        }
-
-        internal static void PerformDesign(ControlElement control)
-        {
-            if (_controls.TryGetValue(control.GetType(), out ControlContainer container))
-            {
-                ApplyDesign(control, container);
-            }
-        }
-
-        private static void ApplyDesign(ControlElement control, ControlContainer container)
-        {
-            ApplyStyles(control, container);
-            ApplyAnimation(control, container);
-        }
-
-        private static void ApplyAnimation(ControlElement control, ControlContainer container)
-        {
-            foreach (var animationcontainer in container.Animations)
-            {
-                var animation = default(Animation);
-
-                if (animationcontainer.Styles.Count() == 1)
-                {
-                    // Create Animation Effect
-                    var item = animationcontainer.Styles.First();
-                    var binding = (BindingProperty)item.Property.GetValue(control);
-                    animation = CreateAnimation(binding, item);
-
-                }
-                else if (animationcontainer.Styles.Count() > 1)
-                {
-
-                }
-                else
-                    continue;
-
-                var effect = CreateAnimationEffect(animationcontainer, animation, control);
-
-                control.Effects.Add(effect);
-            }
-        }
-
-        private static void ApplyStyles(ControlElement control, ControlContainer container)
-        {
-            foreach (var item in container.Styles)
-            {
-                var binding = (BindingProperty)item.Property.GetValue(control);
-                binding.Value = TypeConverter(binding.PropertyType).ConvertFromString(item.Value);
+                container.Animations.AddRange(ParseXmlStoryboard(container, controlnode));
             }
         }
 
@@ -120,46 +79,66 @@ namespace Pandora.Interactions.UI.Design
 
                 var animation = new AnimationContainer()
                 {
+                    AnimationType = AnimationType.Normal,
                     Event = (DesignAnimationEvents)Enum.Parse(typeof(DesignAnimationEvents), eventmode, true),
                     Groupname = groupname
                 };
 
-                animation.Styles = ParseXmlStyles(container, node);
+                animation.PropertySetters = ParseXmlPropertySetter(container, node);
 
                 yield return animation;
             }
         }
 
-        private IEnumerable<StyleContainer> ParseXmlStyles(ControlContainer container, XmlNode basenode)
+        private IEnumerable<AnimationContainer> ParseXmlStoryboard(ControlContainer container, XmlNode controlnode)
         {
-            foreach (XmlNode stylenode in basenode.SelectNodes("style"))
+            foreach (XmlNode node in controlnode.SelectNodes("storyboard"))
             {
-                foreach (XmlNode node in stylenode.SelectNodes("set"))
+                var eventmode = node.Attributes.GetValue("event");
+                var groupname = node.Attributes.GetValue("groupname", string.Empty);
+
+                var animation = new AnimationContainer()
                 {
-                    var name = node.Attributes.GetValue("property");
-                    var duration = node.Attributes.GetValue("duration", 0);
-                    var value = node.InnerText;
+                    AnimationType = AnimationType.Storyboard,
+                    Event = (DesignAnimationEvents)Enum.Parse(typeof(DesignAnimationEvents), eventmode, true),
+                    Groupname = groupname
+                };
 
-                    if (value.StartsWith("#"))
+                animation.PropertySetters = ParseXmlPropertySetter(container, node);
+
+                yield return animation;
+            }
+        }
+
+        private IEnumerable<PropertySetterContainer> ParseXmlPropertySetter(ControlContainer container, XmlNode basenode)
+        {
+            foreach (XmlNode node in basenode.SelectNodes("set"))
+            {
+                var name = node.Attributes.GetValue("property");
+                var duration = node.Attributes.GetValue("duration", 0);
+                var start = node.Attributes.GetValue("start", 0);
+
+                var value = node.InnerText;
+
+                if (value.StartsWith("#"))
+                {
+                    if (_resources.TryGetValue(value.Substring(1), out Ressource ressource))
                     {
-                        if (_resources.TryGetValue(value.Substring(1), out string resvalue))
-                        {
-                            value = resvalue;
-                        }
-                        else
-                        {
-                            throw new Exception($"Resource '{value}' not found");
-                        }
+                        value = ressource.Value;
                     }
-
-                    var style = (from p in container.Control.GetProperties()
-                                 where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
-                                 select new StyleContainer() { Property = p, Duration = duration, Value = value }).FirstOrDefault();
-
-                    if (style == null) throw new Exception($"Property '{name}' not found");
-
-                    yield return style;
+                    else
+                    {
+                        throw new Exception($"Resource '{value}' not found");
+                    }
                 }
+
+                var style = (from p in container.Control.GetProperties()
+                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
+                             select new PropertySetterContainer() { Property = p, Duration = duration, Start = start, Value = value }).FirstOrDefault();
+
+                if (style == null) throw new Exception($"Property '{name}' not found");
+
+                yield return style;
             }
         }
 
@@ -168,6 +147,83 @@ namespace Pandora.Interactions.UI.Design
             foreach (XmlNode node in nodes)
             {
 
+            }
+        }
+
+        internal static void PerformDesignTo(ControlElement control)
+        {
+            if (_controls.TryGetValue(control.GetType(), out ControlContainer container))
+            {
+                ApplyStyles(control, container);
+                ApplyAnimationTo(control, container);
+            }
+        }
+
+        private static void ApplyAnimationTo(ControlElement control, ControlContainer container)
+        {
+            foreach (var animationcontainer in container.Animations)
+            {
+                var animation = default(Animation);
+
+                switch (animationcontainer.AnimationType)
+                {
+                    case AnimationType.Storyboard:
+                        {
+                            animation = new StoryboardAnimation();
+
+                            foreach (var setter in animationcontainer.PropertySetters)
+                            {
+                                var item = animationcontainer.PropertySetters.First();
+                                var binding = (BindingProperty)item.Property.GetValue(control);
+                                ((StoryboardAnimation)animation).Add(setter.Start, CreateAnimation(binding, item));
+                            }
+                        }
+                        break;
+
+                    case AnimationType.Normal:
+                        {
+                            if (animationcontainer.PropertySetters.Count() == 1)
+                            {
+                                var item = animationcontainer.PropertySetters.First();
+                                var binding = (BindingProperty)item.Property.GetValue(control);
+                                animation = CreateAnimation(binding, item);
+                            }
+                            else if (animationcontainer.PropertySetters.Count() > 1)
+                            {
+                                animation = new GroupAnimation();
+
+                                foreach (var setter in animationcontainer.PropertySetters)
+                                {
+                                    var item = animationcontainer.PropertySetters.First();
+                                    var binding = (BindingProperty)item.Property.GetValue(control);
+                                    ((GroupAnimation)animation).Add( CreateAnimation(binding, item));
+                                }
+                            }
+                            else
+                                continue;
+                        }
+                        break;
+
+                    default:
+                        throw new NotSupportedException(animationcontainer.AnimationType.ToString());
+                }
+
+                CreateAndAddAnimationEffect(control, animationcontainer, animation);
+            }
+        }
+
+        private static void CreateAndAddAnimationEffect(ControlElement control, AnimationContainer animationcontainer, Animation animation)
+        {
+            var effect = CreateAnimationEffect(animationcontainer, animation, control);
+            control.Effects.Add(effect);
+        }
+
+        private static void ApplyStyles(ControlElement control, ControlContainer container)
+        {
+            foreach (var item in container.Styles)
+            {
+                var binding = (BindingProperty)item.Property.GetValue(control);
+                binding.Value = TypeConverter(binding.PropertyType).ConvertFromString(item.Value);
             }
         }
 
@@ -214,7 +270,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static Animation CreateAnimation(BindingProperty binding, StyleContainer style)
+        private static Animation CreateAnimation(BindingProperty binding, PropertySetterContainer style)
         {
             switch (binding.PropertyType.Name)
             {

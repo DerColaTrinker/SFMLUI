@@ -46,7 +46,7 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            DesignHandler.PerformDesign(this);
+            DesignHandler.PerformDesignTo(this);
 
             base.InternalOnLoad(handler);
 

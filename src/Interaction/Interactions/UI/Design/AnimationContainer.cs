@@ -6,8 +6,9 @@ namespace Pandora.Interactions.UI.Design
     {
         public DesignAnimationEvents Event { get; set; }
 
-        public IEnumerable<StyleContainer> Styles { get; set; }
+        public IEnumerable<PropertySetterContainer> PropertySetters { get; set; }
 
         public string Groupname { get; internal set; }
+        public AnimationType AnimationType { get; internal set; }
     }
 }

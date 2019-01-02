@@ -32,7 +32,7 @@ namespace Pandora.Interactions
             success = Scenes.Initialize();
 
             foreach (var item in _options.DesignFiles)
-                Scenes.Designs.LoadDesign(item);
+                Scenes.Designs.Load(item);
 
             if (!string.IsNullOrEmpty(_options.DefaultFontfile))
                 DefaultFont = new Font(_options.DefaultFontfile);

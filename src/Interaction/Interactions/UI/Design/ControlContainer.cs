@@ -7,16 +7,16 @@ namespace Pandora.Interactions.UI.Design
 {
     internal class ControlContainer
     {
-        internal class StyleCollection : IEnumerable<StyleContainer>
+        internal class StyleCollection : IEnumerable<PropertySetterContainer>
         {
-            private Dictionary<string, StyleContainer> _properties = new Dictionary<string, StyleContainer>();
+            private Dictionary<string, PropertySetterContainer> _properties = new Dictionary<string, PropertySetterContainer>();
 
-            internal void Add(StyleContainer style)
+            internal void Add(PropertySetterContainer style)
             {
                 _properties[style.Property.Name] = style;
             }
 
-            internal void AddRange(IEnumerable<StyleContainer> enumerable)
+            internal void AddRange(IEnumerable<PropertySetterContainer> enumerable)
             {
                 foreach (var item in enumerable)
                 {
@@ -24,7 +24,7 @@ namespace Pandora.Interactions.UI.Design
                 }
             }
 
-            public IEnumerator<StyleContainer> GetEnumerator()
+            public IEnumerator<PropertySetterContainer> GetEnumerator()
             {
                 return _properties.Values.GetEnumerator();
             }
@@ -33,8 +33,6 @@ namespace Pandora.Interactions.UI.Design
             {
                 throw new NotImplementedException();
             }
-
-
         }
 
         internal class AnimationCollection : IEnumerable<AnimationContainer>
