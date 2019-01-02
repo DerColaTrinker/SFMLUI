@@ -115,6 +115,18 @@ namespace Pandora.Interactions.UI.Drawing
 
         public override bool Equals(object obj) => (obj is Transform) && Equals((Transform)obj);
 
+        public override int GetHashCode()
+        {
+            var array = new float[] { m00, m01, m02, m10, m11, m12, m20, m21, m22 };
+
+            var hc = array.Length;
+            for (int i = 0; i < array.Length; ++i)
+            {
+                hc = (int)unchecked(hc * 314159F + array[i]);
+            }
+            return hc;
+        }
+
         public bool Equals(Transform transform)
         {
             return NativeSFML.sfTransform_equal(ref this, ref transform);

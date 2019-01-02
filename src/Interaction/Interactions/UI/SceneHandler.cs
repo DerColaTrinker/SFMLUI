@@ -76,7 +76,7 @@ namespace Pandora.Interactions.UI
         private void RegisterEvents()
         {
             // Window-Events handling
-            //TODO: Where to handle this event  //Dispatcher.Closed += delegate () { Service.Runtime.ExitApplication(); };
+            Dispatcher.Closed += delegate () { Service.Runtime.InitiateStopRequest(); };
 
             //TODO: Lostfocus = No Rendering
             //Dispatcher.LostFocus += delegate () { Service.Paused = true; };
