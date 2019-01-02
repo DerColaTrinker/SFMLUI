@@ -29,7 +29,7 @@ namespace Pandora.Interactions.UI.Design
         {
             // Stop all animations with the groupname
             if (!string.IsNullOrEmpty(Groupname))
-                AnimationHandler.StopRange(Control.Effects.Where(m => m.Groupname == Groupname));
+                AnimationHandler.StopRange(Control.Animations.Where(m => m.Groupname == Groupname));
 
             AnimationHandler.Start(Animation);
         }

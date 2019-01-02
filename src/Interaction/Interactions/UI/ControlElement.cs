@@ -30,7 +30,7 @@ namespace Pandora.Interactions.UI
     {
         protected ControlElement() : base(IntPtr.Zero)
         {
-            Effects = new EffectCollection();
+            Animations = new EffectCollection();
 
             InitializeUIElement();
 
@@ -83,7 +83,7 @@ namespace Pandora.Interactions.UI
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }
 
-        public EffectCollection Effects { get; internal set; }
+        public EffectCollection Animations { get; internal set; }
 
         #region Events
 

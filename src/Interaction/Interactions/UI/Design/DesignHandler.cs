@@ -196,7 +196,7 @@ namespace Pandora.Interactions.UI.Design
                                 {
                                     var item = animationcontainer.PropertySetters.First();
                                     var binding = (BindingProperty)item.Property.GetValue(control);
-                                    ((GroupAnimation)animation).Add( CreateAnimation(binding, item));
+                                    ((GroupAnimation)animation).Add(CreateAnimation(binding, item));
                                 }
                             }
                             else
@@ -214,8 +214,8 @@ namespace Pandora.Interactions.UI.Design
 
         private static void CreateAndAddAnimationEffect(ControlElement control, AnimationContainer animationcontainer, Animation animation)
         {
-            var effect = CreateAnimationEffect(animationcontainer, animation, control);
-            control.Effects.Add(effect);
+            var effect = CreateHookAnimation(animationcontainer, animation, control);
+            control.Animations.Add(effect);
         }
 
         private static void ApplyStyles(ControlElement control, ControlContainer container)
@@ -285,7 +285,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static AnimationEventHook CreateAnimationEffect(AnimationContainer container, Animation animation, ControlElement control)
+        private static AnimationEventHook CreateHookAnimation(AnimationContainer container, Animation animation, ControlElement control)
         {
             var hook = new AnimationEventHook
             {
