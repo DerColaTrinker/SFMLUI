@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+
+<templates>
+  <resource name="borderfillcolornormal" value="40,40,40" />
+  <resource name="borderfillcolorhoover" value="80,80,80" />
+  
+  <template type="Pandora.Interactions.UI.Controls.ButtonTest" name="Testbutton">
+    
+    <control name="RectElement">
+      <set property="FillColor">#borderfillcolornormal</set>
+      <set property="OutlineThickness">2</set>
+      <set property="OutlineColor">0,255,0</set>
+      <set property="AutoScaleOnParent">true</set>
+    </control>
+
+    <control name="TextElement">
+      <set property="TextColor">255,255,255</set>
+      <set property="TextAlignment">MiddleCenter</set>
+      <set property="AutoScaleOnParent">true</set>
+    </control>
+  </template>
+  
+</templates>
+
+<!--<styles>
+  <resource name="borderfillcolornormal" value="40,40,40" />
+  <resource name="borderfillcolorhoover" value="80,80,80" />
+
+  <control name="Pandora.Interactions.UI.Controls.Button">
+    <set property="FillColor">#borderfillcolornormal</set>
+
+    <animation event="MouseEnter" groupname="mousemove">
+      <set property="FillColor" duration="100">#borderfillcolorhoover</set>
+    </animation>
+
+    <storyboard event="MouseEnter" groupname="mousemove">
+      <set property="FillColor" start="0" duration="100">#borderfillcolornormal</set>
+      <set property="FillColor" start="100" duration="100">128,128,128</set>
+    </storyboard>
+  </control>
+</styles>-->

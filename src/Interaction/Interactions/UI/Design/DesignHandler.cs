@@ -23,13 +23,13 @@ namespace Pandora.Interactions.UI.Design
             var xd = new XmlDocument();
             xd.Load(filename);
 
-            var stylesnode = xd.SelectSingleNode("styles");
-            var templatenode = xd.SelectSingleNode("templates");
+            var stylenode = xd.SelectSingleNode("styles");
+            var templatesnode = xd.SelectSingleNode("templates");
 
-            ParseResources(stylesnode);
-            ParseResources(templatenode);
+            ParseResources(stylenode);
+            ParseResources(templatesnode);
 
-            ParseStylesControls(xd.SelectNodes("styles/control"));
+            ParseStylesControls(stylenode);
         }
 
         private void ParseResources(XmlNode node)
@@ -46,9 +46,17 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private void ParseStylesControls(XmlNodeList controlnodes)
+        private void ParseTemplates(XmlNode templatesnode)
         {
-            foreach (XmlNode controlnode in controlnodes)
+            foreach (XmlNode teamplatenode in templatesnode.SelectNodes("template"))
+            {
+                var controlname = teamplatenode.Attributes.GetValue("name");
+            }
+        }
+
+        private void ParseStylesControls(XmlNode stylenode)
+        {
+            foreach (XmlNode controlnode in stylenode.SelectNodes("control"))
             {
                 var controlname = controlnode.Attributes.GetValue("name");
 

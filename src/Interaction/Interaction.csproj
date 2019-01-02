@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interactions\UI\Controls\ButtonTest.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
     <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />
     <Compile Include="Engine\Services\RuntimeService.cs" />
@@ -106,6 +107,7 @@
     <Compile Include="Interactions\UI\Design\ResourceType.cs" />
     <Compile Include="Interactions\UI\Design\Ressource.cs" />
     <Compile Include="Interactions\UI\Design\PropertySetterContainer.cs" />
+    <Compile Include="Interactions\UI\Design\UITemplateAttribute.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Font.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Image.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Shader.cs" />
