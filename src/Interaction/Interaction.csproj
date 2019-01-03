@@ -44,6 +44,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interactions\Bindings\BindingCollection.cs" />
     <Compile Include="Interactions\UI\Controls\ButtonTest.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
     <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />

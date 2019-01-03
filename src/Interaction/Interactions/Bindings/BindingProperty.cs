@@ -21,7 +21,7 @@ namespace Pandora.Interactions.Bindings
 
         public event BindingPropertyChangedDelegate BindingPropertyChanged;
 
-        public BindingProperty(string name, Type type)
+        protected BindingProperty(string name, Type type)
         {
             CallEvent = true;
             PropertyType = type;
@@ -30,12 +30,12 @@ namespace Pandora.Interactions.Bindings
             BindingType = BindingPropertyType.InternalValue;
         }
 
-        public BindingProperty(string name, Type type, object value) : this(name, type)
+        protected BindingProperty(string name, Type type, object value) : this(name, type)
         {
             Value = value;
         }
 
-        public BindingProperty(string name, Type type, Delegate getter, Delegate setter)
+        protected BindingProperty(string name, Type type, Delegate getter, Delegate setter)
         {
             BindingType = BindingPropertyType.Delegate;
             CallEvent = true;
@@ -46,12 +46,12 @@ namespace Pandora.Interactions.Bindings
             _setter = setter;
         }
 
-        public BindingProperty(string name, Type type, Delegate getter, Delegate setter, object value) : this(name, type, getter, setter)
+        protected BindingProperty(string name, Type type, Delegate getter, Delegate setter, object value) : this(name, type, getter, setter)
         {
             Value = value;
         }
 
-        public BindingProperty(string name, Type type, BindingProperty binding)
+        protected BindingProperty(string name, Type type, BindingProperty binding)
         {
             CallEvent = true;
             PropertyType = type;
@@ -123,19 +123,19 @@ namespace Pandora.Interactions.Bindings
     {
         public new event BindingPropertyChangedDelegate<T> BindingPropertyChanged;
 
-        public BindingProperty(string name) : base(name, typeof(T))
+        internal BindingProperty(string name) : base(name, typeof(T))
         { }
 
-        public BindingProperty(string name, T value) : base(name, typeof(T), value)
+        internal BindingProperty(string name, T value) : base(name, typeof(T), value)
         { }
 
-        public BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter) : base(name, typeof(T), getter, setter)
+        internal BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter) : base(name, typeof(T), getter, setter)
         { }
 
-        public BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter, T value) : base(name, typeof(T), getter, setter, value)
+        internal BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter, T value) : base(name, typeof(T), getter, setter, value)
         { }
 
-        public BindingProperty(string name, BindingProperty<T> binding) : base(name, typeof(T), binding)
+        internal BindingProperty(string name, BindingProperty<T> binding) : base(name, typeof(T), binding)
         { }
 
         public new T Value

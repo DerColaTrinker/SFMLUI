@@ -44,19 +44,19 @@ namespace Pandora.Interactions.UI.Controls
 
         private void RegisterBindings()
         {
-            TextColorBinding = new BindingProperty<Color>("TextColor", _text.TextColorBinding);
-            TextOutlineColorBinding = new BindingProperty<Color>("OutlineColor", _text.OutlineColorBinding);
-            TextOutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", _text.OutlineThicknessBinding);
+            TextColorBinding = Bindings.Create("TextColor", _text.TextColorBinding);
+            TextOutlineColorBinding = Bindings.Create("OutlineColor", _text.OutlineColorBinding);
+            TextOutlineThicknessBinding = Bindings.Create("OutlineThickness", _text.OutlineThicknessBinding);
 
-            TextBinding = new BindingProperty<string>("Text", _text.TextBinding);
-            FontSizeBinding = new BindingProperty<uint>("FontSize", _text.FontSizeBinding);
-            FontBinding = new BindingProperty<Font>("Font", _text.FontBinding);
-            TextAlignmentBinding = new BindingProperty<TextAlignment>("TextAlignment", _text.TextAlignmentBinding);
-            TextStyleBinding = new BindingProperty<FontStyles>("TextStyle", _text.TextStyleBinding);
+            TextBinding = Bindings.Create("Text", _text.TextBinding);
+            FontSizeBinding = Bindings.Create("FontSize", _text.FontSizeBinding);
+            FontBinding = Bindings.Create("Font", _text.FontBinding);
+            TextAlignmentBinding = Bindings.Create("TextAlignment", _text.TextAlignmentBinding);
+            TextStyleBinding = Bindings.Create("TextStyle", _text.TextStyleBinding);
 
-            FillColorBinding = new BindingProperty<Color>("FillColor", _rect.FillColorBinding);
-            BorderOutlineColorBinding = new BindingProperty<Color>("OutlineColor", _rect.OutlineColorBinding);
-            BorderOutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", _rect.OutlineThicknessBinding);
+            FillColorBinding = Bindings.Create("FillColor", _rect.FillColorBinding);
+            BorderOutlineColorBinding = Bindings.Create("OutlineColor", _rect.OutlineColorBinding);
+            BorderOutlineThicknessBinding = Bindings.Create("OutlineThickness", _rect.OutlineThicknessBinding);
         }
 
         protected override void OnFocusKeyPress(char unicode)

@@ -29,7 +29,8 @@ namespace Pandora.Interactions.UI.Design
             ParseResources(stylenode);
             ParseResources(templatesnode);
 
-            ParseStylesControls(stylenode);
+       if(stylenode!=null)    ParseStylesControls(stylenode);
+           if(templatesnode !=null) ParseTemplateControls(templatesnode);
         }
 
         private void ParseResources(XmlNode node)
@@ -54,6 +55,8 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
+        #region Style
+
         private void ParseStylesControls(XmlNode stylenode)
         {
             foreach (XmlNode controlnode in stylenode.SelectNodes("control"))
@@ -75,6 +78,38 @@ namespace Pandora.Interactions.UI.Design
                 container.Styles.AddRange(ParseXmlPropertySetter(container, controlnode));
                 container.Animations.AddRange(ParseXmlAnimation(container, controlnode));
                 container.Animations.AddRange(ParseXmlStoryboard(container, controlnode));
+            }
+        }
+
+        private IEnumerable<PropertySetterContainer> ParseXmlPropertySetter(ControlContainer container, XmlNode basenode)
+        {
+            foreach (XmlNode node in basenode.SelectNodes("set"))
+            {
+                var name = node.Attributes.GetValue("property");
+                var duration = node.Attributes.GetValue("duration", 0);
+                var start = node.Attributes.GetValue("start", 0);
+
+                var value = node.InnerText;
+
+                if (value.StartsWith("#"))
+                {
+                    if (_resources.TryGetValue(value.Substring(1), out Ressource ressource))
+                    {
+                        value = ressource.Value;
+                    }
+                    else
+                    {
+                        throw new Exception($"Resource '{value}' not found");
+                    }
+                }
+
+                var style = (from p in container.Control.GetProperties()
+                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
+                             select new PropertySetterContainer() { Property = p, Duration = duration, Start = start, Value = value }).FirstOrDefault();
+
+                if (style == null) throw new Exception($"Property '{name}' not found");
+
+                yield return style;
             }
         }
 
@@ -118,45 +153,45 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private IEnumerable<PropertySetterContainer> ParseXmlPropertySetter(ControlContainer container, XmlNode basenode)
+        #endregion
+
+        #region Templates
+
+        private void ParseTemplateControls(XmlNode templatebasenode)
         {
-            foreach (XmlNode node in basenode.SelectNodes("set"))
+            foreach (XmlNode templatenode in templatebasenode.SelectNodes("template"))
             {
-                var name = node.Attributes.GetValue("property");
-                var duration = node.Attributes.GetValue("duration", 0);
-                var start = node.Attributes.GetValue("start", 0);
+                var typename = templatenode.Attributes.GetValue("type");
 
-                var value = node.InnerText;
+                var basecontrol = (from a in AppDomain.CurrentDomain.GetAssemblies()
+                                   from t in a.GetTypes()
+                                   where t.IsClass && t.IsSubclassOf(typeof(ControlElement)) && t.FullName == typename
+                                   select t).FirstOrDefault();
+                if (basecontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
-                if (value.StartsWith("#"))
+                if (!_controls.TryGetValue(basecontrol, out ControlContainer container))
                 {
-                    if (_resources.TryGetValue(value.Substring(1), out Ressource ressource))
-                    {
-                        value = ressource.Value;
-                    }
-                    else
-                    {
-                        throw new Exception($"Resource '{value}' not found");
-                    }
+                    container = new ControlContainer(basecontrol);
+                    _controls.Add(basecontrol, container);
                 }
 
-                var style = (from p in container.Control.GetProperties()
-                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
-                             select new PropertySetterContainer() { Property = p, Duration = duration, Start = start, Value = value }).FirstOrDefault();
+                foreach (XmlNode controlnode in templatenode.SelectNodes("control"))
+                {
+                    var uicontrolname = templatenode.Attributes.GetValue("name");
+                    var uicontrol = (from a in AppDomain.CurrentDomain.GetAssemblies()
+                                     from t in a.GetTypes()
+                                     where t.IsClass && t.IsSubclassOf(typeof(UIElement)) && t.Name == uicontrolname
+                                     select t).FirstOrDefault();
+                    if (uicontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
-                if (style == null) throw new Exception($"Property '{name}' not found");
+                    var controlinstance = Activator.CreateInstance(uicontrol);
 
-                yield return style;
+
+                }
             }
         }
 
-        private void ParseXmlTemplates(ControlContainer container, XmlNodeList nodes)
-        {
-            foreach (XmlNode node in nodes)
-            {
-
-            }
-        }
+        #endregion
 
         internal static void PerformDesignTo(ControlElement control)
         {

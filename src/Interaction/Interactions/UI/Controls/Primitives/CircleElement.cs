@@ -39,7 +39,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         private void RegisterBindings()
         {
-            RadiusBinding = new BindingProperty<float>("Radius", () => _radius, (value) => _radius = value);
+            RadiusBinding = Bindings.Create("Radius", () => _radius, (value) => _radius = value);
             RadiusBinding.BindingPropertyChanged += delegate (BindingProperty sender, float value) { ElementDimensionChange(); };
         }
 

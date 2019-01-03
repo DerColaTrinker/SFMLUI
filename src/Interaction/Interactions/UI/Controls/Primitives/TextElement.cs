@@ -33,15 +33,15 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         private void RegisterBindings()
         {
-            TextColorBinding = new BindingProperty<Color>("TextColor", () => NativeSFML.sfText_getFillColor(Pointer), (value) => NativeSFML.sfText_setFillColor(Pointer, value), Color.White);
-            OutlineColorBinding = new BindingProperty<Color>("OutlineColor", () => NativeSFML.sfText_getOutlineColor(Pointer), (value) => NativeSFML.sfText_setOutlineColor(Pointer, value), Color.Transparent);
-            OutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", () => NativeSFML.sfText_getOutlineThickness(Pointer), (value) => NativeSFML.sfText_setOutlineThickness(Pointer, value), 0F);
+            TextColorBinding = Bindings.Create("TextColor", () => NativeSFML.sfText_getFillColor(Pointer), (value) => NativeSFML.sfText_setFillColor(Pointer, value), Color.White);
+            OutlineColorBinding = Bindings.Create("OutlineColor", () => NativeSFML.sfText_getOutlineColor(Pointer), (value) => NativeSFML.sfText_setOutlineColor(Pointer, value), Color.Transparent);
+            OutlineThicknessBinding = Bindings.Create("OutlineThickness", () => NativeSFML.sfText_getOutlineThickness(Pointer), (value) => NativeSFML.sfText_setOutlineThickness(Pointer, value), 0F);
 
-            TextBinding = new BindingProperty<string>("Text", InternalTextGetter, InternalTextSetter, "");
-            FontSizeBinding = new BindingProperty<uint>("FontSize", () => NativeSFML.sfText_getCharacterSize(Pointer), (value) => NativeSFML.sfText_setCharacterSize(Pointer, value), 12);
-            FontBinding = new BindingProperty<Font>("Font", () => _font, (value) => { _font = value; NativeSFML.sfText_setFont(Pointer, value.Pointer); }, InteractionService.DefaultFont);
-            TextAlignmentBinding = new BindingProperty<TextAlignment>("TextAlignment", () => _textalignment, (value) => _textalignment = value, TextAlignment.MiddleLeft);
-            TextStyleBinding = new BindingProperty<FontStyles>("TextStyle", () => NativeSFML.sfText_getStyle(Pointer), (value) => NativeSFML.sfText_setStyle(Pointer, value), FontStyles.Regular);
+            TextBinding = Bindings.Create("Text", InternalTextGetter, InternalTextSetter, "");
+            FontSizeBinding = Bindings.Create<uint>("FontSize", () => NativeSFML.sfText_getCharacterSize(Pointer), (value) => NativeSFML.sfText_setCharacterSize(Pointer, value), 12);
+            FontBinding = Bindings.Create("Font", () => _font, (value) => { _font = value; NativeSFML.sfText_setFont(Pointer, value.Pointer); }, InteractionService.DefaultFont);
+            TextAlignmentBinding = Bindings.Create("TextAlignment", () => _textalignment, (value) => _textalignment = value, TextAlignment.MiddleLeft);
+            TextStyleBinding = Bindings.Create("TextStyle", () => NativeSFML.sfText_getStyle(Pointer), (value) => NativeSFML.sfText_setStyle(Pointer, value), FontStyles.Regular);
 
             SizeBinding.BindingPropertyChanged += delegate (BindingProperty sender, Vector2F value) { ResetTextPosition(); };
             TextBinding.BindingPropertyChanged += delegate (BindingProperty sender, string value) { ResetTextPosition(); };

@@ -39,7 +39,7 @@ namespace Pandora.Interactions.UI
 
         private void RegisterBindingProperties()
         {
-            EnabledBinding = new BindingProperty<bool>("Enabled") { Value = true };
+            EnabledBinding = Bindings.Create("Enabled", true);
         }
 
         public BindingProperty<bool> EnabledBinding { get; private set; }

@@ -44,9 +44,9 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         private void RegisterBindings()
         {
-            ColorBinding = new BindingProperty<Color>("Color", () => NativeSFML.sfSprite_getColor(Pointer), (value) => NativeSFML.sfSprite_setColor(Pointer, value));
-            TextureBinding = new BindingProperty<Texture>("Texture", () => _texture, (value) => NativeSFML.sfSprite_setTexture(Pointer, value != null ? value.Pointer : IntPtr.Zero, false));
-            TextureRectBinding = new BindingProperty<Rectangle>("TextureRect", () => NativeSFML.sfSprite_getTextureRect(Pointer), (value) => NativeSFML.sfSprite_setTextureRect(Pointer, value));
+            ColorBinding = Bindings.Create("Color", () => NativeSFML.sfSprite_getColor(Pointer), (value) => NativeSFML.sfSprite_setColor(Pointer, value));
+            TextureBinding = Bindings.Create("Texture", () => _texture, (value) => NativeSFML.sfSprite_setTexture(Pointer, value != null ? value.Pointer : IntPtr.Zero, false));
+            TextureRectBinding = Bindings.Create("TextureRect", () => NativeSFML.sfSprite_getTextureRect(Pointer), (value) => NativeSFML.sfSprite_setTextureRect(Pointer, value));
         }
 
         public BindingProperty<Color> ColorBinding { get; private set; }

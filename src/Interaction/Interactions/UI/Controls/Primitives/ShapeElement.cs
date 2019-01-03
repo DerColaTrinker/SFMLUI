@@ -47,11 +47,11 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         private void RegisterBindings()
         {
-            TextureBinding = new BindingProperty<Texture>("Texture", () => _texture, (value) => { _texture = value; NativeSFML.sfShape_setTexture(Pointer, value.Pointer, false); });
-            TextureRectBinding = new BindingProperty<Rectangle>("TextureRect", () => NativeSFML.sfShape_getTextureRect(Pointer), (value) => NativeSFML.sfShape_setTextureRect(Pointer, value));
-            FillColorBinding = new BindingProperty<Color>("FillColor", () => NativeSFML.sfShape_getFillColor(Pointer), (value) => NativeSFML.sfShape_setFillColor(Pointer, value));
-            OutlineColorBinding = new BindingProperty<Color>("OutlineColor", () => NativeSFML.sfShape_getOutlineColor(Pointer), (value) => NativeSFML.sfShape_setOutlineColor(Pointer, value));
-            OutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", () => NativeSFML.sfShape_getOutlineThickness(Pointer), (value) => NativeSFML.sfShape_setOutlineThickness(Pointer, value));
+            TextureBinding = Bindings.Create("Texture", () => _texture, (value) => { _texture = value; NativeSFML.sfShape_setTexture(Pointer, value.Pointer, false); });
+            TextureRectBinding = Bindings.Create("TextureRect", () => NativeSFML.sfShape_getTextureRect(Pointer), (value) => NativeSFML.sfShape_setTextureRect(Pointer, value));
+            FillColorBinding = Bindings.Create("FillColor", () => NativeSFML.sfShape_getFillColor(Pointer), (value) => NativeSFML.sfShape_setFillColor(Pointer, value));
+            OutlineColorBinding = Bindings.Create("OutlineColor", () => NativeSFML.sfShape_getOutlineColor(Pointer), (value) => NativeSFML.sfShape_setOutlineColor(Pointer, value));
+            OutlineThicknessBinding = Bindings.Create("OutlineThickness", () => NativeSFML.sfShape_getOutlineThickness(Pointer), (value) => NativeSFML.sfShape_setOutlineThickness(Pointer, value));
         }
 
 

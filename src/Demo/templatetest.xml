@@ -4,7 +4,7 @@
   <resource name="borderfillcolornormal" value="40,40,40" />
   <resource name="borderfillcolorhoover" value="80,80,80" />
   
-  <template type="Pandora.Interactions.UI.Controls.ButtonTest" name="Testbutton">
+  <template type="Pandora.Interactions.UI.Controls.ButtonTest">
     
     <control name="RectElement">
       <set property="FillColor">#borderfillcolornormal</set>
