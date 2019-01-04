@@ -13,14 +13,14 @@ namespace Pandora.Interactions.UI.Design
 
             internal void Add(PropertySetterContainer style)
             {
-                _properties[style.Property.Name] = style;
+                _properties[style.BindingName] = style;
             }
 
             internal void AddRange(IEnumerable<PropertySetterContainer> enumerable)
             {
                 foreach (var item in enumerable)
                 {
-                    _properties[item.Property.Name] = item;
+                    _properties[item.BindingName] = item;
                 }
             }
 
@@ -93,7 +93,7 @@ namespace Pandora.Interactions.UI.Design
             Control = control;
             Styles = new StyleCollection();
             Animations = new AnimationCollection();
-            Teamplates = new TemplateCollection();
+            Templates = new TemplateCollection();
         }
 
         public Type Control { get; }
@@ -102,6 +102,6 @@ namespace Pandora.Interactions.UI.Design
 
         public AnimationCollection Animations { get; }
 
-        public TemplateCollection Teamplates { get; }
+        public TemplateCollection Templates { get; }
     }
 }

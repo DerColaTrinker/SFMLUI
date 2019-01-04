@@ -55,8 +55,8 @@ namespace Pandora.Interactions.UI.Controls
             TextStyleBinding = Bindings.Create("TextStyle", _text.TextStyleBinding);
 
             FillColorBinding = Bindings.Create("FillColor", _rect.FillColorBinding);
-            BorderOutlineColorBinding = Bindings.Create("OutlineColor", _rect.OutlineColorBinding);
-            BorderOutlineThicknessBinding = Bindings.Create("OutlineThickness", _rect.OutlineThicknessBinding);
+            BorderOutlineColorBinding = Bindings.Create("BorderOutlineColorBinding", _rect.OutlineColorBinding);
+            BorderOutlineThicknessBinding = Bindings.Create("BorderOutlineThicknessBinding", _rect.OutlineThicknessBinding);
         }
 
         protected override void OnFocusKeyPress(char unicode)

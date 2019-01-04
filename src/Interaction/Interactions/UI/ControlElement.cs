@@ -31,8 +31,9 @@ namespace Pandora.Interactions.UI
         protected ControlElement() : base(IntPtr.Zero)
         {
             Animations = new EffectCollection();
+            Templates = new UITemplateCollection(this);
 
-            InitializeUIElement();
+            DesignHandler.ApplyDesignToControl(this);
 
             RegisterBindingProperties();
         }
@@ -46,16 +47,9 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            DesignHandler.PerformDesignTo(this);
-
             base.InternalOnLoad(handler);
 
             RegisterDispatcherEvents();
-        }
-
-        private void InitializeUIElement()
-        {
-            Templates = new UITemplateCollection(this);
         }
 
         public UITemplateCollection Templates { get; private set; }

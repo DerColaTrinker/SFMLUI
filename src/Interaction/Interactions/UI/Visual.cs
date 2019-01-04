@@ -50,7 +50,7 @@ namespace Pandora.Interactions.UI
             Rotation = copy.Rotation;
             Scale = copy.Scale;
             InvalidTransformation();
-              
+
             RegisterBindings();
         }
 
@@ -58,10 +58,10 @@ namespace Pandora.Interactions.UI
 
         public BindingCollection Bindings { get; private set; }
 
-        private void RegisterBindings()
+           private void RegisterBindings()
         {
             Bindings = new BindingCollection();
-
+  
             PositionBinding = Bindings.Create("Position", () => _position, (value) => _position = value);
             PositionBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { UpdatePosition(); };
 

@@ -3,23 +3,25 @@
 <templates>
   <resource name="borderfillcolornormal" value="40,40,40" />
   <resource name="borderfillcolorhoover" value="80,80,80" />
-  
+
   <template type="Pandora.Interactions.UI.Controls.ButtonTest">
-    
+
     <control name="RectElement">
-      <set property="FillColor">#borderfillcolornormal</set>
+      <set property="FillColor" public="FillColor">#borderfillcolornormal</set>
       <set property="OutlineThickness">2</set>
       <set property="OutlineColor">0,255,0</set>
       <set property="AutoScaleOnParent">true</set>
     </control>
 
     <control name="TextElement">
+      <set property="Text" public="Text"></set>
       <set property="TextColor">255,255,255</set>
       <set property="TextAlignment">MiddleCenter</set>
       <set property="AutoScaleOnParent">true</set>
     </control>
+
   </template>
-  
+
 </templates>
 
 <!--<styles>

@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Dynamic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Pandora.Interactions.Bindings
 {
-    public sealed class BindingCollection
+    public sealed class BindingCollection : DynamicObject
     {
         private Dictionary<string, BindingProperty> _bindings = new Dictionary<string, BindingProperty>();
+
+        public BindingCollection()
+        { }
+
+        public dynamic Accessor { get => this; }
 
         public BindingProperty<T> Create<T>(string name)
         {
@@ -72,6 +78,25 @@ namespace Pandora.Interactions.Bindings
         public bool TryGetBinding(string name, out BindingProperty binding)
         {
             return _bindings.TryGetValue(name, out binding);
+        }
+
+        public override bool TryGetMember(GetMemberBinder binder, out object result)
+        {
+            return base.TryGetMember(binder, out result);
+        }
+
+        public override bool TrySetMember(SetMemberBinder binder, object value)
+        {
+            if (!TryGetBinding(binder.Name, out BindingProperty property))
+                return false;
+
+            property.Value = value;
+            return true;
+        }
+
+        public override bool TryInvokeMember(InvokeMemberBinder binder, object[] args, out object result)
+        {
+            return base.TryInvokeMember(binder, args, out result);
         }
     }
 }

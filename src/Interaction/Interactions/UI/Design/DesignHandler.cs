@@ -29,8 +29,8 @@ namespace Pandora.Interactions.UI.Design
             ParseResources(stylenode);
             ParseResources(templatesnode);
 
-       if(stylenode!=null)    ParseStylesControls(stylenode);
-           if(templatesnode !=null) ParseTemplateControls(templatesnode);
+            if (stylenode != null) ParseStylesControls(stylenode);
+            if (templatesnode != null) ParseTemplateControls(templatesnode);
         }
 
         private void ParseResources(XmlNode node)
@@ -86,6 +86,7 @@ namespace Pandora.Interactions.UI.Design
             foreach (XmlNode node in basenode.SelectNodes("set"))
             {
                 var name = node.Attributes.GetValue("property");
+                var publicname = node.Attributes.GetValue("public");
                 var duration = node.Attributes.GetValue("duration", 0);
                 var start = node.Attributes.GetValue("start", 0);
 
@@ -103,13 +104,7 @@ namespace Pandora.Interactions.UI.Design
                     }
                 }
 
-                var style = (from p in container.Control.GetProperties()
-                             where p.PropertyType.IsSubclassOf(typeof(BindingProperty)) && p.Name == name + "Binding"
-                             select new PropertySetterContainer() { Property = p, Duration = duration, Start = start, Value = value }).FirstOrDefault();
-
-                if (style == null) throw new Exception($"Property '{name}' not found");
-
-                yield return style;
+                yield return new PropertySetterContainer() { BindingName = name, PublicBindingName = publicname, Duration = duration, Start = start, Value = value };
             }
         }
 
@@ -159,6 +154,7 @@ namespace Pandora.Interactions.UI.Design
 
         private void ParseTemplateControls(XmlNode templatebasenode)
         {
+            // Process all controls
             foreach (XmlNode templatenode in templatebasenode.SelectNodes("template"))
             {
                 var typename = templatenode.Attributes.GetValue("type");
@@ -177,28 +173,62 @@ namespace Pandora.Interactions.UI.Design
 
                 foreach (XmlNode controlnode in templatenode.SelectNodes("control"))
                 {
-                    var uicontrolname = templatenode.Attributes.GetValue("name");
+                    var uicontrolname = controlnode.Attributes.GetValue("name");
                     var uicontrol = (from a in AppDomain.CurrentDomain.GetAssemblies()
                                      from t in a.GetTypes()
                                      where t.IsClass && t.IsSubclassOf(typeof(UIElement)) && t.Name == uicontrolname
                                      select t).FirstOrDefault();
                     if (uicontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
-                    var controlinstance = Activator.CreateInstance(uicontrol);
-
-
+                    var templatecontainer = new ControlContainer(uicontrol);
+                    templatecontainer.Styles.AddRange(ParseXmlPropertySetter(templatecontainer, controlnode));
+                    container.Templates.Add(templatecontainer);
                 }
+
+                container.Animations.AddRange(ParseXmlAnimation(container, templatenode));
+                container.Animations.AddRange(ParseXmlStoryboard(container, templatenode));
             }
         }
 
         #endregion
 
-        internal static void PerformDesignTo(ControlElement control)
+        internal static void ApplyDesignToControl(ControlElement control)
         {
             if (_controls.TryGetValue(control.GetType(), out ControlContainer container))
             {
+                ApplyTemplates(control, container);
                 ApplyStyles(control, container);
                 ApplyAnimationTo(control, container);
+            }
+        }
+
+        private static void ApplyTemplates(ControlElement control, ControlContainer container)
+        {
+            foreach (var template in container.Templates)
+            {
+                var templatecontrol = (UIElement)Activator.CreateInstance(template.Control);
+
+                ApplyStyles(templatecontrol, template);
+                ApplyPublicBindings(control, templatecontrol, template);
+
+                control.Templates.Add(templatecontrol);
+            }
+        }
+
+        private static void ApplyPublicBindings(ControlElement parentcontrol, UIElement templatecontrol, ControlContainer tempaltecontainer)
+        {
+            foreach (var item in tempaltecontainer.Styles)
+            {
+                if (!string.IsNullOrEmpty(item.PublicBindingName))
+                {
+                    if(!templatecontrol.Bindings.TryGetBinding(item.BindingName,out BindingProperty templatebinding))
+                    {
+                        //TODO: Die Property wurde nicht gefunden
+                        continue;
+                    }
+
+                    parentcontrol.Bindings.Create(item.PublicBindingName, templatebinding);
+                }
             }
         }
 
@@ -217,7 +247,12 @@ namespace Pandora.Interactions.UI.Design
                             foreach (var setter in animationcontainer.PropertySetters)
                             {
                                 var item = animationcontainer.PropertySetters.First();
-                                var binding = (BindingProperty)item.Property.GetValue(control);
+                                if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
+                                {
+                                    //TODO: Error Binding not found.
+                                    continue;
+                                }
+
                                 ((StoryboardAnimation)animation).Add(setter.Start, CreateAnimation(binding, item));
                             }
                         }
@@ -228,7 +263,11 @@ namespace Pandora.Interactions.UI.Design
                             if (animationcontainer.PropertySetters.Count() == 1)
                             {
                                 var item = animationcontainer.PropertySetters.First();
-                                var binding = (BindingProperty)item.Property.GetValue(control);
+                                if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
+                                {
+                                    //TODO: Error Binding not found.
+                                    continue;
+                                }
                                 animation = CreateAnimation(binding, item);
                             }
                             else if (animationcontainer.PropertySetters.Count() > 1)
@@ -238,7 +277,11 @@ namespace Pandora.Interactions.UI.Design
                                 foreach (var setter in animationcontainer.PropertySetters)
                                 {
                                     var item = animationcontainer.PropertySetters.First();
-                                    var binding = (BindingProperty)item.Property.GetValue(control);
+                                    if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
+                                    {
+                                        //TODO: Error Binding not found.
+                                        continue;
+                                    }
                                     ((GroupAnimation)animation).Add(CreateAnimation(binding, item));
                                 }
                             }
@@ -261,55 +304,67 @@ namespace Pandora.Interactions.UI.Design
             control.Animations.Add(effect);
         }
 
-        private static void ApplyStyles(ControlElement control, ControlContainer container)
+        private static void ApplyStyles(UIElement control, ControlContainer container)
         {
             foreach (var item in container.Styles)
             {
-                var binding = (BindingProperty)item.Property.GetValue(control);
+                if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
+                {
+                    //TODO: Error Binding not found.
+                    continue;
+                }
+
                 binding.Value = TypeConverter(binding.PropertyType).ConvertFromString(item.Value);
             }
         }
 
         private static ConverterBase TypeConverter(Type type)
         {
-            switch (Type.GetTypeCode(type))
+            if (type.IsEnum)
             {
-                case TypeCode.Object:
-                    switch (type.Name)
-                    {
-                        case "Color":
-                            return ColorConverter.Converter;
+                return new EnumConverter(type);
+            }
+            else
+            {
+                switch (Type.GetTypeCode(type))
+                {
+                    case TypeCode.Object:
+                        switch (type.Name)
+                        {
+                            case "Color":
+                                return ColorConverter.Converter;
 
-                        case "Vector2":
-                        case "Vector2F":
-                        case "Vector2U":
-                            return VectorConverter.Converter;
+                            case "Vector2":
+                            case "Vector2F":
+                            case "Vector2U":
+                                return VectorConverter.Converter;
 
-                        default:
-                            throw new Exception($"Binding type '{type.Name}' not supported");
-                    }
+                            default:
+                                throw new Exception($"Binding type '{type.Name}' not supported");
+                        }
 
-                case TypeCode.Boolean:
-                case TypeCode.Char:
-                case TypeCode.SByte:
-                case TypeCode.Byte:
-                case TypeCode.Int16:
-                case TypeCode.UInt16:
-                case TypeCode.Int32:
-                case TypeCode.UInt32:
-                case TypeCode.Int64:
-                case TypeCode.UInt64:
-                case TypeCode.Single:
-                case TypeCode.Double:
-                case TypeCode.Decimal:
-                case TypeCode.DateTime:
-                case TypeCode.String:
-                    return new DefaultConverter(type);
+                    case TypeCode.Boolean:
+                    case TypeCode.Char:
+                    case TypeCode.SByte:
+                    case TypeCode.Byte:
+                    case TypeCode.Int16:
+                    case TypeCode.UInt16:
+                    case TypeCode.Int32:
+                    case TypeCode.UInt32:
+                    case TypeCode.Int64:
+                    case TypeCode.UInt64:
+                    case TypeCode.Single:
+                    case TypeCode.Double:
+                    case TypeCode.Decimal:
+                    case TypeCode.DateTime:
+                    case TypeCode.String:
+                        return new DefaultConverter(type);
 
-                case TypeCode.Empty:
-                case TypeCode.DBNull:
-                default:
-                    throw new Exception($"Binding type '{type.Name}' not supported");
+                    case TypeCode.Empty:
+                    case TypeCode.DBNull:
+                    default:
+                        throw new Exception($"Binding type '{type.Name}' not supported");
+                }
             }
         }
 

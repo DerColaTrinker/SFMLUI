@@ -47,6 +47,7 @@
     <Compile Include="Interactions\Bindings\BindingCollection.cs" />
     <Compile Include="Interactions\UI\Controls\ButtonTest.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
+    <Compile Include="Interactions\UI\Design\Converter\EnumConverter.cs" />
     <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />
     <Compile Include="Engine\Services\RuntimeService.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
