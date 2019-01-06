@@ -35,10 +35,10 @@ namespace Pandora.Interactions.UI.Controls.Primitives
 
         private void RegisterBindings()
         {
-            RadiusBinding = new BindingProperty<float>("Radius", () => _radius, (value) => _radius = value);
+            RadiusBinding = Bindings.Create("Radius", () => _radius, (value) => _radius = value);
             RadiusBinding.BindingPropertyChanged += delegate (BindingProperty sender, float value) { ElementDimensionChange(); };
 
-            CornerPointerCountBinding = new BindingProperty<uint>("CornerPointerCount", () => _cornerpointcount, (value) => _cornerpointcount = value);
+            CornerPointerCountBinding = Bindings.Create("CornerPointerCount", () => _cornerpointcount, (value) => _cornerpointcount = value);
             CornerPointerCountBinding.BindingPropertyChanged += delegate (BindingProperty sender, uint value) { ElementDimensionChange(); };
 
             SizeBinding.BindingPropertyChanged += delegate (BindingProperty sender, Vector2F value) { ElementDimensionChange(); };

@@ -44,7 +44,7 @@ namespace Pandora.Interactions.UI
 
         private void RegisterBindings()
         {
-            StyleKeyBinding = new BindingProperty<string>("StyleKey", () => _stylekey, (value) => _stylekey = value);
+            StyleKeyBinding = Bindings.Create("StyleKey", () => _stylekey, (value) => _stylekey = value);
         }
 
         public BindingProperty<string> StyleKeyBinding { get; private set; }

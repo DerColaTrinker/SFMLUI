@@ -31,31 +31,25 @@ namespace Pandora.Interactions.UI
         protected ControlElement() : base(IntPtr.Zero)
         {
             Animations = new EffectCollection();
+            Templates = new UITemplateCollection(this);
 
-            InitializeUIElement();
+            DesignHandler.ApplyDesignToControl(this);
 
             RegisterBindingProperties();
         }
 
         private void RegisterBindingProperties()
         {
-            EnabledBinding = new BindingProperty<bool>("Enabled") { Value = true };
+            EnabledBinding = Bindings.Create("Enabled", true);
         }
 
         public BindingProperty<bool> EnabledBinding { get; private set; }
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            DesignHandler.PerformDesignTo(this);
-
             base.InternalOnLoad(handler);
 
             RegisterDispatcherEvents();
-        }
-
-        private void InitializeUIElement()
-        {
-            Templates = new UITemplateCollection(this);
         }
 
         public UITemplateCollection Templates { get; private set; }

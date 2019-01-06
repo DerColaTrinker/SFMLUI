@@ -29,7 +29,7 @@ namespace Pandora.Interactions.UI
 
         private void RegisterBindings()
         {
-            BackgroundColorProperty = new BindingProperty<Color>("BackgroundColor", () => _background.FillColor, (value) => _background.FillColor = value, Color.Transparent);
+            BackgroundColorProperty = Bindings.Create("BackgroundColor", () => _background.FillColor, (value) => _background.FillColor = value, Color.Transparent);
         }
 
         public BindingProperty<Color> BackgroundColorProperty { get; private set; }

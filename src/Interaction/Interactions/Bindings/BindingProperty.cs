@@ -21,7 +21,7 @@ namespace Pandora.Interactions.Bindings
 
         public event BindingPropertyChangedDelegate BindingPropertyChanged;
 
-        public BindingProperty(string name, Type type)
+        protected internal BindingProperty(string name, Type type)
         {
             CallEvent = true;
             PropertyType = type;
@@ -30,12 +30,12 @@ namespace Pandora.Interactions.Bindings
             BindingType = BindingPropertyType.InternalValue;
         }
 
-        public BindingProperty(string name, Type type, object value) : this(name, type)
+        protected internal BindingProperty(string name, Type type, object value) : this(name, type)
         {
             Value = value;
         }
 
-        public BindingProperty(string name, Type type, Delegate getter, Delegate setter)
+        protected internal BindingProperty(string name, Type type, Delegate getter, Delegate setter)
         {
             BindingType = BindingPropertyType.Delegate;
             CallEvent = true;
@@ -46,12 +46,12 @@ namespace Pandora.Interactions.Bindings
             _setter = setter;
         }
 
-        public BindingProperty(string name, Type type, Delegate getter, Delegate setter, object value) : this(name, type, getter, setter)
+        protected internal BindingProperty(string name, Type type, Delegate getter, Delegate setter, object value) : this(name, type, getter, setter)
         {
             Value = value;
         }
 
-        public BindingProperty(string name, Type type, BindingProperty binding)
+        protected internal BindingProperty(string name, Type type, BindingProperty binding)
         {
             CallEvent = true;
             PropertyType = type;
@@ -61,15 +61,46 @@ namespace Pandora.Interactions.Bindings
             BindingType = BindingPropertyType.ExternalBinding;
         }
 
+        public void Attach(BindingProperty target, BindingAttachWays mode)
+        {
+            AttachMode = mode;
+
+            switch (mode)
+            {
+                case BindingAttachWays.Pull:
+                    target.BindingPropertyChanged += Binding_BindingPropertyChanged;
+                    break;
+
+                case BindingAttachWays.Push:
+                    BindingPropertyChanged += target.Binding_BindingPropertyChanged;
+                    break;
+
+                case BindingAttachWays.Full:
+                    target.BindingPropertyChanged += Binding_BindingPropertyChanged;
+                    BindingPropertyChanged += target.Binding_BindingPropertyChanged;
+                    break;
+            }
+        }
+
+        private void Binding_BindingPropertyChanged(BindingProperty property, object value)
+        {
+            if (_lockupdate) return;
+            Value = value;
+        }
+
+        public BindingObject Parent { get; internal set; }
+
         public bool CallEvent { get; set; }
 
-        public Type PropertyType { get; protected set; }
+        public Type PropertyType { get; internal set; }
 
         public string Name { get; protected set; }
 
         private BindingProperty _externalbinding;
 
         private object _internalvalue;
+
+        private bool _lockupdate;
 
         public BindingPropertyType BindingType { get; }
 
@@ -113,6 +144,8 @@ namespace Pandora.Interactions.Bindings
             }
         }
 
+        public BindingAttachWays? AttachMode { get; private set; }
+
         protected virtual void OnValueChanged(object value)
         {
             if (CallEvent) BindingPropertyChanged?.Invoke(this, value);
@@ -123,19 +156,19 @@ namespace Pandora.Interactions.Bindings
     {
         public new event BindingPropertyChangedDelegate<T> BindingPropertyChanged;
 
-        public BindingProperty(string name) : base(name, typeof(T))
+        internal BindingProperty(string name) : base(name, typeof(T))
         { }
 
-        public BindingProperty(string name, T value) : base(name, typeof(T), value)
+        internal BindingProperty(string name, T value) : base(name, typeof(T), value)
         { }
 
-        public BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter) : base(name, typeof(T), getter, setter)
+        internal BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter) : base(name, typeof(T), getter, setter)
         { }
 
-        public BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter, T value) : base(name, typeof(T), getter, setter, value)
+        internal BindingProperty(string name, BindingGetter<T> getter, BindingSetter<T> setter, T value) : base(name, typeof(T), getter, setter, value)
         { }
 
-        public BindingProperty(string name, BindingProperty<T> binding) : base(name, typeof(T), binding)
+        internal BindingProperty(string name, BindingProperty<T> binding) : base(name, typeof(T), binding)
         { }
 
         public new T Value

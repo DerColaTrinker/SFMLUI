@@ -29,15 +29,15 @@ namespace Pandora.Interactions.UI.Controls
 
         private void RegisterBindings()
         {
-            TextColorBinding = new BindingProperty<Color>("TextColor",_text.TextColorBinding );
-            OutlineColorBinding = new BindingProperty<Color>("OutlineColor", _text.OutlineColorBinding);
-            OutlineThicknessBinding = new BindingProperty<float>("OutlineThickness", _text.OutlineThicknessBinding);
+            TextColorBinding = Bindings.Create("TextColor",_text.TextColorBinding );
+            OutlineColorBinding = Bindings.Create("OutlineColor", _text.OutlineColorBinding);
+            OutlineThicknessBinding = Bindings.Create("OutlineThickness", _text.OutlineThicknessBinding);
 
-            TextBinding = new BindingProperty<string>("Text", _text.TextBinding);
-            FontSizeBinding = new BindingProperty<uint>("FontSize", _text.FontSizeBinding);
-            FontBinding = new BindingProperty<Font>("Font", _text.FontBinding);
-            TextAlignmentBinding = new BindingProperty<TextAlignment>("TextAlignment", _text.TextAlignmentBinding);
-            TextStyleBinding = new BindingProperty<FontStyles>("TextStyle", _text.TextStyleBinding);
+            TextBinding = Bindings.Create("Text", _text.TextBinding);
+            FontSizeBinding = Bindings.Create("FontSize", _text.FontSizeBinding);
+            FontBinding = Bindings.Create("Font", _text.FontBinding);
+            TextAlignmentBinding = Bindings.Create("TextAlignment", _text.TextAlignmentBinding);
+            TextStyleBinding = Bindings.Create("TextStyle", _text.TextStyleBinding);
         }
 
         public BindingProperty<Color> TextColorBinding { get; private set; }

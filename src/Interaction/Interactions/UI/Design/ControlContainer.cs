@@ -13,14 +13,14 @@ namespace Pandora.Interactions.UI.Design
 
             internal void Add(PropertySetterContainer style)
             {
-                _properties[style.Property.Name] = style;
+                _properties[style.BindingName] = style;
             }
 
             internal void AddRange(IEnumerable<PropertySetterContainer> enumerable)
             {
                 foreach (var item in enumerable)
                 {
-                    _properties[item.Property.Name] = item;
+                    _properties[item.BindingName] = item;
                 }
             }
 
@@ -61,8 +61,31 @@ namespace Pandora.Interactions.UI.Design
             {
                 throw new NotImplementedException();
             }
+        }
 
+        internal class TemplateCollection : IEnumerable<ControlContainer>
+        {
+            private List<ControlContainer> _controls = new List<ControlContainer>();
 
+            internal void Add(ControlContainer control)
+            {
+                _controls.Add(control);
+            }
+
+            internal void AddRange(IEnumerable<ControlContainer> enumerable)
+            {
+                _controls.AddRange(enumerable);
+            }
+
+            public IEnumerator<ControlContainer> GetEnumerator()
+            {
+                return _controls.GetEnumerator();
+            }
+
+            IEnumerator IEnumerable.GetEnumerator()
+            {
+                throw new NotImplementedException();
+            }
         }
 
         public ControlContainer(Type control)
@@ -70,6 +93,7 @@ namespace Pandora.Interactions.UI.Design
             Control = control;
             Styles = new StyleCollection();
             Animations = new AnimationCollection();
+            Templates = new TemplateCollection();
         }
 
         public Type Control { get; }
@@ -77,5 +101,7 @@ namespace Pandora.Interactions.UI.Design
         public StyleCollection Styles { get; }
 
         public AnimationCollection Animations { get; }
+
+        public TemplateCollection Templates { get; }
     }
 }

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI
 {
-    public abstract class Visual : ObjectPointer
+    public abstract class Visual : BindingObject
     {
         private bool _transformneedupdate = true;
         private bool _inverseNneedupdate = true;
@@ -32,12 +32,12 @@ namespace Pandora.Interactions.UI
         private Visibilities _visibility = Visibilities.Display;
         private bool _autoscaleonparent = false;
 
-        internal Visual(IntPtr pointer) : base(pointer)
+        public Visual(IntPtr pointer) : base(pointer)
         {
             RegisterBindings();
         }
 
-        internal Visual() : base(IntPtr.Zero)
+        public Visual() : base(IntPtr.Zero)
         {
             RegisterBindings();
         }
@@ -58,27 +58,27 @@ namespace Pandora.Interactions.UI
 
         private void RegisterBindings()
         {
-            PositionBinding = new BindingProperty<Vector2F>("Position", () => _position, (value) => _position = value);
+            PositionBinding = Bindings.Create("Position", () => _position, (value) => _position = value);
             PositionBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { UpdatePosition(); };
 
-            SizeBinding = new BindingProperty<Vector2F>("Size", () => _size, (value) => _size = value);
+            SizeBinding = Bindings.Create("Size", () => _size, (value) => _size = value);
 
-            PositionOffsetBinding = new BindingProperty<Vector2F?>("PositionOffset", () => _positionoffset, (value) => _positionoffset = value);
+            PositionOffsetBinding = Bindings.Create("PositionOffset", () => _positionoffset, (value) => _positionoffset = value);
             PositionOffsetBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F? value) { InvalidTransformation(); };
 
-            VisibilityBinding = new BindingProperty<Visibilities>("Visibility", () => _visibility, (value) => _visibility = value);
+            VisibilityBinding = Bindings.Create("Visibility", () => _visibility, (value) => _visibility = value);
             VisibilityBinding.BindingPropertyChanged += delegate (BindingProperty property, Visibilities value) { UpdatePosition(); };
 
-            AutoScaleOnParentBinding = new BindingProperty<bool>("AutoScaleOnParent", () => _autoscaleonparent, (value) => _autoscaleonparent = value);
+            AutoScaleOnParentBinding = Bindings.Create("AutoScaleOnParent", () => _autoscaleonparent, (value) => _autoscaleonparent = value);
             AutoScaleOnParentBinding.BindingPropertyChanged += delegate (BindingProperty property, bool value) { InvalidTransformation(); };
 
-            RotationBinding = new BindingProperty<float>("Rotation", () => _rotation, (value) => _rotation = value % 360F);
-            RotationBinding.BindingPropertyChanged += delegate (BindingProperty property, float value) { InvalidTransformation();};
+            RotationBinding = Bindings.Create("Rotation", () => _rotation, (value) => _rotation = value % 360F);
+            RotationBinding.BindingPropertyChanged += delegate (BindingProperty property, float value) { InvalidTransformation(); };
 
-            ScaleBinding = new BindingProperty<Vector2F>("Scale", () => _scale, (value) => _scale = value);
+            ScaleBinding = Bindings.Create("Scale", () => _scale, (value) => _scale = value);
             ScaleBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { InvalidTransformation(); };
 
-            OriginBinding = new BindingProperty<Vector2F>("Origin", () => _origin, (value) => _origin = value);
+            OriginBinding = Bindings.Create("Origin", () => _origin, (value) => _origin = value);
             OriginBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { InvalidTransformation(); };
         }
 
@@ -115,7 +115,11 @@ namespace Pandora.Interactions.UI
             set { VisibilityBinding.Value = value; }
         }
 
-        public bool AutoScaleOnParent { get; set; }
+        public bool AutoScaleOnParent
+        {
+            get { return AutoScaleOnParentBinding.Value; }
+            set { AutoScaleOnParentBinding.Value = value; }
+        }
 
         public virtual Vector2F Position
         {

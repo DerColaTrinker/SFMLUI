@@ -87,7 +87,7 @@ namespace Pandora.SFML.Graphics
 
         public static bool IsNaN(float value)
         {
-            FloatUtil.NanUnion nanUnion = default(FloatUtil.NanUnion);
+            NanUnion nanUnion = default(NanUnion);
             nanUnion.DoubleValue = value;
             ulong num = nanUnion.UintValue & 18442240474082181120uL;
             ulong num2 = nanUnion.UintValue & 4503599627370495uL;
