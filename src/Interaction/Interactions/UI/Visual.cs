@@ -119,7 +119,9 @@ namespace Pandora.Interactions.UI
             set { VisibilityBinding.Value = value; }
         }
 
-        public bool AutoScaleOnParent { get; set; }
+        public bool AutoScaleOnParent {
+            get => AutoScaleOnParentBinding.Value;
+            set => AutoScaleOnParentBinding.Value = value; }
 
         public virtual Vector2F Position
         {

@@ -61,6 +61,15 @@ namespace Pandora.Interactions.Bindings
             return binding;
         }
 
+        internal BindingProperty CreateVirutal(string publicBindingName, BindingProperty templatebinding)
+        {
+            var binding = new BindingProperty(publicBindingName, templatebinding.PropertyType , templatebinding);
+
+            _bindings.Add(publicBindingName, binding);
+
+            return binding;
+        }
+
         public bool TryGetBinding<T>(string name, out BindingProperty<T> binding)
         {
             if (TryGetBinding(name, out BindingProperty basebinding))
@@ -98,5 +107,7 @@ namespace Pandora.Interactions.Bindings
         {
             return base.TryInvokeMember(binder, args, out result);
         }
+
+  
     }
 }

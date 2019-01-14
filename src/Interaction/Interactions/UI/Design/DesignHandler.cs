@@ -227,7 +227,7 @@ namespace Pandora.Interactions.UI.Design
                         continue;
                     }
 
-                    parentcontrol.Bindings.Create(item.PublicBindingName, templatebinding);
+                    parentcontrol.Bindings.CreateVirutal(item.PublicBindingName, templatebinding);
                 }
             }
         }

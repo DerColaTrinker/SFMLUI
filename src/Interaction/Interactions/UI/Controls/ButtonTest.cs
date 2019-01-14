@@ -14,5 +14,10 @@ namespace Pandora.Interactions.UI.Controls
 
 
         //TODO: Add BindingCollection for better binding 
+
+        protected override void OnLoad()
+        {
+            base.OnLoad();
+        }
     }
 }

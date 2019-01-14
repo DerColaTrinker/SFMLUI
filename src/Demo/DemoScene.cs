@@ -35,7 +35,7 @@ namespace Pandora
 
             _button = new ButtonTest
             {
-                Position = new Vector2F(0, 20),
+                Position = new Vector2F(50, 50),
                 Size = new Vector2F(150, 40)
             };
 

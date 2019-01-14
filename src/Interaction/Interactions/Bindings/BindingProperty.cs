@@ -51,7 +51,7 @@ namespace Pandora.Interactions.Bindings
             Value = value;
         }
 
-        protected BindingProperty(string name, Type type, BindingProperty binding)
+        internal BindingProperty(string name, Type type, BindingProperty binding)
         {
             CallEvent = true;
             PropertyType = type;
