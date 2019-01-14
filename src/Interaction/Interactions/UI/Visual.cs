@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI
 {
-    public abstract class Visual : ObjectPointer
+    public abstract class Visual : BindingObject
     {
         private bool _transformneedupdate = true;
         private bool _inverseNneedupdate = true;
@@ -32,12 +32,12 @@ namespace Pandora.Interactions.UI
         private Visibilities _visibility = Visibilities.Display;
         private bool _autoscaleonparent = false;
 
-        internal Visual(IntPtr pointer) : base(pointer)
+        public Visual(IntPtr pointer) : base(pointer)
         {
             RegisterBindings();
         }
 
-        internal Visual() : base(IntPtr.Zero)
+        public Visual() : base(IntPtr.Zero)
         {
             RegisterBindings();
         }

@@ -207,11 +207,10 @@ namespace Pandora.Interactions.UI.Design
             foreach (var template in container.Templates)
             {
                 var templatecontrol = (UIElement)Activator.CreateInstance(template.Control);
+                control.Templates.Add(templatecontrol);
 
                 ApplyStyles(templatecontrol, template);
                 ApplyPublicBindings(control, templatecontrol, template);
-
-                control.Templates.Add(templatecontrol);
             }
         }
 

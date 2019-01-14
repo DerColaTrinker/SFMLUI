@@ -61,15 +61,46 @@ namespace Pandora.Interactions.Bindings
             BindingType = BindingPropertyType.ExternalBinding;
         }
 
+        public void Attach(BindingProperty target, BindingAttachWays mode)
+        {
+            AttachMode = mode;
+
+            switch (mode)
+            {
+                case BindingAttachWays.Pull:
+                    target.BindingPropertyChanged += Binding_BindingPropertyChanged;
+                    break;
+
+                case BindingAttachWays.Push:
+                    BindingPropertyChanged += target.Binding_BindingPropertyChanged;
+                    break;
+
+                case BindingAttachWays.Full:
+                    target.BindingPropertyChanged += Binding_BindingPropertyChanged;
+                    BindingPropertyChanged += target.Binding_BindingPropertyChanged;
+                    break;
+            }
+        }
+
+        private void Binding_BindingPropertyChanged(BindingProperty property, object value)
+        {
+            if (_lockupdate) return;
+            Value = value;
+        }
+
+        public BindingObject Parent { get; internal set; }
+
         public bool CallEvent { get; set; }
 
-        public Type PropertyType { get; protected set; }
+        public Type PropertyType { get; internal set; }
 
         public string Name { get; protected set; }
 
         private BindingProperty _externalbinding;
 
         private object _internalvalue;
+
+        private bool _lockupdate;
 
         public BindingPropertyType BindingType { get; }
 
@@ -112,6 +143,8 @@ namespace Pandora.Interactions.Bindings
                 OnValueChanged(value);
             }
         }
+
+        public BindingAttachWays? AttachMode { get; private set; }
 
         protected virtual void OnValueChanged(object value)
         {

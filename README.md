@@ -10,14 +10,12 @@ The library contains the following features:
 - Element templates to customize controls.
 - Scenes, controls and container for control-groups
 - Property-Binding ( similar to DepedencyProperties )
-- Animation-System: color, moving and rotation.
-- Style-System definition in XML ( not finished )
+- Animation-System: color, moving and rotation
+- Time-controlled animations ( Storyboard )
+- Style and Templates definition in XML ( not finished )
 - Event-System incl. MouseOver, MouseLeave and double-click.
 
 Many functions are not yet fully implemented:
-- Time-controlled animations ( Storyboard ).
-- Styles to assign control elements quickly and easily to designs.
-- Templates for controls
 - XML definition of animations, styles and templates not yet fully implemented
 - Audio / Music Subsystem
 

@@ -44,7 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Interactions\Bindings\BindingAttachWays.cs" />
     <Compile Include="Interactions\Bindings\BindingCollection.cs" />
+    <Compile Include="Interactions\Bindings\BindingObject.cs" />
     <Compile Include="Interactions\Components\ComponentBase.cs" />
     <Compile Include="Interactions\Components\ComponentCollection.cs" />
     <Compile Include="Interactions\Components\TimerComponent.cs" />
