@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pandora.Engine.Services
 {
-    public sealed class ServiceCollection : ICollection<RuntimeService>
+    public sealed class ServiceCollection
     {
         private HashSet<RuntimeService> _services = new HashSet<RuntimeService>();
         private PandoraRuntimeHost _runtime;
@@ -26,22 +26,28 @@ namespace Pandora.Engine.Services
 
         public void Add(RuntimeService item)
         {
-            if (_services.Add(item))
+            lock (_services)
             {
-                item.Runtime = _runtime;
-                item.StopRequest += _runtime.InternalStopRequest;
+                if (_services.Add(item))
+                {
+                    item.Runtime = _runtime;
+                    item.StopRequest += _runtime.InternalStopRequest;
 
+                }
             }
         }
         public void Clear()
         {
-            foreach (var item in _services)
+            lock (_services)
             {
-                item.Runtime = null;
-                item.StopRequest -= _runtime.InternalStopRequest;
-            }
+                foreach (var item in _services)
+                {
+                    item.Runtime = null;
+                    item.StopRequest -= _runtime.InternalStopRequest;
+                }
 
-            _services.Clear();
+                _services.Clear();
+            }
         }
 
         public bool Contains(RuntimeService item)
@@ -52,11 +58,6 @@ namespace Pandora.Engine.Services
         public void CopyTo(RuntimeService[] array, int arrayIndex)
         {
             _services.CopyTo(array, arrayIndex);
-        }
-
-        public IEnumerator<RuntimeService> GetEnumerator()
-        {
-            return _services.GetEnumerator();
         }
 
         public bool Remove(RuntimeService item)
@@ -71,9 +72,9 @@ namespace Pandora.Engine.Services
             return result;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        public IEnumerable<RuntimeService> Services
         {
-            return _services.GetEnumerator();
+            get => _services.ToArray();
         }
     }
 }

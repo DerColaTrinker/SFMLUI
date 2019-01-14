@@ -54,9 +54,9 @@ namespace Pandora.Interactions
             return true;
         }
 
-        protected internal override void SystemUpdate(PandoraRuntimeHost pandoraRuntimeHost, RuntimeFrameEventArgs args)
+        protected internal override void SystemUpdate(PandoraRuntimeHost host, float ms, float s)
         {
-            Scenes.SystemUpdate(args.Milliseconds, args.Secounds);
+            Scenes.SystemUpdate(ms, s);
         }
     }
 }

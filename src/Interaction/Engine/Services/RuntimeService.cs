@@ -8,7 +8,7 @@ namespace Pandora.Engine.Services
 {
     public delegate void RuntimeServiceDelegate(RuntimeService service);
 
-    public abstract class RuntimeService
+    public abstract class RuntimeService : IDisposable
     {
         public event RuntimeServiceDelegate StopRequest;
 
@@ -27,6 +27,11 @@ namespace Pandora.Engine.Services
             StopRequest?.Invoke(this);
         }
 
-        protected internal abstract void SystemUpdate(PandoraRuntimeHost pandoraRuntimeHost, RuntimeFrameEventArgs args);
+        protected internal abstract void SystemUpdate(PandoraRuntimeHost host, float ms,float s);
+
+        public virtual void Dispose()
+        {
+            // Nichts machen, kann vom Service verwenden werden
+        }
     }
 }

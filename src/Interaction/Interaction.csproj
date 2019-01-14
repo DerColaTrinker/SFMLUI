@@ -45,6 +45,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Interactions\Bindings\BindingCollection.cs" />
+    <Compile Include="Interactions\Components\ComponentBase.cs" />
+    <Compile Include="Interactions\Components\ComponentCollection.cs" />
+    <Compile Include="Interactions\Components\TimerComponent.cs" />
     <Compile Include="Interactions\UI\Controls\ButtonTest.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
     <Compile Include="Interactions\UI\Design\Converter\EnumConverter.cs" />

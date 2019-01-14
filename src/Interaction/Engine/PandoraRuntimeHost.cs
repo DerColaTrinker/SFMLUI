@@ -6,10 +6,17 @@ using System.Threading;
 
 namespace Pandora.Engine
 {
-    public abstract class PandoraRuntimeHost
+    public delegate void RuntimeStopRequestDelegate(PandoraRuntimeHost host, bool services, ref bool cancel);
+    public delegate void RuntimeSystemUpdateDelegate(PandoraRuntimeHost host, float ms, float s);
+
+    public abstract class PandoraRuntimeHost : IDisposable
     {
         private int _framelimit;
         private float _maxframetime;
+
+        public event RuntimeStopRequestDelegate RuntimeStopRequest;
+        public event RuntimeSystemUpdateDelegate RuntimeSystemUpdate;
+
 
         public PandoraRuntimeHost()
         {
@@ -33,7 +40,7 @@ namespace Pandora.Engine
         {
             if (IsRunning) return;
 
-            foreach (var item in Services)
+            foreach (var item in Services.Services)
             {
                 item.Initialize(out bool success);
 
@@ -45,8 +52,14 @@ namespace Pandora.Engine
 
         internal void InternalStopRequest(RuntimeService service)
         {
-            if (Services.Any(m => m.StopRequested()))
-                Stop();
+            var serviceresult = Services.Services.All(m => m.StopRequested());
+
+            var cancel = false;
+            RuntimeStopRequest?.Invoke(this, serviceresult, ref cancel);
+
+            if (cancel | !serviceresult) return;
+
+            Stop();
         }
 
         public void Stop()
@@ -63,7 +76,7 @@ namespace Pandora.Engine
 
         public bool GetStopRequestResult()
         {
-            return Services.Any(m => m.StopRequested());
+            return Services.Services.Any(m => m.StopRequested());
         }
 
         private void RuntimeLoop()
@@ -71,7 +84,6 @@ namespace Pandora.Engine
             var clock = new Clock();                    // Uses a time measurement from the SFML library.
             var ms = 1F;                                // Set Initial ms to 1, since exceptions may occur with 0 DivisionByZero.
             var waittime = 0F;                          // Number of milliseconds returned to the system if the maximum frame time was not reached.
-            var args = new RuntimeFrameEventArgs();
 
             IsRunning = true;
 
@@ -82,10 +94,7 @@ namespace Pandora.Engine
             {
                 clock.Restart();
 
-                args.Milliseconds = ms;
-                args.Secounds = ms / 1000F;
-
-                InternalSystemUpdate(args);
+                InternalSystemUpdate(ms, ms / 1000F);
 
                 // Perform load balancing by returning system time to the operating system.
                 if (_framelimit > 0 && waittime > 0) Thread.Sleep((int)waittime);
@@ -108,23 +117,31 @@ namespace Pandora.Engine
 
             // Alle Dienste ein Stop zukommen lassen
             ForEachServices(m => m.Stop());
-
         }
 
-        private void InternalSystemUpdate(RuntimeFrameEventArgs args)
+        private void InternalSystemUpdate(float ms, float s)
         {
-            SystemUpdate(args);
+            SystemUpdate(ms, s);
+            RuntimeSystemUpdate?.Invoke(this, ms, s);
 
             // Forward the system update to all services
-            ForEachServices(m => m.SystemUpdate(this, args));
+            ForEachServices(m => m.SystemUpdate(this, ms, s));
         }
 
-        protected virtual void SystemUpdate(RuntimeFrameEventArgs args)
+        protected virtual void SystemUpdate(float ms, float s)
         { }
 
         private void ForEachServices(Action<RuntimeService> action)
         {
-            foreach (var item in Services) action.Invoke(item);
+            foreach (var item in Services.Services)
+            {
+                action.Invoke(item);
+            }
+        }
+
+        public void Dispose()
+        {
+            ForEachServices(m => m.Dispose());
         }
     }
 }
