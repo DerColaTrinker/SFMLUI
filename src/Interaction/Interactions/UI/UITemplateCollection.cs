@@ -44,6 +44,14 @@ namespace Pandora.Interactions.UI
             item.Handler = _parent.Handler;
         }
 
+        public void AddRange(IEnumerable<UIElement> elements)
+        {
+            foreach (var item in elements)
+            {
+                Add(item);
+            }
+        }
+
         public void Clear()
         {
             _elements.Clear();

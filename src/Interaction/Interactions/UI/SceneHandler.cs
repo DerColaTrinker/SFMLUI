@@ -236,6 +236,15 @@ namespace Pandora.Interactions.UI
             _scenes.Insert(0, scene);
         }
 
+        public void Close()
+        {
+            _scenes.RemoveAt(0);
+
+            // Wenn noch weitere Scenen in der Pipe hängen, diese anzeigen.
+            if (_scenes.Count > 0)
+                Show((Scene)_scenes.First());
+        }
+
         #endregion
     }
 }

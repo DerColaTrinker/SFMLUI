@@ -39,6 +39,11 @@ namespace Pandora.Interactions.UI
             Handler.Show(scene);
         }
 
+        public void Close()
+        {
+            Handler.Close();
+        }
+
         protected override void Destroy(bool disposing)
         { }
 

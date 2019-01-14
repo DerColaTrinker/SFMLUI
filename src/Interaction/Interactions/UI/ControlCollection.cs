@@ -73,6 +73,12 @@ namespace Pandora.Interactions.UI
             return result;
         }
 
+        internal bool RemoveAt(int index)
+        {
+            var item = _elements[index];
+            return Remove(item);
+        }
+
         IEnumerator IEnumerable.GetEnumerator()
         {
             throw new NotImplementedException();
