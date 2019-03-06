@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace System.Xml
+namespace Pandora.Runtime.Extentions
 {
     public static class XmlAttributeCollectionExtentions
     {
@@ -15,9 +15,9 @@ namespace System.Xml
             {
                 return collection[name].Value;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return string.Empty;
+                throw ex;
             }
         }
 
@@ -30,6 +30,20 @@ namespace System.Xml
             catch (Exception)
             {
                 return defaultvalue;
+            }
+        }
+
+        public static T GetValue<T>(this XmlAttributeCollection collection, string name)
+        {
+            try
+            {
+                var value = GetValue(collection, name);
+
+                return (T)Convert.ChangeType(value, typeof(T));
+            }
+            catch (Exception ex)
+            {
+                throw ex;
             }
         }
 
