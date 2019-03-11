@@ -30,7 +30,15 @@ namespace Pandora.Interactions.UI.Animations
             _storyboardcollection.Sort(this);
 
             // The sum of all durations is the total duration of the storyboard.
-            Duration = _storyboardcollection.Sum(m => m.Duration);
+            Duration = _storyboardcollection.Max(m => m.EndTime);
+        }
+
+        public void AddRange(float starttime, IEnumerable<Animation> animations)
+        {
+            foreach (var item in animations)
+            {
+                Add(starttime, item);
+            }
         }
 
         /// <summary>

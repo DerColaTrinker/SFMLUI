@@ -36,29 +36,29 @@ namespace Pandora.Interactions.UI.Animations
             });
         }
 
-        public static void StopRange(IEnumerable<AnimationEventHook> enumerable)
+        public static void StopRange(IEnumerable<AnimationEventHook> animations)
         {
-            foreach (var item in enumerable)
+            foreach (var item in animations)
             {
                 Stop(item.Animation);
             }
         }
 
-        public static void Start(Animation effect)
+        public static void Start(Animation animation)
         {
-            if (_animations.Add(effect))
+            if (_animations.Add(animation))
             {
-                effect.InternalStart();
+                animation.InternalStart();
             }
             else
             {
-                effect.InternalReset();
+                animation.InternalReset();
             }
         }
 
-        public static void Start(IEnumerable<Animation> effects)
+        public static void Start(IEnumerable<Animation> animations)
         {
-            foreach (var item in effects) Start(item);
+            foreach (var item in animations) Start(item);
         }
 
         public static void Stop(Animation effect)
@@ -67,9 +67,9 @@ namespace Pandora.Interactions.UI.Animations
                 effect.InternalStop();
         }
 
-        public static void Stop(IEnumerable<Animation> effects)
+        public static void Stop(IEnumerable<Animation> animations)
         {
-            foreach (var item in effects) Stop(item);
+            foreach (var item in animations) Stop(item);
         }
 
         public static void Pause(Animation effect)
@@ -77,9 +77,9 @@ namespace Pandora.Interactions.UI.Animations
             effect.InternalPause();
         }
 
-        public static void Pause(IEnumerable<Animation> effects)
+        public static void Pause(IEnumerable<Animation> animations)
         {
-            foreach (var item in effects) Pause(item);
+            foreach (var item in animations) Pause(item);
         }
 
         public static void Reset(Animation effect)
@@ -87,9 +87,14 @@ namespace Pandora.Interactions.UI.Animations
             effect.InternalReset();
         }
 
-        public static void Reset(IEnumerable<Animation> effects)
+        public static void Reset(IEnumerable<Animation> animations)
         {
-            foreach (var item in effects) item.InternalReset();
+            foreach (var item in animations) item.InternalReset();
+        }
+
+        public static void Clear()
+        {
+            _animations.Clear();
         }
     }
 }

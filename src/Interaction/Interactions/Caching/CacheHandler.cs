@@ -12,10 +12,13 @@ namespace Pandora.Interactions.Caching
         {
             Fonts = new FontCache();
             Colors = new ColorCache();
+            Textures = new TextureCache();
         }
 
         public FontCache Fonts { get; }
 
         public ColorCache Colors { get; }
+
+        public TextureCache Textures { get; }
     }
 }

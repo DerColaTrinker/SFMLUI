@@ -3,8 +3,15 @@ using Pandora.Interactions.Bindings;
 
 namespace Pandora.Interactions.UI.Animations
 {
+    public delegate void AnimationDelegate(Animation animation);
+
     public abstract class Animation
     {
+        public event AnimationDelegate AnimationStart;
+        public event AnimationDelegate AnimationStop;
+        public event AnimationDelegate AnimationPause;
+        public event AnimationDelegate AnimationFinish;
+
         protected Animation(float duration)
         {
             Duration = duration;
@@ -73,16 +80,24 @@ namespace Pandora.Interactions.UI.Animations
         { }
 
         protected virtual void OnStart()
-        { }
+        {
+            AnimationStart?.Invoke(this);
+        }
 
         protected virtual void OnPause()
-        { }
+        {
+            AnimationPause?.Invoke(this);
+        }
 
         protected virtual void OnStop()
-        { }
+        {
+            AnimationStop?.Invoke(this);
+        }
 
         protected virtual void OnFinish()
-        { }
+        {
+            AnimationFinish?.Invoke(this);
+        }
 
         protected virtual void OnUpdate(float ms, float s)
         { }
