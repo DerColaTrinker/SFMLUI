@@ -5,6 +5,7 @@ using Pandora.SFML.Native;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -33,11 +34,18 @@ namespace Pandora.Interactions.Dispatcher
         public ControlElement HooverControl { get; private set; }
         public ControlElement MouseDownControl { get; private set; }
 
+        #region Native
+
+        [DllImport("user32.dll", CharSet = CharSet.Auto, ExactSpelling = true)]
+        private static extern int GetDoubleClickTime();
+
+        #endregion
+
         internal EventDispatcher(SceneHandler handler)
         {
             _scenehandler = handler;
 
-            DoubleClickTime = 1000;
+            DoubleClickTime = GetDoubleClickTime();
         }
 
         public void WaitAndDispatchEvents()
@@ -291,7 +299,7 @@ namespace Pandora.Interactions.Dispatcher
             if (control != FocusControl)
             {
                 FocusControl?.InternalLostFocusEvent();
-                
+
                 if (control.AllowFocus)
                 {
 
