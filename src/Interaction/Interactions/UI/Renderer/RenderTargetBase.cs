@@ -1,13 +1,7 @@
-﻿using Pandora.Interactions.UI.Controls;
-using Pandora.Interactions.UI.Drawing;
-using Pandora.Interactions.UI.Renderer;
+﻿using Pandora.Interactions.UI.Drawing;
 using Pandora.SFML;
 using Pandora.SFML.Graphics;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Renderer
 {
@@ -45,7 +39,7 @@ namespace Pandora.Interactions.UI.Renderer
         public abstract void DrawVertexArray(IntPtr pointer, ref MarshalData states);
 
         public abstract void DrawVertexBuffer(IntPtr pointer, ref MarshalData marshaledStates);
-        
+
         public abstract void DrawSprite(IntPtr pointer, ref MarshalData states);
 
 

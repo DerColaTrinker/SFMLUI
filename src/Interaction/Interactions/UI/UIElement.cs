@@ -1,14 +1,9 @@
 ﻿using Pandora.Interactions.Bindings;
 using Pandora.Interactions.Caching;
 using Pandora.Interactions.Dispatcher;
-using Pandora.Interactions.UI.Animations;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI
 {
@@ -67,7 +62,7 @@ namespace Pandora.Interactions.UI
             _isloaded = true;
         }
 
-            internal virtual void InternalRenderUpdate(RenderTargetBase target)
+        internal virtual void InternalRenderUpdate(RenderTargetBase target)
         {
             _template?.Templates.InternalRenderUpdate(target);
             _container?.Controls.InternalRenderUpdate(target);
@@ -124,7 +119,7 @@ namespace Pandora.Interactions.UI
         }
 
         public string TotelStyleKey { get { return string.IsNullOrEmpty(_stylekey) ? string.Empty : Parent.TotelStyleKey + "/" + _stylekey; } }
-        
+
         #endregion
     }
 }

@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Drawing
 {
@@ -13,7 +9,7 @@ namespace Pandora.Interactions.UI.Drawing
             X = x;
             Y = y;
         }
-        
+
         public static double CrossProduct(Vector2F vector1, Vector2F vector2)
         {
             return vector1.X * vector2.Y - vector1.X * vector2.Y;

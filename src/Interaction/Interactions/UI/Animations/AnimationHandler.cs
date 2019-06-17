@@ -1,9 +1,5 @@
-﻿using System;
+﻿using Pandora.Interactions.UI.Design;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Pandora.Interactions.UI.Design;
 
 namespace Pandora.Interactions.UI.Animations
 {

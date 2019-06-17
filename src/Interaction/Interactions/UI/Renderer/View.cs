@@ -2,10 +2,6 @@
 using Pandora.SFML;
 using Pandora.SFML.Native;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Renderer
 {
@@ -81,7 +77,7 @@ namespace Pandora.Interactions.UI.Renderer
         {
             return "[View]" + " Center(" + Center + ")" + " Size(" + Size + ")" + " Rotation(" + Rotation + ")" + " Viewport(" + Viewport + ")";
         }
-        
+
         protected override void Destroy(bool disposing)
         {
             if (!_external)

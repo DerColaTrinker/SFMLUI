@@ -8,10 +8,8 @@ using Pandora.SFML;
 using Pandora.SFML.Graphics;
 using Pandora.SFML.Native;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI
 {

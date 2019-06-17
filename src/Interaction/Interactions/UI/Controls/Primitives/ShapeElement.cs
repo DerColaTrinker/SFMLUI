@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Text;
-using System.Threading.Tasks;
-using Pandora.Interactions.Bindings;
+﻿using Pandora.Interactions.Bindings;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing2D;
 using Pandora.Interactions.UI.Renderer;
 using Pandora.SFML.Graphics;
 using Pandora.SFML.Native;
+using System;
 
 namespace Pandora.Interactions.UI.Controls.Primitives
 {
@@ -40,7 +35,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
             TextureRect = copy.TextureRect;
             FillColor = copy.FillColor;
             OutlineColor = copy.OutlineColor;
-            OutlineThickness = copy.OutlineThickness;                        
+            OutlineThickness = copy.OutlineThickness;
         }
 
         #region Bindings
@@ -81,7 +76,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
         public Rectangle TextureRect
         {
             get { return TextureRectBinding.Value; }
-            set { TextureRectBinding.Value=value; }
+            set { TextureRectBinding.Value = value; }
         }
 
         public Color FillColor

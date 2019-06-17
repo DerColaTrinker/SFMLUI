@@ -1,14 +1,6 @@
 ﻿using Pandora.Interactions.Bindings;
-using Pandora.Interactions.Caching;
-using Pandora.Interactions.UI.Controls;
 using Pandora.Interactions.UI.Drawing;
-using Pandora.Interactions.UI.Renderer;
-using Pandora.SFML;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI
 {
@@ -56,12 +48,8 @@ namespace Pandora.Interactions.UI
 
         #region Bindings
 
-        public BindingCollection Bindings { get; private set; }
-
-           private void RegisterBindings()
+        private void RegisterBindings()
         {
-            Bindings = new BindingCollection();
-  
             PositionBinding = Bindings.Create("Position", () => _position, (value) => _position = value);
             PositionBinding.BindingPropertyChanged += delegate (BindingProperty property, Vector2F value) { UpdatePosition(); };
 
@@ -119,9 +107,11 @@ namespace Pandora.Interactions.UI
             set { VisibilityBinding.Value = value; }
         }
 
-        public bool AutoScaleOnParent {
+        public bool AutoScaleOnParent
+        {
             get => AutoScaleOnParentBinding.Value;
-            set => AutoScaleOnParentBinding.Value = value; }
+            set => AutoScaleOnParentBinding.Value = value;
+        }
 
         public virtual Vector2F Position
         {

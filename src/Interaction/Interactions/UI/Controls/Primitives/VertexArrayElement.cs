@@ -1,11 +1,6 @@
 ﻿using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Renderer;
 using Pandora.SFML.Native;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Controls.Primitives
 {

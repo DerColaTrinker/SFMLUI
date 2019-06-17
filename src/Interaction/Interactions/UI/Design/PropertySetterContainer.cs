@@ -1,6 +1,4 @@
-﻿using System.Reflection;
-
-namespace Pandora.Interactions.UI.Design
+﻿namespace Pandora.Interactions.UI.Design
 {
     internal class PropertySetterContainer
     {
@@ -10,7 +8,7 @@ namespace Pandora.Interactions.UI.Design
         public string BindingName { get; set; }
 
         public int Duration { get; set; }
-                
+
         public string Value { get; set; }
 
         public int Start { get; set; }

@@ -1,7 +1,4 @@
-﻿using System;
-using Pandora.Interactions.Bindings;
-
-namespace Pandora.Interactions.UI.Animations
+﻿namespace Pandora.Interactions.UI.Animations
 {
     public delegate void AnimationDelegate(Animation animation);
 

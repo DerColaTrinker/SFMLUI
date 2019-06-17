@@ -1,10 +1,7 @@
-﻿using System;
+﻿using Pandora.Interactions.UI.Renderer;
+using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Pandora.Interactions.UI.Renderer;
 
 namespace Pandora.Interactions.UI
 {

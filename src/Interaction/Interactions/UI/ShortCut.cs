@@ -1,5 +1,4 @@
-﻿using System;
-using Pandora.Interactions.Controller;
+﻿using Pandora.Interactions.Controller;
 
 namespace Pandora.Interactions.UI.Controls
 {

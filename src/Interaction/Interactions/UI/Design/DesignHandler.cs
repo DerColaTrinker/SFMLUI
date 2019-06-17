@@ -1,15 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
-using System.Xml;
-using Pandora.Interactions.Bindings;
+﻿using Pandora.Interactions.Bindings;
 using Pandora.Interactions.UI.Animations;
 using Pandora.Interactions.UI.Design.Converter;
 using Pandora.Interactions.UI.Drawing;
+using Pandora.Runtime.Extentions;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Xml;
 
 namespace Pandora.Interactions.UI.Design
 {
@@ -220,7 +217,7 @@ namespace Pandora.Interactions.UI.Design
             {
                 if (!string.IsNullOrEmpty(item.PublicBindingName))
                 {
-                    if(!templatecontrol.Bindings.TryGetBinding(item.BindingName,out BindingProperty templatebinding))
+                    if (!templatecontrol.Bindings.TryGetBinding(item.BindingName, out BindingProperty templatebinding))
                     {
                         //TODO: Die Property wurde nicht gefunden
                         continue;

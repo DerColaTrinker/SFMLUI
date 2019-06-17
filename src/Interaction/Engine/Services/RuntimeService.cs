@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Engine.Services
 {
@@ -27,7 +23,7 @@ namespace Pandora.Engine.Services
             StopRequest?.Invoke(this);
         }
 
-        protected internal abstract void SystemUpdate(PandoraRuntimeHost host, float ms,float s);
+        protected internal abstract void SystemUpdate(PandoraRuntimeHost host, float ms, float s);
 
         public virtual void Dispose()
         {

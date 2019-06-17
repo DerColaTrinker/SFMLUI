@@ -2,11 +2,6 @@
 using Pandora.Interactions.UI.Controls.Primitives;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Controls
 {
@@ -29,7 +24,7 @@ namespace Pandora.Interactions.UI.Controls
 
         private void RegisterBindings()
         {
-            TextColorBinding = Bindings.Create("TextColor",_text.TextColorBinding );
+            TextColorBinding = Bindings.Create("TextColor", _text.TextColorBinding);
             OutlineColorBinding = Bindings.Create("OutlineColor", _text.OutlineColorBinding);
             OutlineThicknessBinding = Bindings.Create("OutlineThickness", _text.OutlineThicknessBinding);
 

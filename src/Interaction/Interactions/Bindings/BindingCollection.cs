@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Dynamic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.Bindings
 {
@@ -63,7 +59,7 @@ namespace Pandora.Interactions.Bindings
 
         internal BindingProperty CreateVirutal(string publicBindingName, BindingProperty templatebinding)
         {
-            var binding = new BindingProperty(publicBindingName, templatebinding.PropertyType , templatebinding);
+            var binding = new BindingProperty(publicBindingName, templatebinding.PropertyType, templatebinding);
 
             _bindings.Add(publicBindingName, binding);
 
@@ -108,6 +104,6 @@ namespace Pandora.Interactions.Bindings
             return base.TryInvokeMember(binder, args, out result);
         }
 
-  
+
     }
 }

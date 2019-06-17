@@ -4,11 +4,8 @@ using Pandora.Interactions.UI.Drawing2D;
 using Pandora.Interactions.UI.Renderer;
 using Pandora.SFML.Native;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Controls.Primitives
 {
@@ -168,7 +165,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
         public float LineSpacing
         {
             get { return NativeSFML.sfText_getLineSpacing(Pointer); }
-            set { NativeSFML. sfText_setLineSpacing(Pointer, value); }
+            set { NativeSFML.sfText_setLineSpacing(Pointer, value); }
         }
 
         public Color TextColor

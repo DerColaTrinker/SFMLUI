@@ -1,10 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Pandora.Interactions.UI.Drawing;
 
 namespace Pandora.Interactions.Bindings
 {
@@ -84,7 +78,6 @@ namespace Pandora.Interactions.Bindings
 
         private void Binding_BindingPropertyChanged(BindingProperty property, object value)
         {
-            if (_lockupdate) return;
             Value = value;
         }
 
@@ -99,8 +92,6 @@ namespace Pandora.Interactions.Bindings
         private BindingProperty _externalbinding;
 
         private object _internalvalue;
-
-        private bool _lockupdate;
 
         public BindingPropertyType BindingType { get; }
 

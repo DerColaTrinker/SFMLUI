@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pandora.Interactions.Caching
+﻿namespace Pandora.Interactions.Caching
 {
     public sealed class CacheHandler
     {

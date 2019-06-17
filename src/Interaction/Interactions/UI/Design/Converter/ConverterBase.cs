@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Pandora.Interactions.UI.Design.Converter
+﻿namespace Pandora.Interactions.UI.Design.Converter
 {
     public abstract class ConverterBase
     {

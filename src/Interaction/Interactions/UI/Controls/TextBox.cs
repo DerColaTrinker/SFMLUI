@@ -1,13 +1,7 @@
 ﻿using Pandora.Interactions.Bindings;
-using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Controls.Primitives;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing2D;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Controls
 {
@@ -63,7 +57,7 @@ namespace Pandora.Interactions.UI.Controls
         {
             if (char.IsControl(unicode))
             {
-               switch (unicode)
+                switch (unicode)
                 {
                     case '\b':
                         if (Text.Length > 0)

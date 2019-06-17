@@ -1,10 +1,4 @@
 ﻿using Pandora.Interactions.Bindings;
-using Pandora.Interactions.UI.Drawing;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Pandora.Interactions.UI.Animations
 {
