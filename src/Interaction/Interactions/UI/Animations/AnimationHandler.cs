@@ -5,7 +5,7 @@ namespace Pandora.Interactions.UI.Animations
 {
     public static class AnimationHandler
     {
-        private static HashSet<Animation> _animations = new HashSet<Animation>();
+        private static readonly HashSet<Animation> _animations = new HashSet<Animation>();
 
         internal static void SystemUpdate(float ms, float s)
         {

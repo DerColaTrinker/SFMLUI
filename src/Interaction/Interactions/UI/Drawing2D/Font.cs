@@ -12,8 +12,8 @@ namespace Pandora.Interactions.UI.Drawing2D
 {
     public class Font : ObjectPointer
     {
-        private Dictionary<uint, Texture> myTextures = new Dictionary<uint, Texture>();
-        private StreamAdaptor myStream = null;
+        private readonly Dictionary<uint, Texture> myTextures = new Dictionary<uint, Texture>();
+        private readonly StreamAdaptor myStream = null;
 
         private Font(IntPtr Pointer) : base(Pointer)
         { }

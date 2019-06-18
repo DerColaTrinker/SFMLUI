@@ -64,8 +64,8 @@ namespace Pandora.SFML
             return myStream.Length;
         }
 
-        private Stream myStream;
+        private readonly Stream myStream;
         private InputStream myInputStream;
-        private IntPtr myInputStreamPtr;
+        private readonly IntPtr myInputStreamPtr;
     }
 }

@@ -5,8 +5,8 @@ namespace Pandora.Engine.Services
 {
     public sealed class ServiceCollection
     {
-        private HashSet<RuntimeService> _services = new HashSet<RuntimeService>();
-        private PandoraRuntimeHost _runtime;
+        private readonly HashSet<RuntimeService> _services = new HashSet<RuntimeService>();
+        private readonly PandoraRuntimeHost _runtime;
 
         public ServiceCollection(PandoraRuntimeHost runtime)
         {

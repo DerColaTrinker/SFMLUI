@@ -8,7 +8,7 @@ namespace Pandora.Interactions.UI.Design
     {
         internal class StyleCollection : IEnumerable<PropertySetterContainer>
         {
-            private Dictionary<string, PropertySetterContainer> _properties = new Dictionary<string, PropertySetterContainer>();
+            private readonly Dictionary<string, PropertySetterContainer> _properties = new Dictionary<string, PropertySetterContainer>();
 
             internal void Add(PropertySetterContainer style)
             {
@@ -36,7 +36,7 @@ namespace Pandora.Interactions.UI.Design
 
         internal class AnimationCollection : IEnumerable<AnimationContainer>
         {
-            private Dictionary<DesignAnimationEvents, AnimationContainer> _animations = new Dictionary<DesignAnimationEvents, AnimationContainer>();
+            private readonly Dictionary<DesignAnimationEvents, AnimationContainer> _animations = new Dictionary<DesignAnimationEvents, AnimationContainer>();
 
             internal void Add(AnimationContainer animation)
             {
@@ -64,7 +64,7 @@ namespace Pandora.Interactions.UI.Design
 
         internal class TemplateCollection : IEnumerable<ControlContainer>
         {
-            private List<ControlContainer> _controls = new List<ControlContainer>();
+            private readonly List<ControlContainer> _controls = new List<ControlContainer>();
 
             internal void Add(ControlContainer control)
             {

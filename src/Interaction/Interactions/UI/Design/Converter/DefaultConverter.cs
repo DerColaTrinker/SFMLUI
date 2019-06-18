@@ -4,7 +4,7 @@ namespace Pandora.Interactions.UI.Design.Converter
 {
     class DefaultConverter : ConverterBase
     {
-        private Type _type;
+        private readonly Type _type;
 
         public DefaultConverter(Type type)
         {

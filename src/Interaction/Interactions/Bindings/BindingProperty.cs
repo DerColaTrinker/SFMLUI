@@ -10,8 +10,8 @@ namespace Pandora.Interactions.Bindings
 
     public class BindingProperty
     {
-        private Delegate _getter;
-        private Delegate _setter;
+        private readonly Delegate _getter;
+        private readonly Delegate _setter;
 
         public event BindingPropertyChangedDelegate BindingPropertyChanged;
 
@@ -89,7 +89,7 @@ namespace Pandora.Interactions.Bindings
 
         public string Name { get; protected set; }
 
-        private BindingProperty _externalbinding;
+        private readonly BindingProperty _externalbinding;
 
         private object _internalvalue;
 

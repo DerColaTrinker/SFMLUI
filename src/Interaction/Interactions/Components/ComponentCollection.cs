@@ -6,8 +6,8 @@ namespace Pandora.Interactions.Components
 {
     public sealed class ComponentCollection : ICollection<ComponentBase>
     {
-        private List<ComponentBase> _components = new List<ComponentBase>();
-        private ControlElement _element;
+        private readonly List<ComponentBase> _components = new List<ComponentBase>();
+        private readonly ControlElement _element;
 
         public ComponentCollection(ControlElement element)
         {
