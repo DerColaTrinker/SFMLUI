@@ -8,7 +8,7 @@ namespace Pandora.Interactions.UI
 {
     public sealed class ControlCollection : IEnumerable<ControlElement>
     {
-        private List<ControlElement> _elements = new List<ControlElement>();
+        private readonly List<ControlElement> _elements = new List<ControlElement>();
         private readonly ControlElement _parent;
 
         internal ControlCollection(ControlElement parent)

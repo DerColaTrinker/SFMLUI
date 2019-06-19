@@ -5,8 +5,8 @@ namespace Pandora.Interactions.UI.Animations
 {
     public sealed class StoryboardAnimation : Animation, IComparer<StoryboardStep>
     {
-        private List<StoryboardStep> _storyboardcollection = new List<StoryboardStep>();
-        private Stack<StoryboardStep> _playstack = new Stack<StoryboardStep>();
+        private readonly List<StoryboardStep> _storyboardcollection = new List<StoryboardStep>();
+        private readonly Stack<StoryboardStep> _playstack = new Stack<StoryboardStep>();
 
         public StoryboardAnimation() : base(0)
         { }

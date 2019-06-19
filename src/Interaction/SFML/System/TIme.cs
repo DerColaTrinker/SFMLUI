@@ -7,7 +7,7 @@ namespace Pandora.SFML.System
     [StructLayout(LayoutKind.Sequential)]
     public struct Time : IEquatable<Time>
     {
-        private long _microseconds;
+        private readonly long _microseconds;
 
         public static readonly Time Zero = FromMicroseconds(0);
 

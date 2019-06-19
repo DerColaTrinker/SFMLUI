@@ -9,7 +9,7 @@ namespace Pandora.Interactions
 {
     public sealed class InteractionService : RuntimeService
     {
-        private InteractionOptions _options;
+        private readonly InteractionOptions _options;
 
         public static Font DefaultFont { get; internal set; }
 

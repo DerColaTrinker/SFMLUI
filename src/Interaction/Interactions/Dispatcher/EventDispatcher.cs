@@ -19,7 +19,7 @@ namespace Pandora.Interactions.Dispatcher
 
     internal sealed class EventDispatcher
     {
-        private SceneHandler _scenehandler;
+        private readonly SceneHandler _scenehandler;
         private ControlElement _dbclickcontrol;
         private DateTime _dbclicktimestamp;
 

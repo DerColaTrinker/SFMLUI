@@ -5,7 +5,7 @@ namespace Pandora.Interactions.UI.Animations
 {
     public sealed class GroupAnimation : Animation
     {
-        private HashSet<Animation> _animations = new HashSet<Animation>();
+        private readonly HashSet<Animation> _animations = new HashSet<Animation>();
 
         public GroupAnimation() : base(0)
         { }

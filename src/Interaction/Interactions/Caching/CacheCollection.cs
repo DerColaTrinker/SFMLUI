@@ -7,7 +7,7 @@ namespace Pandora.Interactions.Caching
 {
     public abstract class CacheCollection<T> : IEnumerable<KeyValuePair<string, T>>
     {
-        private Dictionary<string, T> _cache = new Dictionary<string, T>(StringComparer.InvariantCultureIgnoreCase);
+        private readonly Dictionary<string, T> _cache = new Dictionary<string, T>(StringComparer.InvariantCultureIgnoreCase);
 
         protected CacheCollection()
         {

@@ -7,8 +7,8 @@ namespace Pandora.Interactions.UI
 {
     public sealed class UITemplateCollection : IEnumerable<UIElement>
     {
-        private List<UIElement> _elements = new List<UIElement>();
-        private UIElement _parent;
+        private readonly List<UIElement> _elements = new List<UIElement>();
+        private readonly UIElement _parent;
 
         internal UITemplateCollection(UIElement parent)
         {

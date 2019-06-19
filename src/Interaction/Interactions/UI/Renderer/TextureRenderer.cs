@@ -8,7 +8,7 @@ namespace Pandora.Interactions.UI.Renderer
 {
     public class TextureRenderer : RenderTargetBase
     {
-        private View _defaultview;
+        private readonly View _defaultview;
 
         public TextureRenderer(uint width, uint height) : this(width, height, false)
         { }

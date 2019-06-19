@@ -7,8 +7,8 @@ namespace Pandora.Interactions.UI.Controls
 {
     public class TextBox : Control
     {
-        private RectElement _rect;
-        private TextElement _text;
+        private readonly RectElement _rect;
+        private readonly TextElement _text;
 
         public TextBox()
         {

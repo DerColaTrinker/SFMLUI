@@ -7,7 +7,7 @@ namespace Pandora.Interactions.UI.Controls
 {
     public class Label : Control
     {
-        private TextElement _text;
+        private readonly TextElement _text;
 
         public Label()
         {

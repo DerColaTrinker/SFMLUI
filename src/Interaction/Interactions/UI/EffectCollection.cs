@@ -6,7 +6,7 @@ namespace Pandora.Interactions.UI
 {
     public class EffectCollection : ICollection<AnimationEventHook>
     {
-        private List<AnimationEventHook> _list = new List<AnimationEventHook>();
+        private readonly List<AnimationEventHook> _list = new List<AnimationEventHook>();
 
         public int Count => _list.Count;
 

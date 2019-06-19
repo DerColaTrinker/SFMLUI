@@ -6,7 +6,7 @@ namespace Pandora.Interactions
 {
     public class InteractionOptions : IInteractionOptions
     {
-        private List<string> _designfiles = new List<string>();
+        private readonly List<string> _designfiles = new List<string>();
 
         private InteractionOptions()
         { }

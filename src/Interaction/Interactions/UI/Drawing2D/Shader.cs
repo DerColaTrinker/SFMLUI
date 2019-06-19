@@ -217,6 +217,6 @@ namespace Pandora.Interactions.UI.Drawing2D
         }
 
         // Keeps references to used Textures for GC prevention during use
-        private Dictionary<string, Texture> _textures = new Dictionary<string, Texture>();
+        private readonly Dictionary<string, Texture> _textures = new Dictionary<string, Texture>();
     }
 }

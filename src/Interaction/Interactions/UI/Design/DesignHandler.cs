@@ -13,7 +13,7 @@ namespace Pandora.Interactions.UI.Design
     public class DesignHandler
     {
         private readonly Dictionary<string, Ressource> _resources = new Dictionary<string, Ressource>(StringComparer.InvariantCultureIgnoreCase);
-        private static Dictionary<Type, ControlContainer> _controls = new Dictionary<Type, ControlContainer>();
+        private static readonly Dictionary<Type, ControlContainer> _controls = new Dictionary<Type, ControlContainer>();
 
         public void Load(string filename)
         {
@@ -33,7 +33,6 @@ namespace Pandora.Interactions.UI.Design
         private void ParseResources(XmlNode node)
         {
             if (node == null) return;
-            var mode = node.Name == "styles" ? ResourceType.Style : ResourceType.Template;
 
             foreach (XmlNode resnode in node.SelectNodes("resource"))
             {
@@ -41,14 +40,6 @@ namespace Pandora.Interactions.UI.Design
                 var value = resnode.Attributes.GetValue("value");
 
                 _resources[name] = new Ressource() { Value = value, ResourceType = ResourceType.Template };
-            }
-        }
-
-        private void ParseTemplates(XmlNode templatesnode)
-        {
-            foreach (XmlNode teamplatenode in templatesnode.SelectNodes("template"))
-            {
-                var controlname = teamplatenode.Attributes.GetValue("name");
             }
         }
 
@@ -72,18 +63,18 @@ namespace Pandora.Interactions.UI.Design
                     _controls.Add(control, container);
                 }
 
-                container.Styles.AddRange(ParseXmlPropertySetter(container, controlnode));
-                container.Animations.AddRange(ParseXmlAnimation(container, controlnode));
-                container.Animations.AddRange(ParseXmlStoryboard(container, controlnode));
+                container.Styles.AddRange(ParseXmlPropertySetter(controlnode));
+                container.Animations.AddRange(ParseXmlAnimation(controlnode));
+                container.Animations.AddRange(ParseXmlStoryboard(controlnode));
             }
         }
 
-        private IEnumerable<PropertySetterContainer> ParseXmlPropertySetter(ControlContainer container, XmlNode basenode)
+        private IEnumerable<PropertySetterContainer> ParseXmlPropertySetter(XmlNode basenode)
         {
             foreach (XmlNode node in basenode.SelectNodes("set"))
             {
                 var name = node.Attributes.GetValue("property");
-                var publicname = node.Attributes.GetValue("public");
+                var publicname = node.Attributes.GetValue("public", "");
                 var duration = node.Attributes.GetValue("duration", 0);
                 var start = node.Attributes.GetValue("start", 0);
 
@@ -105,7 +96,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private IEnumerable<AnimationContainer> ParseXmlAnimation(ControlContainer container, XmlNode controlnode)
+        private IEnumerable<AnimationContainer> ParseXmlAnimation(XmlNode controlnode)
         {
             foreach (XmlNode node in controlnode.SelectNodes("animation"))
             {
@@ -119,13 +110,13 @@ namespace Pandora.Interactions.UI.Design
                     Groupname = groupname
                 };
 
-                animation.PropertySetters = ParseXmlPropertySetter(container, node);
+                animation.PropertySetters = ParseXmlPropertySetter(node);
 
                 yield return animation;
             }
         }
 
-        private IEnumerable<AnimationContainer> ParseXmlStoryboard(ControlContainer container, XmlNode controlnode)
+        private IEnumerable<AnimationContainer> ParseXmlStoryboard(XmlNode controlnode)
         {
             foreach (XmlNode node in controlnode.SelectNodes("storyboard"))
             {
@@ -139,7 +130,7 @@ namespace Pandora.Interactions.UI.Design
                     Groupname = groupname
                 };
 
-                animation.PropertySetters = ParseXmlPropertySetter(container, node);
+                animation.PropertySetters = ParseXmlPropertySetter(node);
 
                 yield return animation;
             }
@@ -178,12 +169,12 @@ namespace Pandora.Interactions.UI.Design
                     if (uicontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
                     var templatecontainer = new ControlContainer(uicontrol);
-                    templatecontainer.Styles.AddRange(ParseXmlPropertySetter(templatecontainer, controlnode));
+                    templatecontainer.Styles.AddRange(ParseXmlPropertySetter(controlnode));
                     container.Templates.Add(templatecontainer);
                 }
 
-                container.Animations.AddRange(ParseXmlAnimation(container, templatenode));
-                container.Animations.AddRange(ParseXmlStoryboard(container, templatenode));
+                container.Animations.AddRange(ParseXmlAnimation(templatenode));
+                container.Animations.AddRange(ParseXmlStoryboard(templatenode));
             }
         }
 

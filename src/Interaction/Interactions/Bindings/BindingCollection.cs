@@ -5,7 +5,7 @@ namespace Pandora.Interactions.Bindings
 {
     public sealed class BindingCollection : DynamicObject
     {
-        private Dictionary<string, BindingProperty> _bindings = new Dictionary<string, BindingProperty>();
+        private readonly Dictionary<string, BindingProperty> _bindings = new Dictionary<string, BindingProperty>();
 
         public BindingCollection()
         { }
