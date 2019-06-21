@@ -1,11 +1,10 @@
 ﻿using Pandora.SFML.Native;
-using System;
 using System.Runtime.InteropServices;
 
 namespace Pandora.Interactions.UI.Drawing
 {
     [StructLayout(LayoutKind.Sequential)]
-    public struct Transform : IEquatable<Transform>
+    public struct Transform
     {
         public Transform(float a00, float a01, float a02, float a10, float a11, float a12, float a20, float a21, float a22)
         {

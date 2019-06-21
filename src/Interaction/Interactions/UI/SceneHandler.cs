@@ -186,6 +186,11 @@ namespace Pandora.Interactions.UI
             }
         }
 
+        public void SetMouseCursor(Cursor cursor)
+        {
+            NativeSFML.sfRenderWindow_setMouseCursor(Pointer, cursor.Pointer);
+        }
+
         public InteractionService Service { get; }
 
         public CacheHandler Cache { get; }

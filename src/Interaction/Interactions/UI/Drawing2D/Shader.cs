@@ -131,7 +131,7 @@ namespace Pandora.Interactions.UI.Drawing2D
             NativeSFML.sfShader_setTextureUniform(Pointer, name, texture.Pointer);
         }
 
-        public void SetUniform(string name, CurrentTextureType current)
+        public void SetUniform(string name)
         {
             NativeSFML.sfShader_setCurrentTextureUniform(Pointer, name);
         }

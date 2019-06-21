@@ -33,24 +33,11 @@ namespace Pandora.Interactions.UI.Drawing2D
                 throw new Exception("font");
         }
 
-        public Font(byte[] bytes) : base(IntPtr.Zero)
-        {
-            GCHandle pin = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            try
-            {
-                Pointer = NativeSFML.sfFont_createFromMemory(pin.AddrOfPinnedObject(), Convert.ToUInt64(bytes.Length));
-            }
-            finally
-            {
-                pin.Free();
-            }
-            if (Pointer == IntPtr.Zero)
-                throw new Exception("font");
-        }
+        public Font(byte[] bytes) : this(new MemoryStream(bytes))
+        { }
 
         public Font(Font copy) : base(NativeSFML.sfFont_copy(copy.Pointer))
-        {
-        }
+        { }
 
         public Glyph GetGlyph(uint codePoint, uint characterSize, bool bold, float outlineThickness)
         {

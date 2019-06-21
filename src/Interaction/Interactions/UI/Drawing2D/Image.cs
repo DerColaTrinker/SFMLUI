@@ -40,23 +40,8 @@ namespace Pandora.Interactions.UI.Drawing2D
                 throw new Exception("image");
         }
 
-        public Image(byte[] bytes) :
-            base(IntPtr.Zero)
-        {
-            GCHandle pin = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-
-            try
-            {
-                Pointer = NativeSFML.sfImage_createFromMemory(pin.AddrOfPinnedObject(), Convert.ToUInt64(bytes.Length));
-            }
-            finally
-            {
-                pin.Free();
-            }
-
-            if (Pointer == IntPtr.Zero)
-                throw new Exception("image");
-        }
+        public Image(byte[] bytes) : this(new MemoryStream(bytes))
+        { }
 
         public Image(Color[,] pixels) : base(IntPtr.Zero)
         {

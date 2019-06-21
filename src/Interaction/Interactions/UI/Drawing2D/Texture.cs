@@ -4,7 +4,6 @@ using Pandora.SFML;
 using Pandora.SFML.Native;
 using System;
 using System.IO;
-using System.Runtime.InteropServices;
 
 namespace Pandora.Interactions.UI.Drawing2D
 {
@@ -50,21 +49,8 @@ namespace Pandora.Interactions.UI.Drawing2D
                 throw new Exception("texture");
         }
 
-        public Texture(byte[] bytes) : base(IntPtr.Zero)
-        {
-            GCHandle pin = GCHandle.Alloc(bytes, GCHandleType.Pinned);
-            try
-            {
-                Rectangle rect = new Rectangle(0, 0, 0, 0);
-                Pointer = NativeSFML.sfTexture_createFromMemory(pin.AddrOfPinnedObject(), Convert.ToUInt64(bytes.Length), ref rect);
-            }
-            finally
-            {
-                pin.Free();
-            }
-            if (Pointer == IntPtr.Zero)
-                throw new Exception("texture");
-        }
+        public Texture(byte[] bytes) : this(new MemoryStream(bytes))
+        { }
 
         public Texture(Texture copy) : base(NativeSFML.sfTexture_copy(copy.Pointer))
         { }
