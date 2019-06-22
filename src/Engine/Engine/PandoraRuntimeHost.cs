@@ -9,7 +9,7 @@ namespace Pandora.Engine
     public delegate void RuntimeStopRequestDelegate(PandoraRuntimeHost host, bool services, ref bool cancel);
     public delegate void RuntimeSystemUpdateDelegate(PandoraRuntimeHost host, float ms, float s);
 
-    public abstract class PandoraRuntimeHost : IDisposable
+    public class PandoraRuntimeHost : IDisposable
     {
         private int _framelimit;
         private float _maxframetime;
@@ -17,9 +17,9 @@ namespace Pandora.Engine
         public event RuntimeStopRequestDelegate RuntimeStopRequest;
         public event RuntimeSystemUpdateDelegate RuntimeSystemUpdate;
 
-
         public PandoraRuntimeHost()
         {
+            Logger.Normal($"Starting Host '{GetType().Name}'");
             Services = new ServiceCollection(this);
             FrameLimit = 60;
         }
@@ -40,6 +40,8 @@ namespace Pandora.Engine
         {
             if (IsRunning) return;
 
+            Logger.Normal("[Runtime] start");
+
             foreach (var item in Services.Services)
             {
                 item.Initialize(out bool success);
@@ -52,11 +54,12 @@ namespace Pandora.Engine
 
         internal void InternalStopRequest(RuntimeService service)
         {
+            Logger.Debug("[Runtime] call stop request");
             var serviceresult = Services.Services.All(m => m.StopRequested());
+            Logger.Debug($"Stop request service result : {serviceresult}");
 
             var cancel = false;
             RuntimeStopRequest?.Invoke(this, serviceresult, ref cancel);
-
             if (cancel | !serviceresult) return;
 
             Stop();
@@ -64,12 +67,18 @@ namespace Pandora.Engine
 
         public void Stop()
         {
+            if (!IsRunning)
+                return;
+
+            Logger.Normal("[Runtime] stop");
+
             // Do not stop directly, but set the running status to False, so that the loop is left directly.
             IsRunning = false;
         }
 
         public void InitiateStopRequest()
         {
+            Logger.Normal("[Runtime] Initiate stop request");
             if (GetStopRequestResult())
                 Stop();
         }
@@ -89,6 +98,8 @@ namespace Pandora.Engine
 
             // Allen Diensten ein Start zukommen lassen
             ForEachServices(m => m.Start());
+
+            Logger.Debug("[Runtime] Enter loop.");
 
             while (IsRunning)
             {
@@ -112,6 +123,8 @@ namespace Pandora.Engine
                 // FPS
                 FPS = 1000F / (ms);
             }
+
+            Logger.Debug("[Runtime] Leave loop");
 
             IsRunning = false;
 
@@ -141,6 +154,7 @@ namespace Pandora.Engine
 
         public void Dispose()
         {
+            Logger.Debug("[Runtime] Dispose");
             ForEachServices(m => m.Dispose());
         }
     }

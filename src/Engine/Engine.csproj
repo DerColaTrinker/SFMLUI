@@ -51,6 +51,15 @@
     <Compile Include="Engine\Services\ServiceCollection.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Runtime\Extentions\XmlAttributeCollectionExtentions.cs" />
+    <Compile Include="Runtime\Logging\Logger.cs" />
+    <Compile Include="Runtime\Logging\LoggerManager.cs" />
+    <Compile Include="Runtime\Logging\LoggerMessageType.cs" />
+    <Compile Include="Runtime\Logging\LoggerStateResult.cs" />
+    <Compile Include="Runtime\Logging\LoggerTarget.cs" />
+    <Compile Include="Runtime\Logging\LoggerTargetConfiguration.cs" />
+    <Compile Include="Runtime\Logging\Targets\ConsoleLoggerTarget.cs" />
+    <Compile Include="Runtime\Logging\Targets\ConsoleLoggerTargetConfiguration.cs" />
+    <Compile Include="Runtime\Logging\Targets\DelegateLoggerTarget.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
