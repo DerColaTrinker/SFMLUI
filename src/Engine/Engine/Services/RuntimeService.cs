@@ -8,7 +8,7 @@ namespace Pandora.Engine.Services
     {
         public event RuntimeServiceDelegate StopRequest;
 
-        protected internal PandoraRuntimeHost Runtime { get; internal set; }
+        public PandoraRuntimeHost Runtime { get; internal set; }
 
         protected internal abstract void Initialize(out bool success);
 

@@ -8,7 +8,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Pandora</RootNamespace>
-    <AssemblyName>ppgui</AssemblyName>
+    <AssemblyName>Pandora.Interactions</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -56,7 +56,6 @@
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
     <Compile Include="Interactions\UI\Design\Converter\EnumConverter.cs" />
     <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />
-    <Compile Include="Engine\Services\RuntimeService.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
     <Compile Include="Interactions\Bindings\BindingEnumerator.cs" />
     <Compile Include="Interactions\Bindings\BindingProperty.cs" />
@@ -96,9 +95,6 @@
     <Compile Include="Interactions\UI\ControlCollection.cs" />
     <Compile Include="Interactions\UI\ControlContainer.cs" />
     <Compile Include="Interactions\UI\ControlElement.cs" />
-    <Compile Include="Interactions\UI\Controls\TextBox.cs" />
-    <Compile Include="Interactions\UI\Controls\Button.cs" />
-    <Compile Include="Interactions\UI\Controls\Label.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\CircleElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\ConvexElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\LineElement.cs" />
@@ -172,9 +168,6 @@
     <Compile Include="Interactions\UI\UITemplateCollection.cs" />
     <Compile Include="Interactions\UI\Visibilities.cs" />
     <Compile Include="Interactions\UI\Visual.cs" />
-    <Compile Include="Engine\PandoraRuntimeHost.cs" />
-    <Compile Include="Engine\RuntimeFrameEventArgs.cs" />
-    <Compile Include="Engine\Services\ServiceCollection.cs" />
     <Compile Include="SFML\Native\NativeSFML_System.cs" />
     <Compile Include="SFML\Native\NativeSFML_Windows.cs" />
     <Compile Include="SFML\Native\NativeSFML_Graphics.cs" />
@@ -190,7 +183,6 @@
     <Compile Include="SFML\Graphics\MarshalData.cs" />
     <Compile Include="SFML\InputStream.cs" />
     <Compile Include="SFML\StreamAdapter.cs" />
-    <Compile Include="Utility\XmlAttributeCollectionExtentions.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="..\..\deps\x86\csfml-audio-2.dll">
@@ -210,6 +202,11 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Engine\Engine.csproj">
+      <Project>{eaa83923-e8a2-4c3c-9cc6-139fd85e2ac4}</Project>
+      <Name>Engine</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

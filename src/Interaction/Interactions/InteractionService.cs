@@ -21,7 +21,7 @@ namespace Pandora.Interactions
 
         public SceneHandler Scenes { get; private set; }
 
-        protected internal override void Initialize(out bool success)
+        protected override void Initialize(out bool success)
         {
             Scenes = new SceneHandler(this);
             success = Scenes.Initialize();
@@ -33,23 +33,23 @@ namespace Pandora.Interactions
                 DefaultFont = new Font(_options.DefaultFontfile);
         }
 
-        protected internal override void Start()
+        protected override void Start()
         {
             if (_options.StartScene != null)
                 Scenes.Show(_options.StartScene);
         }
 
-        protected internal override void Stop()
+        protected override void Stop()
         {
             Scenes.Dispose();
         }
 
-        protected internal override bool StopRequested()
+        protected override bool StopRequested()
         {
             return true;
         }
 
-        protected internal override void SystemUpdate(PandoraRuntimeHost host, float ms, float s)
+        protected override void SystemUpdate(PandoraRuntimeHost host, float ms, float s)
         {
             Scenes.SystemUpdate(ms, s);
         }

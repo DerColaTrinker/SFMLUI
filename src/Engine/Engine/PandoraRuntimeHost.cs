@@ -1,6 +1,6 @@
 ﻿using Pandora.Engine.Services;
-using Pandora.SFML.System;
 using System;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading;
 
@@ -81,7 +81,7 @@ namespace Pandora.Engine
 
         private void RuntimeLoop()
         {
-            var clock = new Clock();                    // Uses a time measurement from the SFML library.
+            var clock = new Stopwatch();                // Uses a time measurement from the SFML library.
             var ms = 1F;                                // Set Initial ms to 1, since exceptions may occur with 0 DivisionByZero.
             var waittime = 0F;                          // Number of milliseconds returned to the system if the maximum frame time was not reached.
 
@@ -100,7 +100,7 @@ namespace Pandora.Engine
                 if (_framelimit > 0 && waittime > 0) Thread.Sleep((int)waittime);
 
                 // Measure the time already here and include the compensation time.
-                ms = clock.ElapsedTime.AsMilliseconds();
+                ms = clock.ElapsedMilliseconds;
 
                 // Calculate waiting time for load balancing
                 if (_framelimit > 0 && ms < _maxframetime)
