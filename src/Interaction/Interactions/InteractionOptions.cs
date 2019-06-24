@@ -9,7 +9,9 @@ namespace Pandora.Interactions
         private readonly List<string> _designfiles = new List<string>();
 
         private InteractionOptions()
-        { }
+        {
+            Logger.Trace("Create interaction configuration object");
+        }
 
         internal static InteractionOptions Create()
         {

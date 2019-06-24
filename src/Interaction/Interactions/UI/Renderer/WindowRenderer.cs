@@ -9,7 +9,9 @@ namespace Pandora.Interactions.UI.Renderer
     public sealed class WindowRenderer : RenderTargetBase
     {
         internal WindowRenderer(ObjectPointer pointer) : base(pointer.Pointer)
-        { }
+        {
+            Logger.Normal("[Interaction] Create WindowRenderer instance");
+        }
 
         public void SetMouseCursor(Cursor cursor)
         {

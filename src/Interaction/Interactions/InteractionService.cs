@@ -15,6 +15,7 @@ namespace Pandora.Interactions
 
         public InteractionService(Action<IInteractionOptions> options)
         {
+            Logger.Normal("[Interaction] Create service instance");
             _options = InteractionOptions.Create();
             options?.Invoke(_options);
         }
@@ -23,6 +24,8 @@ namespace Pandora.Interactions
 
         protected override void Initialize(out bool success)
         {
+            Logger.Debug("[Interaction] Initializing");
+
             Scenes = new SceneHandler(this);
             success = Scenes.Initialize();
 
@@ -36,7 +39,7 @@ namespace Pandora.Interactions
         protected override void Start()
         {
             if (_options.StartScene != null)
-                Scenes.Show(_options.StartScene);
+               Scenes.Show(_options.StartScene);
         }
 
         protected override void Stop()

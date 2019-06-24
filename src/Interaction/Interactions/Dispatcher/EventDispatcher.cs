@@ -39,6 +39,8 @@ namespace Pandora.Interactions.Dispatcher
 
         internal EventDispatcher(SceneHandler handler)
         {
+            Logger.Debug("[Interaction] Create EventDispatcher instance");
+
             _scenehandler = handler;
 
             DoubleClickTime = GetDoubleClickTime();
@@ -56,9 +58,9 @@ namespace Pandora.Interactions.Dispatcher
                 CallEventHandler(e);
         }
 
-        internal bool PollEvent(out Event eventToFill)
+        internal bool PollEvent(out Event currentevent)
         {
-            return NativeSFML.sfWindow_pollEvent(_scenehandler.Pointer, out eventToFill);
+            return NativeSFML.sfWindow_pollEvent(_scenehandler.Pointer, out currentevent);
         }
 
         internal void RenderUpdate(RenderTargetBase target)
@@ -66,13 +68,15 @@ namespace Pandora.Interactions.Dispatcher
             Render?.Invoke(target);
         }
 
-        internal bool WaitEvent(out Event eventToFill)
+        internal bool WaitEvent(out Event currentevent)
         {
-            return NativeSFML.sfWindow_waitEvent(_scenehandler.Pointer, out eventToFill);
+            return NativeSFML.sfWindow_waitEvent(_scenehandler.Pointer, out currentevent);
         }
 
         private void CallEventHandler(Event e)
         {
+            Logger.Trace($"Dispatch event '{e.Type}'");
+
             switch (e.Type)
             {
                 case EventType.Closed:

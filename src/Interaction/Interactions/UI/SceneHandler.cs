@@ -23,6 +23,8 @@ namespace Pandora.Interactions.UI
 
         public SceneHandler(InteractionService service) : base(IntPtr.Zero)
         {
+            Logger.Normal("[Interaction] Create SceneHandler instance");
+
             Service = service;
             Cache = new CacheHandler();
             Designs = new DesignHandler();
@@ -41,6 +43,9 @@ namespace Pandora.Interactions.UI
 
             // Windowstyle
             _windowstyle = WindowStyle.Close | WindowStyle.Titlebar;
+
+            Logger.Trace("[Interaction] Context   : " + _contextsettings.ToString());
+            Logger.Trace("[Interaction] Videomode :" + _videomode.ToString();
         }
 
         #region Runtime
@@ -51,10 +56,12 @@ namespace Pandora.Interactions.UI
             {
                 // Try to create the RenderWindow. The SceneManager managed the Window
                 Pointer = NativeSFML.sfRenderWindow_create(_videomode, _windowtitle, _windowstyle, ref _contextsettings);
+
+                Logger.Debug("[Interaction] Window created");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                //TODO: Throw exception
+                Logger.Error($"[Interaction] Error on create window : " + ex.Message);
                 return false;
             }
 
@@ -73,18 +80,10 @@ namespace Pandora.Interactions.UI
 
         private void RegisterEvents()
         {
-            // Window-Events handling
-            Dispatcher.Closed += delegate () { Service.Runtime.InitiateStopRequest(); };
-
             //TODO: Lostfocus = No Rendering
             //Dispatcher.LostFocus += delegate () { Service.Paused = true; };
             //Dispatcher.GetFocus += delegate () { Service.Paused = false; };
-            Dispatcher.Closed += Dispatcher_Closed;
-        }
-
-        private void Dispatcher_Closed()
-        {
-            Service.InitiateStopRequest();
+            Dispatcher.Closed += delegate () { Service.Runtime.InitiateStopRequest(); };
         }
 
         internal void SystemUpdate(float ms, float s)
@@ -107,6 +106,7 @@ namespace Pandora.Interactions.UI
 
         protected override void Destroy(bool disposing)
         {
+            Logger.Normal("[SceneHandler] Detroy render window");
             NativeSFML.sfRenderWindow_destroy(Pointer);
         }
 
@@ -237,13 +237,17 @@ namespace Pandora.Interactions.UI
 
             // Insert scene on top
             _scenes.Insert(0, scene);
+
+            Logger.Debug($"[SceneHandler] Show scene '{scene.GetType().Name}'");
         }
 
         public void Close()
         {
-            _scenes.RemoveAt(0);
+            Logger.Debug($"[SceneHandler] Close current scene");
 
-            // Wenn noch weitere Scenen in der Pipe hängen, diese anzeigen.
+            if (_scenes.Count > 0)
+                _scenes.RemoveAt(0);
+
             if (_scenes.Count > 0)
                 Show((Scene)_scenes.First());
         }
