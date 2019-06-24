@@ -56,7 +56,7 @@ namespace Pandora.Engine
         {
             Logger.Debug("[Runtime] call stop request");
             var serviceresult = Services.Services.All(m => m.StopRequested());
-            Logger.Debug($"Stop request service result : {serviceresult}");
+            Logger.Debug($"[Runtime] Stop request service result : {serviceresult}");
 
             var cancel = false;
             RuntimeStopRequest?.Invoke(this, serviceresult, ref cancel);

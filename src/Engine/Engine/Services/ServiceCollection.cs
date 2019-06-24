@@ -26,9 +26,9 @@ namespace Pandora.Engine.Services
             {
                 if (_services.Add(item))
                 {
+                    Logger.Debug($"[Service] Add service '{item.GetType().Name}'");
                     item.Runtime = _runtime;
                     item.StopRequest += _runtime.InternalStopRequest;
-
                 }
             }
         }
@@ -43,6 +43,8 @@ namespace Pandora.Engine.Services
                 }
 
                 _services.Clear();
+
+                Logger.Debug($"[Service] Remove all servces");
             }
         }
 
@@ -58,9 +60,12 @@ namespace Pandora.Engine.Services
 
         public bool Remove(RuntimeService item)
         {
+            lock (_services)
+            { }
             var result = _services.Remove(item);
             if (result)
             {
+                Logger.Debug($"[Service] Remove service '{item.GetType().Name}'");
                 item.Runtime = null;
                 item.StopRequest += _runtime.InternalStopRequest;
             }
