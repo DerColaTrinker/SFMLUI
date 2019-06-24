@@ -45,7 +45,7 @@ namespace Pandora.Interactions.UI
             _windowstyle = WindowStyle.Close | WindowStyle.Titlebar;
 
             Logger.Trace("[Interaction] Context   : " + _contextsettings.ToString());
-            Logger.Trace("[Interaction] Videomode :" + _videomode.ToString();
+            Logger.Trace("[Interaction] Videomode :" + _videomode.ToString());
         }
 
         #region Runtime

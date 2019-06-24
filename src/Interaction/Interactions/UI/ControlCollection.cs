@@ -13,7 +13,7 @@ namespace Pandora.Interactions.UI
 
         internal ControlCollection(ControlElement parent)
         {
-            Logger.Debug("[Interaction] Create ControlCollection instance : " + parent == null ? "---" : parent.GetType().Name);
+            Logger.Debug("[Interaction] Create ControlCollection instance : " + (parent == null ? "---" : parent.GetType().Name));
             _parent = parent;
         }
 
@@ -107,7 +107,6 @@ namespace Pandora.Interactions.UI
                 if (control != null) break;
             }
 
-            Logger.Trace($"[ControlCollection] Tunnel 'MouseMove' Event from '{control.GetType().Name}'");
             return control;
         }
 
@@ -122,7 +121,6 @@ namespace Pandora.Interactions.UI
                 if (control != null) break;
             }
 
-            Logger.Trace($"[ControlCollection] Tunnel 'MouseOver' Event from '{control.GetType().Name}'");
             return control;
         }
 
@@ -137,7 +135,6 @@ namespace Pandora.Interactions.UI
                 if (control != null) break;
             }
 
-            Logger.Trace($"[ControlCollection] Tunnel 'MouseButtonUp' Event from '{control.GetType().Name}'");
             return control;
         }
 
@@ -152,7 +149,6 @@ namespace Pandora.Interactions.UI
                 if (control != null) break;
             }
 
-            Logger.Trace($"[ControlCollection] Tunnel 'MouseButtonDown' Event from '{control.GetType().Name}'");
             return control;
         }
 
