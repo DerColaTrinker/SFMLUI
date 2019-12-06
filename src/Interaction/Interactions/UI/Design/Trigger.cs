@@ -1,11 +1,13 @@
-﻿using Pandora.Interactions.UI.Animations;
+﻿using Pandora.Interactions.Controller;
+using Pandora.Interactions.UI.Animations;
+using System;
 using System.Linq;
 
 namespace Pandora.Interactions.UI.Design
 {
-    public sealed class AnimationEventHook
+    public class Trigger
     {
-        public AnimationEventHook()
+        public Trigger()
         {
             Groupname = string.Empty;
         }
@@ -16,7 +18,12 @@ namespace Pandora.Interactions.UI.Design
 
         public string Groupname { get; internal set; }
 
-        internal void MouseEvents1(ControlElement element)
+        internal virtual void MouseEvents(ControlElement element)
+        {
+            Start();
+        }
+
+        internal virtual void MouseButtonEvents(ControlElement element, MouseButton button, float x, float y)
         {
             Start();
         }
@@ -25,7 +32,8 @@ namespace Pandora.Interactions.UI.Design
         {
             // Stop all animations with the groupname
             if (!string.IsNullOrEmpty(Groupname))
-                AnimationHandler.StopRange(Control.Animations.Where(m => m.Groupname == Groupname));
+                Control.Triggers.Stop(Groupname);
+            //AnimationHandler.StopRange(Control.Animations.Where(m => m.Groupname == Groupname));
 
             AnimationHandler.Start(Animation);
         }

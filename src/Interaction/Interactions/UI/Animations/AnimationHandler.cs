@@ -32,7 +32,7 @@ namespace Pandora.Interactions.UI.Animations
             });
         }
 
-        public static void StopRange(IEnumerable<AnimationEventHook> animations)
+        public static void StopRange(IEnumerable<Trigger> animations)
         {
             foreach (var item in animations)
             {

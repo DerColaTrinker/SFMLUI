@@ -36,7 +36,7 @@ namespace Pandora.Interactions.UI.Design
 
         internal class AnimationCollection : IEnumerable<AnimationContainer>
         {
-            private readonly Dictionary<DesignAnimationEvents, AnimationContainer> _animations = new Dictionary<DesignAnimationEvents, AnimationContainer>();
+            private readonly Dictionary<TriggerEvents, AnimationContainer> _animations = new Dictionary<TriggerEvents, AnimationContainer>();
 
             internal void Add(AnimationContainer animation)
             {

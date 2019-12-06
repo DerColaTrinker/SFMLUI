@@ -13,8 +13,8 @@ namespace Pandora
             {
                 option.DefaultFontfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
                 option.StartScene = new DemoScene();
-                //option.LoadDesign("styletest.xml");
-                //option.LoadDesign("templatetest.xml");
+                option.LoadDesign("styletest.xml");
+                option.LoadDesign("templatetest.xml");
             });
 
             Services.Add(Interaction);

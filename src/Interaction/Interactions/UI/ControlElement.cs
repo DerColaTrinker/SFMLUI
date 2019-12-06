@@ -24,11 +24,10 @@ namespace Pandora.Interactions.UI
     {
         protected ControlElement() : base(IntPtr.Zero)
         {
-            Animations = new EffectCollection();
             Templates = new UITemplateCollection(this);
+            Triggers = new TriggerCollection(this);
 
             DesignHandler.ApplyDesignToControl(this);
-
             RegisterBindingProperties();
         }
 
@@ -46,7 +45,9 @@ namespace Pandora.Interactions.UI
             RegisterDispatcherEvents();
         }
 
-        public UITemplateCollection Templates { get; private set; }
+        public UITemplateCollection Templates { get; }
+
+        public TriggerCollection Triggers { get; }
 
         public new ControlElement Parent { get { return (ControlElement)base.Parent; } }
 
@@ -71,8 +72,6 @@ namespace Pandora.Interactions.UI
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }
 
-        public EffectCollection Animations { get; internal set; }
-
         #region Events
 
         private void RegisterDispatcherEvents()
@@ -95,11 +94,9 @@ namespace Pandora.Interactions.UI
         {
             if (Enabled && HitTest(x, y))
             {
-                var control = default(ControlElement);
-
                 if (this is IContainer container)
                 {
-                    control = container.Controls.InternalTunnelMouseMoveEvent(x, y, ref handled);
+                    ControlElement control = container.Controls.InternalTunnelMouseMoveEvent(x, y, ref handled);
                     if (control != null) return control;
                 }
 
@@ -137,11 +134,9 @@ namespace Pandora.Interactions.UI
         {
             if (Enabled && HitTest(x, y))
             {
-                var control = default(ControlElement);
-
                 if (this is IContainer container)
                 {
-                    control = container.Controls.InternalTunnelMouseOverEvent(x, y, ref handled);
+                    ControlElement control = container.Controls.InternalTunnelMouseOverEvent(x, y, ref handled);
                     if (control != null) return control;
                 }
 
@@ -194,11 +189,9 @@ namespace Pandora.Interactions.UI
         {
             if (Enabled && HitTest(x, y))
             {
-                var control = default(ControlElement);
-
                 if (this is IContainer container)
                 {
-                    control = container.Controls.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+                    ControlElement control = container.Controls.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
                     if (control != null) return control;
                 }
 
@@ -218,11 +211,9 @@ namespace Pandora.Interactions.UI
         {
             if (Enabled && HitTest(x, y))
             {
-                var control = default(ControlElement);
-
                 if (this is IContainer container)
                 {
-                    control = container.Controls.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
+                    ControlElement control = container.Controls.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
                     if (control != null) return control;
                 }
 

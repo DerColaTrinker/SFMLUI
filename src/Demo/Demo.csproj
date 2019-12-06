@@ -65,6 +65,10 @@
       <Project>{eaa83923-e8a2-4c3c-9cc6-139fd85e2ac4}</Project>
       <Name>Engine</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Interaction.Controls\Interaction.Controls.csproj">
+      <Project>{5aeec28b-2f34-421e-aae6-3972ed843b4e}</Project>
+      <Name>Interaction.Controls</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Interaction\Interaction.csproj">
       <Project>{024ff546-c4f7-4d60-acdb-10d203f356ec}</Project>
       <Name>Interaction</Name>

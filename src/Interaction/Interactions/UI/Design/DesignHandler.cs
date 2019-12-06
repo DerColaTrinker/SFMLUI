@@ -1,4 +1,5 @@
 ﻿using Pandora.Interactions.Bindings;
+using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Animations;
 using Pandora.Interactions.UI.Design.Converter;
 using Pandora.Interactions.UI.Drawing;
@@ -6,6 +7,7 @@ using Pandora.Runtime.Extentions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 
 namespace Pandora.Interactions.UI.Design
@@ -52,7 +54,9 @@ namespace Pandora.Interactions.UI.Design
                 var controlname = controlnode.Attributes.GetValue("name");
 
                 var control = (from a in AppDomain.CurrentDomain.GetAssemblies()
-                               from t in a.GetTypes()
+                               from rn in a.GetReferencedAssemblies()
+                               let r = Assembly.Load(rn)
+                               from t in r.GetTypes()
                                where t.IsClass && t.IsSubclassOf(typeof(ControlElement)) && t.FullName == controlname
                                select t).FirstOrDefault();
                 if (control == null) throw new Exception($"Control '{controlname}' not found");
@@ -106,7 +110,7 @@ namespace Pandora.Interactions.UI.Design
                 var animation = new AnimationContainer()
                 {
                     AnimationType = AnimationType.Normal,
-                    Event = (DesignAnimationEvents)Enum.Parse(typeof(DesignAnimationEvents), eventmode, true),
+                    Event = (TriggerEvents)Enum.Parse(typeof(TriggerEvents), eventmode, true),
                     Groupname = groupname
                 };
 
@@ -126,7 +130,7 @@ namespace Pandora.Interactions.UI.Design
                 var animation = new AnimationContainer()
                 {
                     AnimationType = AnimationType.Storyboard,
-                    Event = (DesignAnimationEvents)Enum.Parse(typeof(DesignAnimationEvents), eventmode, true),
+                    Event = (TriggerEvents)Enum.Parse(typeof(TriggerEvents), eventmode, true),
                     Groupname = groupname
                 };
 
@@ -287,8 +291,8 @@ namespace Pandora.Interactions.UI.Design
 
         private static void CreateAndAddAnimationEffect(ControlElement control, AnimationContainer animationcontainer, Animation animation)
         {
-            var effect = CreateHookAnimation(animationcontainer, animation, control);
-            control.Animations.Add(effect);
+            var trigger = CreateTriggerAnimation(animationcontainer, animation, control);
+            control.Triggers.Add(trigger);
         }
 
         private static void ApplyStyles(UIElement control, ControlContainer container)
@@ -370,9 +374,9 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static AnimationEventHook CreateHookAnimation(AnimationContainer container, Animation animation, ControlElement control)
+        internal static Trigger CreateTriggerAnimation(AnimationContainer container, Animation animation, ControlElement control)
         {
-            var hook = new AnimationEventHook
+            var hook = new Trigger
             {
                 Animation = animation,
                 Control = control,
@@ -381,20 +385,93 @@ namespace Pandora.Interactions.UI.Design
 
             switch (container.Event)
             {
-                case DesignAnimationEvents.MouseEnter:
-                    control.MouseEnter += hook.MouseEvents1;
+                case TriggerEvents.MouseEnter:
+                    control.MouseEnter += hook.MouseEvents;
                     break;
 
-                case DesignAnimationEvents.MouseLeave:
-                    control.MouseLeave += hook.MouseEvents1;
+                case TriggerEvents.MouseLeave:
+                    control.MouseLeave += hook.MouseEvents;
                     break;
 
-                case DesignAnimationEvents.MouseClick:
-                    control.MouseClick += hook.MouseEvents1;
+                case TriggerEvents.MouseClick:
+                    control.MouseClick += hook.MouseEvents;
+                    break;
+
+                case TriggerEvents.MouseDown:
+                    control.MouseButtonDown += hook.MouseButtonEvents;
+                    break;
+
+                case TriggerEvents.MouseUp:
+                    control.MouseButtonUp += hook.MouseButtonEvents;
                     break;
 
                 default:
                     throw new NotSupportedException($"'{container.Event}' not supported.");
+            }
+
+            return hook;
+        }
+
+        internal static Trigger CreateTrigger(ControlElement control, string groupname, TriggerEvents triggerevent, Animation animation)
+        {
+            var hook = new Trigger
+            {
+                Animation = animation,
+                Control = control,
+                Groupname = groupname
+            };
+
+            switch (triggerevent)
+            {
+                case TriggerEvents.MouseEnter:
+                    control.MouseEnter += hook.MouseEvents;
+                    break;
+
+                case TriggerEvents.MouseLeave:
+                    control.MouseLeave += hook.MouseEvents;
+                    break;
+
+                case TriggerEvents.MouseClick:
+                    control.MouseClick += hook.MouseEvents;
+                    break;
+
+                case TriggerEvents.MouseDown:
+                    control.MouseButtonDown += hook.MouseButtonEvents;
+                    break;
+
+                case TriggerEvents.MouseUp:
+                    control.MouseButtonUp += hook.MouseButtonEvents;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"'{triggerevent}' not supported.");
+            }
+
+            return hook;
+        }
+
+        internal static Trigger CreateMouseButtonTrigger(ControlElement control, string groupname, TriggerEvents triggerevent, MouseButton button, Animation animation)
+        {
+            var hook = new MouseButtonTrigger()
+            {
+                Animation = animation,
+                Control = control,
+                Groupname = groupname,
+                MouseButton = button
+            };
+
+            switch (triggerevent)
+            {
+                case TriggerEvents.MouseDown:
+                    control.MouseButtonDown += hook.MouseButtonEvents;
+                    break;
+
+                case TriggerEvents.MouseUp:
+                    control.MouseButtonUp += hook.MouseButtonEvents;
+                    break;
+
+                default:
+                    throw new NotSupportedException($"'{triggerevent}' not supported.");
             }
 
             return hook;

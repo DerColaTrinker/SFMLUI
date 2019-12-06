@@ -54,8 +54,10 @@
     <Compile Include="Interactions\Components\TimerComponent.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\ImageElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
+    <Compile Include="Interactions\UI\Design\AnimationContainer.cs" />
+    <Compile Include="Interactions\UI\Design\AnimationType.cs" />
+    <Compile Include="Interactions\UI\Design\ControlContainer.cs" />
     <Compile Include="Interactions\UI\Design\Converter\EnumConverter.cs" />
-    <Compile Include="Interactions\UI\Design\DesignAnimationEvents.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
     <Compile Include="Interactions\Bindings\BindingEnumerator.cs" />
     <Compile Include="Interactions\Bindings\BindingProperty.cs" />
@@ -105,13 +107,14 @@
     <Compile Include="Interactions\UI\Controls\Primitives\TextAlignment.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\TextElement.cs" />
     <Compile Include="Interactions\UI\Controls\Primitives\VertexArrayElement.cs" />
-    <Compile Include="Interactions\UI\Design\AnimationContainer.cs" />
-    <Compile Include="Interactions\UI\Design\AnimationEventHook.cs" />
-    <Compile Include="Interactions\UI\Design\ControlContainer.cs" />
-    <Compile Include="Interactions\UI\Design\AnimationType.cs" />
+    <Compile Include="Interactions\UI\Design\DesignHandler.cs" />
+    <Compile Include="Interactions\UI\Design\MouseButtonTrigger.cs" />
+    <Compile Include="Interactions\UI\Design\PropertySetterContainer.cs" />
     <Compile Include="Interactions\UI\Design\ResourceType.cs" />
     <Compile Include="Interactions\UI\Design\Ressource.cs" />
-    <Compile Include="Interactions\UI\Design\PropertySetterContainer.cs" />
+    <Compile Include="Interactions\UI\Design\Trigger.cs" />
+    <Compile Include="Interactions\UI\Design\TriggerCollection.cs" />
+    <Compile Include="Interactions\UI\Design\TriggerEvents.cs" />
     <Compile Include="Interactions\UI\Design\UITemplateAttribute.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Font.cs" />
     <Compile Include="Interactions\UI\Drawing2D\Image.cs" />
@@ -142,7 +145,6 @@
     <Compile Include="Interactions\UI\Drawing\Vector2U.cs" />
     <Compile Include="Interactions\UI\Drawing\Vector3F.cs" />
     <Compile Include="Interactions\UI\Drawing\Vertex.cs" />
-    <Compile Include="Interactions\UI\EffectCollection.cs" />
     <Compile Include="Interactions\UI\IContainer.cs" />
     <Compile Include="Interactions\UI\ITemplate.cs" />
     <Compile Include="Interactions\UI\Renderer\BlendMode.cs" />
@@ -163,7 +165,6 @@
     <Compile Include="Interactions\UI\Design\Converter\ConverterBase.cs" />
     <Compile Include="Interactions\UI\Design\Converter\DefaultConverter.cs" />
     <Compile Include="Interactions\UI\Design\Converter\VectorConverter.cs" />
-    <Compile Include="Interactions\UI\Design\DesignHandler.cs" />
     <Compile Include="Interactions\UI\UIElement.cs" />
     <Compile Include="Interactions\UI\UITemplateCollection.cs" />
     <Compile Include="Interactions\UI\Visibilities.cs" />

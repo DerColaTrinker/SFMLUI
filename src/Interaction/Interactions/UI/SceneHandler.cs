@@ -218,7 +218,7 @@ namespace Pandora.Interactions.UI
 
         public ControlCollection Scenes { get { return _scenes; } }
 
-        public DesignHandler Designs { get; private set; }
+        public DesignHandler Designs { get; }
 
         public void Show(Scene scene)
         {
