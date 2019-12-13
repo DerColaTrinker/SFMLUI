@@ -1,5 +1,6 @@
 ﻿using Pandora.Interactions.Abstractions;
 using Pandora.Interactions.UI;
+using System;
 using System.Collections.Generic;
 
 namespace Pandora.Interactions
@@ -18,15 +19,20 @@ namespace Pandora.Interactions
             return new InteractionOptions();
         }
 
-        public Scene StartScene { get; set; }
-
         public string DefaultFontfile { get; set; }
 
         public IEnumerable<string> DesignFiles { get { return _designfiles; } }
 
+        internal Type InternalStartScene { get; private set; }
+
         public void LoadDesign(string filename)
         {
             _designfiles.Add(filename);
+        }
+
+        public void StartScene<TScene>() where TScene : Scene
+        {
+            InternalStartScene = typeof(TScene);
         }
     }
 }

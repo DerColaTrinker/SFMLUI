@@ -56,7 +56,7 @@
     <Compile Include="Interactions\UI\Controls\Primitives\VertexBufferElement.cs" />
     <Compile Include="Interactions\UI\Design\AnimationContainer.cs" />
     <Compile Include="Interactions\UI\Design\AnimationType.cs" />
-    <Compile Include="Interactions\UI\Design\ControlContainer.cs" />
+    <Compile Include="Interactions\UI\Design\DesignContainer.cs" />
     <Compile Include="Interactions\UI\Design\Converter\EnumConverter.cs" />
     <Compile Include="Interactions\Abstractions\IInteractionOptions.cs" />
     <Compile Include="Interactions\Bindings\BindingEnumerator.cs" />
@@ -147,6 +147,7 @@
     <Compile Include="Interactions\UI\Drawing\Vertex.cs" />
     <Compile Include="Interactions\UI\IContainer.cs" />
     <Compile Include="Interactions\UI\ITemplate.cs" />
+    <Compile Include="Interactions\UI\ITriggers.cs" />
     <Compile Include="Interactions\UI\Renderer\BlendMode.cs" />
     <Compile Include="Interactions\UI\Renderer\Contxt.cs" />
     <Compile Include="Interactions\UI\Renderer\Equation.cs" />

@@ -38,8 +38,8 @@ namespace Pandora.Interactions
 
         protected override void Start()
         {
-            if (_options.StartScene != null)
-               Scenes.Show(_options.StartScene);
+            if (_options.InternalStartScene != null)
+                Scenes.Show((Scene)Activator.CreateInstance(_options.InternalStartScene));
         }
 
         protected override void Stop()

@@ -15,7 +15,7 @@ namespace Pandora.Interactions.UI.Design
     public class DesignHandler
     {
         private readonly Dictionary<string, Ressource> _resources = new Dictionary<string, Ressource>(StringComparer.InvariantCultureIgnoreCase);
-        private static readonly Dictionary<Type, ControlContainer> _controls = new Dictionary<Type, ControlContainer>();
+        private static readonly Dictionary<Type, DesignContainer> _controls = new Dictionary<Type, DesignContainer>();
 
         public void Load(string filename)
         {
@@ -61,9 +61,9 @@ namespace Pandora.Interactions.UI.Design
                                select t).FirstOrDefault();
                 if (control == null) throw new Exception($"Control '{controlname}' not found");
 
-                if (!_controls.TryGetValue(control, out ControlContainer container))
+                if (!_controls.TryGetValue(control, out DesignContainer container))
                 {
-                    container = new ControlContainer(control);
+                    container = new DesignContainer(control);
                     _controls.Add(control, container);
                 }
 
@@ -157,9 +157,9 @@ namespace Pandora.Interactions.UI.Design
                                    select t).FirstOrDefault();
                 if (basecontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
-                if (!_controls.TryGetValue(basecontrol, out ControlContainer container))
+                if (!_controls.TryGetValue(basecontrol, out DesignContainer container))
                 {
-                    container = new ControlContainer(basecontrol);
+                    container = new DesignContainer(basecontrol);
                     _controls.Add(basecontrol, container);
                 }
 
@@ -172,7 +172,7 @@ namespace Pandora.Interactions.UI.Design
                                      select t).FirstOrDefault();
                     if (uicontrol == null) throw new Exception($"Base-Control '{typename}' not found");
 
-                    var templatecontainer = new ControlContainer(uicontrol);
+                    var templatecontainer = new DesignContainer(uicontrol);
                     templatecontainer.Styles.AddRange(ParseXmlPropertySetter(controlnode));
                     container.Templates.Add(templatecontainer);
                 }
@@ -186,7 +186,7 @@ namespace Pandora.Interactions.UI.Design
 
         internal static void ApplyDesignToControl(ControlElement control)
         {
-            if (_controls.TryGetValue(control.GetType(), out ControlContainer container))
+            if (_controls.TryGetValue(control.GetType(), out DesignContainer container))
             {
                 ApplyTemplates(control, container);
                 ApplyStyles(control, container);
@@ -194,7 +194,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static void ApplyTemplates(ControlElement control, ControlContainer container)
+        private static void ApplyTemplates(ControlElement control, DesignContainer container)
         {
             foreach (var template in container.Templates)
             {
@@ -206,7 +206,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static void ApplyPublicBindings(ControlElement parentcontrol, UIElement templatecontrol, ControlContainer tempaltecontainer)
+        private static void ApplyPublicBindings(ControlElement parentcontrol, UIElement templatecontrol, DesignContainer tempaltecontainer)
         {
             foreach (var item in tempaltecontainer.Styles)
             {
@@ -223,7 +223,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        private static void ApplyAnimationTo(ControlElement control, ControlContainer container)
+        private static void ApplyAnimationTo(ControlElement control, DesignContainer container)
         {
             foreach (var animationcontainer in container.Animations)
             {
@@ -295,7 +295,7 @@ namespace Pandora.Interactions.UI.Design
             control.Triggers.Add(trigger);
         }
 
-        private static void ApplyStyles(UIElement control, ControlContainer container)
+        private static void ApplyStyles(UIElement control, DesignContainer container)
         {
             foreach (var item in container.Styles)
             {

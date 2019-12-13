@@ -12,9 +12,9 @@ namespace Pandora
             Interaction = new InteractionService((option) =>
             {
                 option.DefaultFontfile = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
-                option.StartScene = new DemoScene();
                 option.LoadDesign("styletest.xml");
                 option.LoadDesign("templatetest.xml");
+                option.StartScene<DemoScene>();
             });
 
             Services.Add(Interaction);

@@ -1,4 +1,5 @@
 ﻿using Pandora.Interactions.Controller;
+using Pandora.Interactions.UI.Design;
 using Pandora.Interactions.UI.Renderer;
 using System;
 using System.Collections;
@@ -40,7 +41,7 @@ namespace Pandora.Interactions.UI
         {
             _elements.Add(item);
             item.InternalSetParent(_parent);
-
+            DesignHandler.ApplyDesignToControl(item);
             Logger.Trace($"[ControlCollection] Add control '{item.GetType().Name}'");
         }
 
@@ -49,6 +50,7 @@ namespace Pandora.Interactions.UI
             _elements.Insert(index, item);
             item.InternalSetParent(_parent);
             item.UpdatePosition();
+            DesignHandler.ApplyDesignToControl(item);
             Logger.Trace($"[ControlCollection] Add control '{item.GetType().Name}'");
         }
 
@@ -62,7 +64,6 @@ namespace Pandora.Interactions.UI
         {
             return _elements.Contains(item);
         }
-
 
         public IEnumerator<ControlElement> GetEnumerator()
         {

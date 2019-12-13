@@ -20,18 +20,17 @@ namespace Pandora.Interactions.UI
     public delegate void ControlKeyDelegate(ControlElement element, bool control, bool alt, bool shift, bool system, KeyboardKey key);
     public delegate void ControlKeyPressDelegate(ControlElement element, char unicode);
 
-    public abstract class ControlElement : UIElement, ITemplate
+    public abstract class ControlElement : UIElement, ITemplate, ITriggers
     {
         protected ControlElement() : base(IntPtr.Zero)
         {
             Templates = new UITemplateCollection(this);
             Triggers = new TriggerCollection(this);
 
-            DesignHandler.ApplyDesignToControl(this);
-            RegisterBindingProperties();
+            RegisterBindings();
         }
 
-        private void RegisterBindingProperties()
+        private void RegisterBindings()
         {
             EnabledBinding = Bindings.Create("Enabled", true);
         }

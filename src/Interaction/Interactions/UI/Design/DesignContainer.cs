@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Pandora.Interactions.UI.Design
 {
-    internal class ControlContainer
+    internal class DesignContainer
     {
         internal class StyleCollection : IEnumerable<PropertySetterContainer>
         {
@@ -62,21 +62,21 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        internal class TemplateCollection : IEnumerable<ControlContainer>
+        internal class TemplateCollection : IEnumerable<DesignContainer>
         {
-            private readonly List<ControlContainer> _controls = new List<ControlContainer>();
+            private readonly List<DesignContainer> _controls = new List<DesignContainer>();
 
-            internal void Add(ControlContainer control)
+            internal void Add(DesignContainer control)
             {
                 _controls.Add(control);
             }
 
-            internal void AddRange(IEnumerable<ControlContainer> enumerable)
+            internal void AddRange(IEnumerable<DesignContainer> enumerable)
             {
                 _controls.AddRange(enumerable);
             }
 
-            public IEnumerator<ControlContainer> GetEnumerator()
+            public IEnumerator<DesignContainer> GetEnumerator()
             {
                 return _controls.GetEnumerator();
             }
@@ -87,7 +87,7 @@ namespace Pandora.Interactions.UI.Design
             }
         }
 
-        public ControlContainer(Type control)
+        public DesignContainer(Type control)
         {
             Control = control;
             Styles = new StyleCollection();

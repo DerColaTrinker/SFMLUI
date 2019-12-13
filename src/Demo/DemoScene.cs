@@ -16,6 +16,7 @@ namespace Pandora
             BackgroundColor = new Color(0, 0, 10);
 
             _button = new Button();
+            _button.Size = new Vector2F(100, 20);
             _button.Position = new Vector2F(20, 20);
 
             Controls.Add(_button);
