@@ -237,14 +237,13 @@ namespace Pandora.Interactions.UI.Design
 
                             foreach (var setter in animationcontainer.PropertySetters)
                             {
-                                var item = animationcontainer.PropertySetters.First();
-                                if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
+                                if (!control.Bindings.TryGetBinding(setter.BindingName, out BindingProperty binding))
                                 {
                                     //TODO: Error Binding not found.
                                     continue;
                                 }
 
-                                ((StoryboardAnimation)animation).Add(setter.Start, CreateAnimation(binding, item));
+                                ((StoryboardAnimation)animation).Add(setter.Start, CreateAnimation(binding, setter));
                             }
                         }
                         break;

@@ -13,7 +13,6 @@
         {
             Duration = duration;
             IsComplet = true;
-            //InternalReset();
         }
 
         internal virtual void InternalReset()
@@ -98,5 +97,10 @@
 
         protected virtual void OnUpdate(float ms, float s)
         { }
+
+        public override string ToString()
+        {
+            return $"{CurrentTime:N3}/{Duration:N3}";
+        }
     }
 }

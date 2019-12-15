@@ -121,20 +121,6 @@ namespace Pandora.Interactions.UI.Controls.Primitives
                 case TextAlignment.BottomLeft: PositionOffset = new Vector2F(TextBounds.Left, Size.Y - (TextBounds.Top + TextBounds.Height)); break;
                 case TextAlignment.BottomCenter: PositionOffset = new Vector2F((Size.X / 2F) - (TextBounds.Width / 2F), Size.Y - (TextBounds.Top + TextBounds.Height)); break;
                 case TextAlignment.BottomRight: PositionOffset = new Vector2F(Size.X - TextBounds.Width, Size.Y - (TextBounds.Top + TextBounds.Height)); break;
-
-
-                    //Original auf Position basierent
-                    //case TextAlignment.TopLeft: TextPosition = new Vector2F(ScreenPosition.X - TextBounds.Left, ScreenPosition.Y - TextBounds.Top); break;
-                    //case TextAlignment.TopCenter: TextPosition = new Vector2F(ScreenPosition.X + (Size.X / 2F) - ((TextBounds.Left + TextBounds.Width) / 2F), ScreenPosition.Y - TextBounds.Top); break;
-                    //case TextAlignment.TopRight: TextPosition = new Vector2F(ScreenPosition.X + Size.X - (TextBounds.Left + TextBounds.Width), ScreenPosition.Y - TextBounds.Top); break;
-                    //
-                    //case TextAlignment.MiddleLeft: TextPosition = new Vector2F(ScreenPosition.X - TextBounds.Left, ScreenPosition.Y + (Size.Y / 2F) - ((TextBounds.Top + TextBounds.Height) / 2F)); break;
-                    //case TextAlignment.MiddleCenter: TextPosition = new Vector2F(ScreenPosition.X + (Size.X / 2F) - ((TextBounds.Left + TextBounds.Width) / 2F), ScreenPosition.Y + (Size.Y / 2F) - ((TextBounds.Top + TextBounds.Height) / 2F)); break;
-                    //case TextAlignment.MiddleRight: TextPosition = new Vector2F(ScreenPosition.X + Size.X - (TextBounds.Left + TextBounds.Width), ScreenPosition.Y + (Size.Y / 2F) - ((TextBounds.Top + TextBounds.Height) / 2F)); break;
-                    //
-                    //case TextAlignment.BottomLeft: TextPosition = new Vector2F(ScreenPosition.X - TextBounds.Left, ScreenPosition.Y + Size.Y - (TextBounds.Top + TextBounds.Height)); break;
-                    //case TextAlignment.BottomCenter: TextPosition = new Vector2F(ScreenPosition.X + (Size.X / 2F) - (TextBounds.Width / 2F), ScreenPosition.Y + Size.Y - (TextBounds.Top + TextBounds.Height)); break;
-                    //case TextAlignment.BottomRight: TextPosition = new Vector2F(ScreenPosition.X + Size.X - TextBounds.Width, ScreenPosition.Y + Size.Y - (TextBounds.Top + TextBounds.Height)); break;
             }
         }
 

@@ -39,7 +39,7 @@ namespace Pandora.Interactions.UI.Drawing
 
         public override string ToString()
         {
-            return "[Color]" + " R(" + R + ")" + " G(" + G + ")" + " B(" + B + ")" + " A(" + A + ")";
+            return $"[Color] {A},{R},{G},{B}";
         }
 
         public override bool Equals(object obj)

@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Pandora.Interactions.UI.Animations
 {
-    public sealed class StoryboardAnimation : Animation, IComparer<StoryboardStep>
+    public sealed class StoryboardAnimation : Animation
     {
         private readonly List<StoryboardStep> _storyboardcollection = new List<StoryboardStep>();
         private readonly Stack<StoryboardStep> _playstack = new Stack<StoryboardStep>();
@@ -11,21 +12,9 @@ namespace Pandora.Interactions.UI.Animations
         public StoryboardAnimation() : base(0)
         { }
 
-        public int Compare(StoryboardStep x, StoryboardStep y)
+        public void Add(float starttime, Animation animation)
         {
-            if (x.StartTime > y.StartTime) return 1;
-            if (x.StartTime < y.StartTime) return -1;
-
-            return 0;
-        }
-
-        public void Add(float startime, Animation animation)
-        {
-            // Add the Animation and create a step
-            _storyboardcollection.Add(new StoryboardStep() { StartTime = startime, Animation = animation });
-            _storyboardcollection.Sort(this);
-
-            // The sum of all durations is the total duration of the storyboard.
+            _storyboardcollection.Add(new StoryboardStep() { StartTime = starttime, Animation = animation });
             Duration = _storyboardcollection.Max(m => m.EndTime);
         }
 
@@ -33,8 +22,10 @@ namespace Pandora.Interactions.UI.Animations
         {
             foreach (var item in animations)
             {
-                Add(starttime, item);
+                _storyboardcollection.Add(new StoryboardStep() { StartTime = starttime, Animation = item });
             }
+
+            Duration = _storyboardcollection.Max(m => m.EndTime);
         }
 
         /// <summary>
@@ -44,7 +35,6 @@ namespace Pandora.Interactions.UI.Animations
 
         internal override void InternalReset()
         {
-            // Reorder the startparameters
             _playstack.Clear();
             foreach (var item in _storyboardcollection.OrderByDescending(m => m.StartTime))
             {
@@ -66,6 +56,11 @@ namespace Pandora.Interactions.UI.Animations
 
         internal override void InternalStop()
         {
+            foreach (var item in _storyboardcollection)
+            {
+                item.Animation.InternalStop();
+            }
+
             base.InternalStop();
         }
 
@@ -77,8 +72,8 @@ namespace Pandora.Interactions.UI.Animations
 
                 if (CurrentTime >= peekstep.StartTime)
                 {
-                    peekstep.Animation.InternalStart();
                     peekstep.Animation.InternalReset();
+                    peekstep.Animation.InternalStart();
                     _playstack.Pop();
                 }
             }
@@ -88,13 +83,15 @@ namespace Pandora.Interactions.UI.Animations
                 if (step.Animation.Status == AnimationStatus.Running)
                 {
                     step.Animation.InternalUpdate(ms, s);
-
-                    if (step.Animation.IsComplet)
-                        step.Animation.InternalStop();
                 }
             });
 
             base.InternalUpdate(ms, s);
+        }
+
+        public override string ToString()
+        {
+            return base.ToString();
         }
     }
 }

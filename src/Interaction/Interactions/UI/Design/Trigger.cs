@@ -30,10 +30,8 @@ namespace Pandora.Interactions.UI.Design
 
         public void Start()
         {
-            // Stop all animations with the groupname
             if (!string.IsNullOrEmpty(Groupname))
-                Control.Triggers.Stop(Groupname);
-            //AnimationHandler.StopRange(Control.Animations.Where(m => m.Groupname == Groupname));
+                Control.Triggers.StopOtherAnimationsByGroupname(Groupname, Animation);
 
             AnimationHandler.Start(Animation);
         }

@@ -42,8 +42,6 @@ namespace Pandora.Interactions.UI.Renderer
 
         public abstract void DrawSprite(IntPtr pointer, ref MarshalData states);
 
-
-
         //public abstract void Draw(UIElement drawable);
 
         //public abstract void Draw(UIElement drawable, RenderStates states);

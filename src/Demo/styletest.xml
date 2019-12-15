@@ -7,17 +7,17 @@
   <control name="Pandora.Interactions.UI.Controls.Button">
       <set property="FillColor">#borderfillcolornormal</set>
 
-    <animation event="MouseEnter" groupname="mousemove">
-        <set property="FillColor" duration="100">#borderfillcolorhoover</set>
+    <!--<animation event="MouseEnter" groupname="mousemove">
+      <set property="FillColor" duration="200">#borderfillcolorhoover</set>
+    </animation>-->
+    
+    <animation event="MouseLeave" groupname="mousemove">
+        <set property="FillColor" duration="200">#borderfillcolornormal</set>
     </animation>
 
-    <!--<animation event="MouseLeave" groupname="mousemove">
-        <set property="FillColor" duration="100">#borderfillcolornormal</set>
-    </animation>-->
-
     <storyboard event="MouseEnter" groupname="mousemove">
-      <set property="FillColor" start="0" duration="100">#borderfillcolornormal</set>
-      <set property="FillColor" start="100" duration="100">128,128,128</set>
+      <set property="FillColor" start="0" duration="1000">255,0,0</set>
+      <set property="FillColor" start="1000" duration="1000">0,255,0</set>
     </storyboard>
   </control>
 </styles>

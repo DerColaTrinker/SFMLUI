@@ -105,7 +105,6 @@ namespace Pandora.Interactions.Bindings
                         return _externalbinding.Value;
 
                     case BindingPropertyType.Delegate:
-
                         return _getter.DynamicInvoke();
 
                     case BindingPropertyType.InternalValue:

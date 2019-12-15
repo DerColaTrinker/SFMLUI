@@ -15,9 +15,9 @@ namespace Pandora.Interactions.UI.Design
         public TriggerCollection(ControlElement controlElement)
         { }
 
-        internal void Stop(string groupname)
+        internal void StopOtherAnimationsByGroupname(string groupname ,Animation animation)
         {
-            var triggers = _triggers.Where(m => m.Groupname == groupname);
+            var triggers = _triggers.Where(m => m.Groupname == groupname && m.Animation != animation);
 
             foreach (var trigger in triggers)
             {

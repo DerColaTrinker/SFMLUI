@@ -44,5 +44,10 @@ namespace Pandora.Interactions.UI.Animations
             _fB = ((float)TargetValue.B - _cB) / Duration;
             _fA = ((float)TargetValue.A - _cA) / Duration;
         }
+
+        public override string ToString()
+        {
+            return $"{base.ToString()} {Property.Value.ToString()} - {TargetValue.ToString()}";
+        }
     }
 }

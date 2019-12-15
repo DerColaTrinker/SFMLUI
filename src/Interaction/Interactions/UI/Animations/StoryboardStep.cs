@@ -15,7 +15,7 @@
 
         public override string ToString()
         {
-            return $"Animation {Animation.GetType().Name}";
+            return $"{Animation.GetType().Name} {Animation.ToString()}";
         }
     }
 }

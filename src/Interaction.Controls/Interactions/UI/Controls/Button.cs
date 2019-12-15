@@ -30,8 +30,8 @@ namespace Pandora.Interactions.UI.Controls
             Text = "Button";
             TextAlignment = TextAlignment.MiddleCenter;
             FillColor = new Color(60, 0, 0);
-            BorderOutlineThickness = 2;
-            BorderOutlineColor = Color.Green;
+            BorderOutlineThickness = 1;
+            BorderOutlineColor = Color.Yellow;
         }
 
         private void RegisterBindings()

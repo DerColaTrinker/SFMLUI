@@ -25,7 +25,6 @@ namespace Pandora.Interactions.UI.Animations
 
         protected override void OnFinish()
         {
-            // Sicherstellen das am Ende der Animation, der Wert auch genau auf das gesetzt wird, wo es hin soll
             Property.Value = TargetValue;
         }
     }

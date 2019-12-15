@@ -7,7 +7,7 @@ namespace Pandora.Interactions.UI
     public abstract class Visual : BindingObject
     {
         private bool _transformneedupdate = true;
-        private bool _inverseNneedupdate = true;
+        private bool _inverseneedupdate = true;
 
         private Transform _transform;
         private Transform _inversetransform;
@@ -197,13 +197,13 @@ namespace Pandora.Interactions.UI
                 Size = Parent.Size;
 
             _transformneedupdate = true;
-            _inverseNneedupdate = true;
+            _inverseneedupdate = true;
         }
 
         private void InvalidTransformation()
         {
             _transformneedupdate = true;
-            _inverseNneedupdate = true;
+            _inverseneedupdate = true;
         }
 
         internal virtual Transform Transform
@@ -236,10 +236,10 @@ namespace Pandora.Interactions.UI
         {
             get
             {
-                if (_inverseNneedupdate)
+                if (_inverseneedupdate)
                 {
                     _inversetransform = Transform.GetInverse();
-                    _inverseNneedupdate = false;
+                    _inverseneedupdate = false;
                 }
 
                 return _inversetransform;
