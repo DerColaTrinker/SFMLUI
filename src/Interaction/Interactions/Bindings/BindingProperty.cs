@@ -164,7 +164,7 @@ namespace Pandora.Interactions.Bindings
         public new T Value
         {
             get { return (T)base.Value; }
-            set { base.Value = value; }
+            set { base.Value = value;  }
         }
 
         protected override void OnValueChanged(object value)

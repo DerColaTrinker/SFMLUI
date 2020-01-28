@@ -16,6 +16,9 @@ namespace Pandora.Interactions.UI
         public event SceneDelegate WindowMouseLeft;
         public event SceneResizeDelegate Resize;
 
+        public event SceneDelegate SceneShow;
+        public event SceneDelegate SceneClose;
+
         protected Scene()
         {
             Controls = new ControlCollection(this);
@@ -45,17 +48,17 @@ namespace Pandora.Interactions.UI
 
         internal override void InternalOnLoad(SceneHandler handler)
         {
-            // Do not call, since this comes from the UIElement.
-            //Controls.InternalOnLoad(handler);
-
-            _background = new RectElement
+            if (_background == null)
             {
-                AutoScaleOnParent = true
-            };
+                _background = new RectElement
+                {
+                    AutoScaleOnParent = true
+                };
 
-            RegisterBindings();
+                RegisterBindings();
 
-            Templates.Add(_background);
+                Templates.Add(_background);
+            }
 
             base.InternalOnLoad(handler);
         }
@@ -63,6 +66,11 @@ namespace Pandora.Interactions.UI
         internal virtual void InternalOnShow()
         {
             OnShow();
+        }
+
+        internal virtual void InternalOnClose()
+        {
+            OnClose();
         }
 
         internal override void InternalRenderUpdate(RenderTargetBase target)
@@ -74,7 +82,12 @@ namespace Pandora.Interactions.UI
 
         protected virtual void OnShow()
         {
+            SceneShow?.Invoke(this);
+        }
 
+        protected virtual void OnClose()
+        {
+            SceneClose?.Invoke(this);
         }
 
         public Color BackgroundColor

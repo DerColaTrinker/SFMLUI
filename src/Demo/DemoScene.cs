@@ -1,6 +1,7 @@
 ﻿using Pandora.Interactions.UI;
 using Pandora.Interactions.UI.Controls;
 using Pandora.Interactions.UI.Drawing;
+using System;
 
 namespace Pandora
 {
@@ -20,6 +21,13 @@ namespace Pandora
             _button.Position = new Vector2F(20, 20);
 
             Controls.Add(_button);
+
+            _button.MouseClick += _button_MouseClick;
+        }
+
+        private void _button_MouseClick(ControlElement element)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Pandora.Interactions.Bindings;
+using Pandora.Interactions.Components;
 using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Design;
 using System;
@@ -26,6 +27,7 @@ namespace Pandora.Interactions.UI
         {
             Templates = new UITemplateCollection(this);
             Triggers = new TriggerCollection(this);
+            Components = new ComponentCollection(this);
 
             RegisterBindings();
         }
@@ -47,6 +49,8 @@ namespace Pandora.Interactions.UI
         public UITemplateCollection Templates { get; }
 
         public TriggerCollection Triggers { get; }
+
+        public ComponentCollection Components { get; }
 
         public new ControlElement Parent { get { return (ControlElement)base.Parent; } }
 
@@ -222,7 +226,7 @@ namespace Pandora.Interactions.UI
 
             return null;
         }
-
+                
         protected virtual void OnPreMouseButtonDown(int x, int y, MouseButton button, ref bool handled)
         {
             PreMouseButtonDown?.Invoke(this, button, x, y, ref handled);

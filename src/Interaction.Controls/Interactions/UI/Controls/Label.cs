@@ -17,9 +17,11 @@ namespace Pandora.Interactions.UI.Controls
                 AutoScaleOnParent = true
             };
 
-            Templates.Add(_text);
-
             RegisterBindings();
+
+            TextColor = Color.White;
+
+            Templates.Add(_text);
         }
 
         private void RegisterBindings()

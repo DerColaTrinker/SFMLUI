@@ -28,9 +28,6 @@ namespace Pandora.Interactions.UI.Animations
             Duration = _storyboardcollection.Max(m => m.EndTime);
         }
 
-        /// <summary>
-        /// Returns the sum of all animation steps.
-        /// </summary>
         public int StepCount => _storyboardcollection.Count;
 
         internal override void InternalReset()

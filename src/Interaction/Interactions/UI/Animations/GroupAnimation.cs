@@ -10,6 +10,11 @@ namespace Pandora.Interactions.UI.Animations
         public GroupAnimation() : base(0)
         { }
 
+        public GroupAnimation(IEnumerable<Animation> animations) : this()
+        {
+            AddRange(animations);
+        }
+
         public void Add(Animation effect)
         {
             _animations.Add(effect);

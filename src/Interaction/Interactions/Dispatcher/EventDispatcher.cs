@@ -166,7 +166,7 @@ namespace Pandora.Interactions.Dispatcher
         {
             // Search for the deepest control element that has received this event.
             var handled = false;
-            var control = _scenehandler.Scenes.InternalTunnelMouseMoveEvent(x, y, ref handled);
+            var control = _scenehandler.CurrentScene.InternalTunnelMouseMoveEvent(x, y, ref handled);
 
             HandleMouseOverEvent(x, y);
 
@@ -181,7 +181,7 @@ namespace Pandora.Interactions.Dispatcher
         private void HandleMouseOverEvent(int x, int y)
         {
             var handled = false;
-            var control = _scenehandler.Scenes.InternalTunnelMouseOverEvent(x, y, ref handled);
+            var control = _scenehandler.CurrentScene.InternalTunnelMouseOverEvent(x, y, ref handled);
 
             if (HooverControl == control) return;
             HandleMouseLeaveEvent(HooverControl);
@@ -215,7 +215,7 @@ namespace Pandora.Interactions.Dispatcher
         {
             // Search for the deepest control element that has received this event.
             var handled = false;
-            var control = _scenehandler.Scenes.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
+            var control = _scenehandler.CurrentScene.InternalTunnelMouseButtonUpEvent(x, y, button, ref handled);
 
             // Trigger the MouseClick event only when the button is also released above the control where it was pressed.
             if (button == MouseButton.Left && control == MouseDownControl)
@@ -245,7 +245,7 @@ namespace Pandora.Interactions.Dispatcher
         {
             // Search for the deepest control element that has received this event.
             var handled = false;
-            var control = _scenehandler.Scenes.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
+            var control = _scenehandler.CurrentScene.InternalTunnelMouseButtonDownEvent(x, y, button, ref handled);
 
             MouseDownControl = control;
 

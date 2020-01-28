@@ -31,7 +31,9 @@ namespace Pandora.Interactions.UI.Controls
 
             Text = "";
             TextAlignment = TextAlignment.MiddleCenter;
-            FillColor = new Color(60, 0, 0);
+            TextColor = Color.White;
+            FillColor = new Color(60, 60, 60);
+            BorderOutlineColor = Color.White;
             BorderOutlineThickness = 2;
             BorderOutlineColor = Color.Green;
         }

@@ -4,6 +4,7 @@ using Pandora.Interactions.Abstractions;
 using Pandora.Interactions.UI;
 using Pandora.Interactions.UI.Drawing2D;
 using System;
+using System.IO;
 
 namespace Pandora.Interactions
 {
@@ -13,11 +14,17 @@ namespace Pandora.Interactions
 
         public static Font DefaultFont { get; internal set; }
 
-        public InteractionService(Action<IInteractionOptions> options)
+        public InteractionService(Action<IInteractionOptions> options) : this()
         {
             Logger.Normal("[Interaction] Create service instance");
             _options = InteractionOptions.Create();
             options?.Invoke(_options);
+        }
+
+        public InteractionService()
+        {
+            var fontfilename = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Fonts), "arial.ttf");
+            DefaultFont = new Font(fontfilename);
         }
 
         public SceneHandler Scenes { get; private set; }

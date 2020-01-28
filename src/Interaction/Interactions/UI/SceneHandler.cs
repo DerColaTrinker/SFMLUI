@@ -8,6 +8,7 @@ using Pandora.SFML;
 using Pandora.SFML.Graphics;
 using Pandora.SFML.Native;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
@@ -17,7 +18,7 @@ namespace Pandora.Interactions.UI
     {
         private ContextSettings _contextsettings;
         private VideoMode _videomode;
-        private ControlCollection _scenes;
+        private Stack<Scene> _scenestack;
         private readonly WindowStyle _windowstyle;
         private string _windowtitle;
 
@@ -72,8 +73,7 @@ namespace Pandora.Interactions.UI
             // Render-Target erstellen für das Zeichnen
             Renderer = new WindowRenderer(this);
 
-            // Scenes are also Controls.
-            _scenes = new ControlCollection(null);
+            _scenestack = new Stack<Scene>();
 
             return true;
         }
@@ -97,8 +97,9 @@ namespace Pandora.Interactions.UI
             // Clear the Display
             Renderer.Clear(Color.Black);
 
-            // Render the First Scene in Pipe.
-            if (_scenes.Count > 0) _scenes[0].InternalRenderUpdate(Renderer);
+            // Render scene
+            if (_scenestack.Count > 0)
+                _scenestack.Peek().InternalRenderUpdate(Renderer);
 
             // Display
             Renderer.Display();
@@ -106,8 +107,8 @@ namespace Pandora.Interactions.UI
 
         protected override void Destroy(bool disposing)
         {
-            Logger.Normal("[SceneHandler] Detroy render window");
-            NativeSFML.sfRenderWindow_destroy(Pointer);
+            Logger.Normal("[SceneHandler] Destroy render window");
+            //NativeSFML.sfRenderWindow_destroy(Pointer);
         }
 
         #endregion
@@ -212,44 +213,36 @@ namespace Pandora.Interactions.UI
 
         #region Scene Control
 
-        public bool HasScene { get => _scenes.Count > 0; }
+        public bool HasScene { get => _scenestack != null; }
 
-        public Scene CurrentScene { get { return _scenes.Cast<Scene>().FirstOrDefault(); } }
+        public Scene CurrentScene { get { return _scenestack.Count > 0 ? _scenestack.Peek() : null; } }
 
-        public ControlCollection Scenes { get { return _scenes; } }
+        public IEnumerable<Scene> SceneStack { get { return _scenestack.ToArray(); } }
 
         public DesignHandler Designs { get; }
 
         public void Show(Scene scene)
         {
-            // Change visibility to hidden
-            foreach (var item in _scenes) item.Visibility = Visibilities.Hidden;
-
-            // new scene ist visible
             scene.Visibility = Visibilities.Display;
 
-            // Reset size
             scene.Size = Renderer.Size;
 
-            // Initilize controls
             scene.InternalOnLoad(this);
             scene.InternalOnShow();
 
-            // Insert scene on top
-            _scenes.Insert(0, scene);
+            _scenestack.Push(scene);
 
             Logger.Debug($"[SceneHandler] Show scene '{scene.GetType().Name}'");
         }
 
         public void Close()
         {
-            Logger.Debug($"[SceneHandler] Close current scene");
-
-            if (_scenes.Count > 0)
-                _scenes.RemoveAt(0);
-
-            if (_scenes.Count > 0)
-                Show((Scene)_scenes.First());
+            if (_scenestack.Count > 0)
+            {
+                var scene = _scenestack.Pop();
+                Logger.Debug($"[SceneHandler] Close '{scene.GetType().Name}' scene");
+                ((Scene)scene).InternalOnClose();
+            }
         }
 
         #endregion

@@ -14,7 +14,13 @@ namespace Pandora.Interactions.Components
         {
             Interval = interval;
             Enabled = enabled;
+        }
 
+        public TimerComponent(float interval, bool enabled, TimerTickDelegate tickevent)
+        {
+            Interval = interval;
+            Enabled = enabled;
+            Tick += tickevent;
         }
 
         public float Interval { get; }

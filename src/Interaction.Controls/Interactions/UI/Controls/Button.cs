@@ -14,7 +14,7 @@ namespace Pandora.Interactions.UI.Controls
         {
             _rect = new RectElement
             {
-                AutoScaleOnParent = true
+                AutoScaleOnParent = true,
             };
 
             _text = new TextElement
@@ -28,10 +28,11 @@ namespace Pandora.Interactions.UI.Controls
             RegisterBindings();
 
             Text = "Button";
+            TextColor = Color.White;
             TextAlignment = TextAlignment.MiddleCenter;
-            FillColor = new Color(60, 0, 0);
+            FillColor = new Color(60, 60, 60);
             BorderOutlineThickness = 1;
-            BorderOutlineColor = Color.Yellow;
+            BorderOutlineColor = Color.White;
         }
 
         private void RegisterBindings()
