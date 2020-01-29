@@ -160,6 +160,15 @@ namespace Pandora.Interactions.Dispatcher
             }
         }
 
+        internal void RemoveFocus(ControlElement control)
+        {
+            if (FocusControl == control)
+            {
+                FocusControl.InternalLostFocusEvent();
+                FocusControl = null;
+            }
+        }
+
         #region MouseMove and MouseOver
 
         private void HandleMouseMoveEvent(int x, int y)

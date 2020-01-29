@@ -67,13 +67,24 @@ namespace Pandora.Interactions.UI
             return null;
         }
 
-        public bool AllowFocus { get; protected set; }
 
-        public bool IsFocus { get { return Dispatcher.FocusControl == this; } }
 
         public bool IsMouseOver { get { return Dispatcher.HooverControl == this; } }
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }
+
+        #region Focus
+
+        public bool AllowFocus { get; protected set; }
+
+        public bool IsFocus { get { return Dispatcher.FocusControl == this; } }
+
+        protected void RemoveFocus()
+        {
+            Dispatcher.RemoveFocus(this);
+        }
+
+        #endregion
 
         #region Events
 

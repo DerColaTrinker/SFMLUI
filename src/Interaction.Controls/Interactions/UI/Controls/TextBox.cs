@@ -1,4 +1,5 @@
 ﻿using Pandora.Interactions.Bindings;
+using Pandora.Interactions.Controller;
 using Pandora.Interactions.UI.Controls.Primitives;
 using Pandora.Interactions.UI.Drawing;
 using Pandora.Interactions.UI.Drawing2D;
@@ -35,7 +36,7 @@ namespace Pandora.Interactions.UI.Controls
             FillColor = new Color(60, 60, 60);
             BorderOutlineColor = Color.White;
             BorderOutlineThickness = 2;
-            BorderOutlineColor = Color.Green;
+            BorderOutlineColor = Color.White;
         }
 
         private void RegisterBindings()
@@ -57,33 +58,44 @@ namespace Pandora.Interactions.UI.Controls
 
         protected override void OnFocusKeyPress(char unicode)
         {
-            if (char.IsControl(unicode))
-            {
-                switch (unicode)
-                {
-                    case '\b':
-                        if (Text.Length > 0)
-                            Text = Text.Substring(0, Text.Length - 1);
-                        break;
-
-                    default:
-                        break;
-                }
-            }
-            else
+            if (!char.IsControl(unicode))
             {
                 Text += unicode;
             }
         }
 
+        protected override void OnFocusKeyUp(bool control, bool alt, bool shift, bool system, KeyboardKey key)
+        {
+            switch (key)
+            {
+                case KeyboardKey.Return:
+                    RemoveFocus();
+                    break;
+
+                case KeyboardKey.Escape:
+                    Text = _oldtext;
+                    RemoveFocus();
+                    break;
+
+                case KeyboardKey.BackSpace:
+                    if (Text.Length > 0)
+                        Text = Text.Substring(0, Text.Length - 1);
+                    break;
+
+                default:
+                    break;
+            }
+        }
+
         protected override void OnGetFocus()
         {
-            FillColor = new Color(128, 0, 0);
+            _oldtext = Text;
+            FillColor = new Color(128, 128, 128);
         }
 
         protected override void OnLostFocus()
         {
-            FillColor = new Color(60, 0, 0);
+            FillColor = new Color(60, 60, 60);
         }
 
         public BindingProperty<Color> TextColorBinding { get; private set; }
@@ -155,6 +167,8 @@ namespace Pandora.Interactions.UI.Controls
             get { return TextStyleBinding.Value; }
             set { TextStyleBinding.Value = value; }
         }
+
+        private string _oldtext;
 
         public Color FillColor
         {
