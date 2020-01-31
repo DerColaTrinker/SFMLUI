@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Pandora.Engine.Services
@@ -71,6 +72,12 @@ namespace Pandora.Engine.Services
             }
 
             return result;
+        }
+
+        public TService GetService<TService>()
+            where TService : RuntimeService
+        {
+            return _services.OfType<TService>().FirstOrDefault();
         }
 
         public IEnumerable<RuntimeService> Services

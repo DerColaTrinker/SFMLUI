@@ -8,6 +8,16 @@ namespace Pandora.Engine.Services
     {
         public event RuntimeServiceDelegate StopRequest;
 
+        public override int GetHashCode()
+        {
+            return base.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj != null && this.GetType().FullName == obj.GetType().FullName;
+        }
+
         public PandoraRuntimeHost Runtime { get; internal set; }
 
         protected internal abstract void Initialize(out bool success);
