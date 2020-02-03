@@ -90,7 +90,7 @@ namespace Pandora.Engine
 
         private void RuntimeLoop()
         {
-            var clock = new Stopwatch();                // Uses a time measurement from the SFML library.
+            var clock = new Stopwatch();
             var ms = 1F;                                // Set Initial ms to 1, since exceptions may occur with 0 DivisionByZero.
             var waittime = 0F;                          // Number of milliseconds returned to the system if the maximum frame time was not reached.
 

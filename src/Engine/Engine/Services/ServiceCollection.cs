@@ -77,7 +77,7 @@ namespace Pandora.Engine.Services
         public TService GetService<TService>()
             where TService : RuntimeService
         {
-            return _services.OfType<TService>().FirstOrDefault();
+            return _services.OfType<TService>().First();
         }
 
         public IEnumerable<RuntimeService> Services
