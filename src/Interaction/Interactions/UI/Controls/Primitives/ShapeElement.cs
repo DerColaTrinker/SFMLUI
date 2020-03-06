@@ -48,8 +48,7 @@ namespace Pandora.Interactions.UI.Controls.Primitives
             OutlineColorBinding = Bindings.Create("OutlineColor", () => NativeSFML.sfShape_getOutlineColor(Pointer), (value) => NativeSFML.sfShape_setOutlineColor(Pointer, value));
             OutlineThicknessBinding = Bindings.Create("OutlineThickness", () => NativeSFML.sfShape_getOutlineThickness(Pointer), (value) => NativeSFML.sfShape_setOutlineThickness(Pointer, value));
         }
-
-
+        
         public BindingProperty<Texture> TextureBinding { get; private set; }
 
         public BindingProperty<Rectangle> TextureRectBinding { get; private set; }

@@ -67,8 +67,6 @@ namespace Pandora.Interactions.UI
             return null;
         }
 
-
-
         public bool IsMouseOver { get { return Dispatcher.HooverControl == this; } }
 
         public bool Enabled { get { return EnabledBinding.Value; } set { EnabledBinding.Value = value; } }

@@ -35,7 +35,7 @@ namespace Pandora.Interactions.UI.Controls
             TextColor = Color.White;
             FillColor = new Color(60, 60, 60);
             BorderOutlineColor = Color.White;
-            BorderOutlineThickness = 2;
+            BorderOutlineThickness = 1F;
             BorderOutlineColor = Color.White;
         }
 
