@@ -75,8 +75,6 @@ namespace Pandora.Interactions.Dispatcher
 
         private void CallEventHandler(Event e)
         {
-            Logger.Trace($"Dispatch event '{e.Type}'");
-
             switch (e.Type)
             {
                 case EventType.Closed:

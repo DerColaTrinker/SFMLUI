@@ -214,7 +214,7 @@ namespace Pandora.Interactions.UI.Design
                 {
                     if (!templatecontrol.Bindings.TryGetBinding(item.BindingName, out BindingProperty templatebinding))
                     {
-                        //TODO: Die Property wurde nicht gefunden
+                        Logger.Warning($"[DesignHandler] Property binding '{item.BindingName}' in '{parentcontrol.GetType().Name}' not found");
                         continue;
                     }
 
@@ -239,7 +239,7 @@ namespace Pandora.Interactions.UI.Design
                             {
                                 if (!control.Bindings.TryGetBinding(setter.BindingName, out BindingProperty binding))
                                 {
-                                    //TODO: Error Binding not found.
+                                    Logger.Warning($"[DesignHandler] Animation binding '{setter.BindingName}' in '{control.GetType().Name}' not found");
                                     continue;
                                 }
 
@@ -255,7 +255,7 @@ namespace Pandora.Interactions.UI.Design
                                 var item = animationcontainer.PropertySetters.First();
                                 if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
                                 {
-                                    //TODO: Error Binding not found.
+                                    Logger.Warning($"[DesignHandler] Animation Binding '{item.BindingName}' in '{control.GetType().Name}' not found");
                                     continue;
                                 }
                                 animation = CreateAnimation(binding, item);
@@ -269,7 +269,7 @@ namespace Pandora.Interactions.UI.Design
                                     var item = animationcontainer.PropertySetters.First();
                                     if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
                                     {
-                                        //TODO: Error Binding not found.
+                                        Logger.Warning($"[DesignHandler] Animation binding '{item.BindingName}' in '{control.GetType().Name}' not found");
                                         continue;
                                     }
                                     ((GroupAnimation)animation).Add(CreateAnimation(binding, item));
@@ -300,7 +300,7 @@ namespace Pandora.Interactions.UI.Design
             {
                 if (!control.Bindings.TryGetBinding(item.BindingName, out BindingProperty binding))
                 {
-                    //TODO: Error Binding not found.
+                    Logger.Warning($"[DesignHandler] Style binding '{item.BindingName}' in '{control.GetType().Name}' not found");
                     continue;
                 }
 
@@ -330,7 +330,7 @@ namespace Pandora.Interactions.UI.Design
                                 return VectorConverter.Converter;
 
                             default:
-                                throw new Exception($"Binding type '{type.Name}' not supported");
+                                throw new NotSupportedException($"Binding type '{type.Name}' not supported");
                         }
 
                     case TypeCode.Boolean:
@@ -353,7 +353,7 @@ namespace Pandora.Interactions.UI.Design
                     case TypeCode.Empty:
                     case TypeCode.DBNull:
                     default:
-                        throw new Exception($"Binding type '{type.Name}' not supported");
+                        throw new NotSupportedException($"Binding type '{type.Name}' not supported");
                 }
             }
         }
